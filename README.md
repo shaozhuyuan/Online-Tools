@@ -1,5 +1,7 @@
 # 🛠️ Modern Online Web Tools Collection
 
+Translations: [简体中文](README_zh.md)
+
 Welcome to the **Online Tools** repository! This is a comprehensive, client-side suite of 100% private, free, and ad-free web developer utilities. 
 
 Each utility is fully responsive, works completely offline (all calculations and formatting are done purely in your browser), and is styled with Tailwind CSS.
