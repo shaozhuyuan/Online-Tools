@@ -128,7 +128,7 @@
 
 1. 克隆此仓库：
    ```bash
-   git clone https://github.com/您的_GITHUB_用户名/Online-Tools.git
+   git clone https://github.com/shaozhuyuan/Online-Tools.git
    ```
 2. 进入任一工具子目录（例如 `/qrcode-tool`）。
 3. 双击 `index.html` 文件即可直接在您的浏览器中打开并使用该工具。

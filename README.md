@@ -128,7 +128,7 @@ Since every tool is built to be a standalone `index.html` file, you do not need 
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/Online-Tools.git
+   git clone https://github.com/shaozhuyuan/Online-Tools.git
    ```
 2. Navigate to any tool subdirectory (e.g., `/qrcode-tool`).
 3. Double-click the `index.html` file to launch the utility directly in your browser.
