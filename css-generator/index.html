@@ -1,0 +1,2470 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Glassmorphism & Gradient Generator | Online Tools</title>
+  <meta name="description" content="Generate beautiful CSS glassmorphism effects and custom linear or radial gradients. Interactively customize blur, opacity, shadows, borders, and color stops. Export clean CSS and Tailwind CSS code instantly.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Glass & Gradient Hub)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(187, 100%, 45%);
+}
+
+&.light-theme .logo-icon {
+  color: hsl(187, 100%, 40%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Tab Controls */
+.tab-controls {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  gap: 4px;
+}
+
+&.light-theme .tab-controls {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Grid)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body Wrapper */
+.card-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* ==========================================================================
+   Controls Panel Elements
+   ========================================================================== */
+
+.editor-card {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .editor-card {
+    max-height: none;
+  }
+}
+
+.control-panel {
+  display: none;
+  padding: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-panel.active {
+  display: flex;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-divider-top {
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.control-value-display {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: hsl(187, 100%, 45%);
+  font-weight: 600;
+}
+
+&.light-theme .control-value-display {
+  color: hsl(187, 100%, 40%);
+}
+
+.control-inputs-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Inputs & Color Pickers */
+input[type="color"] {
+  -webkit-appearance: none;
+  border: 1px solid var(--border-color);
+  width: 42px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+  padding: 2px;
+  transition: border-color var(--transition-fast);
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+input[type="color"]:hover {
+  border-color: var(--text-muted);
+}
+
+/* Quick Colors List */
+.quick-colors {
+  display: flex;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+  box-shadow: 0 0 0 1px var(--border-color);
+}
+
+.color-dot:hover {
+  transform: scale(1.1);
+}
+
+.color-dot.active {
+  border-color: hsl(187, 100%, 45%);
+  transform: scale(1.1);
+}
+
+/* Slider Controls */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-round);
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+&.light-theme .slider {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-round);
+  background: hsl(187, 100%, 45%);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  border: 2px solid var(--bg-app);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: hsl(187, 100%, 50%);
+}
+
+.slider-half {
+  flex-grow: 1;
+}
+
+/* Action Link Btn */
+.action-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-link-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  user-select: none;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+&.light-theme .checkmark {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: var(--text-muted);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: hsl(187, 100%, 45%);
+  border-color: hsl(187, 100%, 45%);
+}
+
+.checkmark::after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* Form Selector & Inline checkboxes */
+.form-select {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-select {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-select:focus {
+  border-color: var(--border-color-focus);
+}
+
+.toggle-group-row {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  gap: 2px;
+}
+
+&.light-theme .toggle-group-row {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.toggle-group-row .toggle-mode-btn {
+  flex: 1;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Color Stops List & Header */
+.color-stops-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-small-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(187, 100%, 45%);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.btn-small-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-small-action:hover {
+  color: hsl(187, 100%, 50%);
+}
+
+.color-stops-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Color Stop Item */
+.color-stop-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+&.light-theme .color-stop-item {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.stop-color-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stop-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.stop-pos-display {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  width: 34px;
+  text-align: right;
+}
+
+.btn-remove-stop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-remove-stop:hover {
+  color: hsl(0, 84%, 60%);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.btn-remove-stop svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Gradient Presets */
+.gradient-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.preset-card {
+  height: 38px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.preset-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Preview Column & Real-Time Preview Box
+   ========================================================================== */
+
+.preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.preview-card {
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview-label-small {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.bg-mode-controls, .card-content-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.bg-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.bg-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.bg-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+&.light-theme .bg-btn.active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.preview-area-wrapper {
+  background-color: #12151c;
+  background-size: 16px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Preview background modes */
+.preview-area-wrapper.bg-dark-grid {
+  background-color: #121318;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+&.light-theme .preview-area-wrapper.bg-dark-grid {
+  background-color: #f3f4f6;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+}
+
+/* Floating pattern shapes overlay */
+.pattern-shapes-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: var(--radius-round);
+  filter: blur(20px);
+  opacity: 0.85;
+}
+
+.bubble-1 {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #f72585, #7209b7);
+  top: 15%;
+  left: 20%;
+  animation: float-shape 12s infinite alternate ease-in-out;
+}
+
+.bubble-2 {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  bottom: 15%;
+  right: 15%;
+  animation: float-shape 16s infinite alternate-reverse ease-in-out;
+}
+
+.bubble-3 {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #ff0844, #ffb199);
+  top: 45%;
+  right: 40%;
+  animation: float-shape 10s infinite alternate ease-in-out;
+}
+
+@keyframes float-shape {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-20px) scale(1.1); }
+}
+
+/* Glass Card & Float container */
+.glass-card-container {
+  z-index: 2;
+  perspective: 1000px;
+}
+
+.glass-card {
+  width: 320px;
+  height: 190px;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.1s ease-out; /* smooth visual adjustments */
+}
+
+/* Reflection diagonal sheen */
+.reflection-sheen {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.05) 35%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.02) 65%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Inner content elements of cards */
+.card-inner-content {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* OPTION A: Credit Card styling */
+.credit-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip-icon {
+  border-radius: 4px;
+}
+
+.card-type-icon {
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.credit-card-number {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin: 18px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.credit-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+}
+
+.credit-card-footer .label {
+  display: block;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+
+.credit-card-footer .value {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* OPTION B: Analytics Widget styling */
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.widget-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.widget-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.widget-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: hsl(150, 100%, 38%);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+&.light-theme .widget-badge {
+  color: hsl(150, 100%, 30%);
+}
+
+.widget-chart-wrapper {
+  margin: 10px 0;
+  color: hsl(187, 100%, 45%);
+}
+
+&.light-theme .widget-chart-wrapper {
+  color: hsl(187, 100%, 40%);
+}
+
+.sparkline-svg {
+  display: block;
+  overflow: visible;
+}
+
+.widget-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Code Export Card Elements
+   ========================================================================== */
+
+.code-export-card {
+  flex-grow: 1;
+}
+
+.code-tab-controls {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.code-output-pane {
+  background: rgba(0, 0, 0, 0.25);
+  border-top: none;
+  position: relative;
+  flex-grow: 1;
+  min-height: 140px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+&.light-theme .code-output-pane {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.code-pre {
+  display: none;
+  padding: 16px 20px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.code-pre.active {
+  display: block;
+}
+
+/* ==========================================================================
+   Status Bar & Error Badges
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+/* Badges */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.status-valid {
+  background: rgba(6, 182, 212, 0.15);
+  color: hsl(187, 100%, 45%);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+&.light-theme .status-valid {
+  color: hsl(187, 100%, 40%);
+}
+
+/* ==========================================================================
+   SEO Section & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col li {
+  margin-top: 6px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-meta p {
+  margin-top: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="14" height="14" rx="2" ry="2"></rect>
+            <rect x="7" y="7" width="14" height="14" rx="2" ry="2" fill="none" opacity="0.5"></rect>
+          </svg>
+          <h1>Glass & Gradient Hub</h1>
+        </div>
+      </div>
+
+      <!-- Controls & Tabs -->
+      <div class="header-right">
+        <!-- Tab Swappers -->
+        <div class="tab-controls">
+          <button id="tab-glass-btn" class="tab-btn active">Glassmorphism</button>
+          <button id="tab-gradient-btn" class="tab-btn">Gradient Designer</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Controls -->
+        <section class="card editor-card">
+          <div class="card-header">
+            <h3 id="panel-title">Glassmorphism Settings</h3>
+            <button id="btn-reset" class="action-link-btn" title="Reset to defaults">Reset</button>
+          </div>
+          
+          <div class="card-body-wrapper">
+            <!-- Glassmorphism Controls Panel -->
+            <div id="controls-glass" class="control-panel active">
+              
+              <!-- Card Background -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Card Background Color</span>
+                  <span class="control-value-display" id="val-glass-color">#ffffff</span>
+                </div>
+                <div class="control-inputs-row">
+                  <input type="color" id="input-glass-color" value="#ffffff">
+                  <div class="quick-colors">
+                    <button class="color-dot active" data-color="#ffffff" style="background:#ffffff;"></button>
+                    <button class="color-dot" data-color="#0f172a" style="background:#0f172a;"></button>
+                    <button class="color-dot" data-color="#1e1b4b" style="background:#1e1b4b;"></button>
+                    <button class="color-dot" data-color="#022c22" style="background:#022c22;"></button>
+                    <button class="color-dot" data-color="#311042" style="background:#311042;"></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Background Opacity -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Background Opacity</span>
+                  <span class="control-value-display" id="val-glass-opacity">0.15</span>
+                </div>
+                <input type="range" id="input-glass-opacity" min="0" max="1" step="0.01" value="0.15" class="slider">
+              </div>
+
+              <!-- Blur Strength -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Backdrop Blur</span>
+                  <span class="control-value-display" id="val-glass-blur">16px</span>
+                </div>
+                <input type="range" id="input-glass-blur" min="0" max="40" step="1" value="16" class="slider">
+              </div>
+
+              <!-- Borders -->
+              <div class="control-group section-divider-top">
+                <div class="control-label-row">
+                  <span class="control-label">Border Color & Opacity</span>
+                  <span class="control-value-display" id="val-border-color-display">#ffffff (0.20)</span>
+                </div>
+                <div class="control-inputs-row">
+                  <input type="color" id="input-border-color" value="#ffffff">
+                  <input type="range" id="input-border-opacity" min="0" max="1" step="0.01" value="0.20" class="slider slider-half">
+                </div>
+              </div>
+
+              <!-- Border Width -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Border Width</span>
+                  <span class="control-value-display" id="val-border-width">1px</span>
+                </div>
+                <input type="range" id="input-border-width" min="0" max="8" step="1" value="1" class="slider">
+              </div>
+
+              <!-- Border Radius -->
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Border Radius</span>
+                  <span class="control-value-display" id="val-border-radius">20px</span>
+                </div>
+                <input type="range" id="input-border-radius" min="0" max="60" step="1" value="20" class="slider">
+              </div>
+
+              <!-- Box Shadow -->
+              <div class="control-group section-divider-top">
+                <div class="control-label-row">
+                  <span class="control-label">Box Shadow Opacity</span>
+                  <span class="control-value-display" id="val-shadow-opacity">0.15</span>
+                </div>
+                <div class="control-inputs-row">
+                  <input type="color" id="input-shadow-color" value="#000000">
+                  <input type="range" id="input-shadow-opacity" min="0" max="1" step="0.01" value="0.15" class="slider slider-half">
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Shadow Blur & Size</span>
+                  <span class="control-value-display" id="val-shadow-blur">32px</span>
+                </div>
+                <input type="range" id="input-shadow-blur" min="0" max="80" step="1" value="32" class="slider">
+              </div>
+
+              <!-- Reflection highlight option -->
+              <div class="control-group section-divider-top inline-checkbox">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="input-glass-reflection" checked>
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label">Add Reflection Highlight (Diagonal Sheen)</span>
+                </label>
+              </div>
+
+            </div>
+
+            <!-- Gradient Designer Controls Panel -->
+            <div id="controls-gradient" class="control-panel">
+              
+              <!-- Gradient Type Selector -->
+              <div class="control-group">
+                <span class="control-label">Gradient Type</span>
+                <div class="toggle-group-row">
+                  <button id="btn-grad-linear" class="toggle-mode-btn active">Linear</button>
+                  <button id="btn-grad-radial" class="toggle-mode-btn">Radial</button>
+                </div>
+              </div>
+
+              <!-- Gradient Angle (Linear Only) -->
+              <div id="group-angle" class="control-group">
+                <div class="control-label-row">
+                  <span class="control-label">Gradient Angle</span>
+                  <span class="control-value-display" id="val-grad-angle">135°</span>
+                </div>
+                <input type="range" id="input-grad-angle" min="0" max="360" step="1" value="135" class="slider">
+              </div>
+
+              <!-- Radial Position (Radial Only) -->
+              <div id="group-position" class="control-group" style="display: none;">
+                <span class="control-label">Radial Position</span>
+                <select id="input-grad-position" class="form-select">
+                  <option value="circle at center">Center</option>
+                  <option value="circle at top left">Top Left</option>
+                  <option value="circle at top right">Top Right</option>
+                  <option value="circle at bottom left">Bottom Left</option>
+                  <option value="circle at bottom right">Bottom Right</option>
+                </select>
+              </div>
+
+              <!-- Color Stops Header -->
+              <div class="control-group section-divider-top">
+                <div class="color-stops-header">
+                  <span class="control-label">Color Stops</span>
+                  <button id="btn-add-stop" class="btn-small-action">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Stop
+                  </button>
+                </div>
+                
+                <!-- Color Stops List Container -->
+                <div id="stops-container" class="color-stops-list">
+                  <!-- Dynamic Stops go here -->
+                </div>
+              </div>
+
+              <!-- Gradient Presets -->
+              <div class="control-group section-divider-top">
+                <span class="control-label">Gorgeous Gradient Presets</span>
+                <div class="gradient-presets-grid">
+                  <button class="preset-card" data-preset="1" title="Sunset Orange" style="background: linear-gradient(135deg, #FF512F 0%, #DD2476 100%);"></button>
+                  <button class="preset-card" data-preset="2" title="Cosmic Purple" style="background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);"></button>
+                  <button class="preset-card" data-preset="3" title="Cool Cyan" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);"></button>
+                  <button class="preset-card" data-preset="4" title="Neon Dream" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 50%, #3f37c9 100%);"></button>
+                  <button class="preset-card" data-preset="5" title="Emerald Sea" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);"></button>
+                  <button class="preset-card" data-preset="6" title="Sweet Peach" style="background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);"></button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Visual Preview & Code Panel -->
+        <div class="preview-column">
+          
+          <!-- Visual Preview Box -->
+          <section class="card preview-card">
+            <div class="card-header">
+              <h3>Real-Time Preview</h3>
+              <div class="preview-controls">
+                <!-- Background Mode Toggles -->
+                <div class="bg-mode-controls">
+                  <span class="preview-label-small">Background:</span>
+                  <button id="bg-mode-custom" class="bg-btn active" title="Use your Custom Gradient">Custom Grad</button>
+                  <button id="bg-mode-pattern" class="bg-btn" title="Use Geometric Shapes Pattern">Mesh shapes</button>
+                  <button id="bg-mode-dark" class="bg-btn" title="Dark Gray grid">Dark Grid</button>
+                </div>
+                <!-- Card Inner Widget Selector -->
+                <div class="divider"></div>
+                <div class="card-content-controls">
+                  <button id="content-card-credit" class="bg-btn active">Credit Card</button>
+                  <button id="content-card-widget" class="bg-btn">Analytics</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper preview-area-wrapper" id="preview-background-container">
+              
+              <!-- Floating Pattern Shapes (for Glass Blur effect verification) -->
+              <div class="pattern-shapes-overlay" id="pattern-shapes" style="display: none;">
+                <div class="bubble bubble-1"></div>
+                <div class="bubble bubble-2"></div>
+                <div class="bubble bubble-3"></div>
+              </div>
+
+              <!-- Main Glass Card Element -->
+              <div class="glass-card-container">
+                <div id="preview-glass-card" class="glass-card">
+                  <!-- Reflection highlight overlay -->
+                  <div class="reflection-sheen" id="reflection-sheen"></div>
+                  
+                  <!-- Option A: Credit Card Content -->
+                  <div id="content-credit" class="card-inner-content">
+                    <div class="credit-card-header">
+                      <div class="chip-container">
+                        <svg class="chip-icon" viewBox="0 0 100 80" width="36" height="30">
+                          <rect width="100" height="80" rx="8" fill="#e2e8f0" opacity="0.8"/>
+                          <line x1="0" y1="20" x2="100" y2="20" stroke="#1e293b" stroke-width="2"/>
+                          <line x1="0" y1="40" x2="100" y2="40" stroke="#1e293b" stroke-width="2"/>
+                          <line x1="0" y1="60" x2="100" y2="60" stroke="#1e293b" stroke-width="2"/>
+                          <line x1="33" y1="0" x2="33" y2="80" stroke="#1e293b" stroke-width="2"/>
+                          <line x1="66" y1="0" x2="66" y2="80" stroke="#1e293b" stroke-width="2"/>
+                        </svg>
+                      </div>
+                      <div class="card-type-icon">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="5" width="20" height="14" rx="2" fill="rgba(255,255,255,0.05)"/>
+                          <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <div class="credit-card-number">
+                      <span>4532</span>
+                      <span>8290</span>
+                      <span>1028</span>
+                      <span>4491</span>
+                    </div>
+                    
+                    <div class="credit-card-footer">
+                      <div class="card-holder">
+                        <span class="label">CARD HOLDER</span>
+                        <span class="value">ALEXANDER D.</span>
+                      </div>
+                      <div class="card-expires">
+                        <span class="label">EXPIRES</span>
+                        <span class="value">12 / 29</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Option B: Analytics Widget Content -->
+                  <div id="content-widget" class="card-inner-content" style="display: none;">
+                    <div class="widget-header">
+                      <div class="widget-meta">
+                        <span class="widget-label">MONTHLY REVENUE</span>
+                        <h4 class="widget-value">$48,256.80</h4>
+                      </div>
+                      <div class="widget-badge">+14.2%</div>
+                    </div>
+                    
+                    <!-- Sparkline visual representation -->
+                    <div class="widget-chart-wrapper">
+                      <svg class="sparkline-svg" viewBox="0 0 300 60" width="100%" height="60">
+                        <path d="M 0,45 Q 30,35 60,38 T 120,20 T 180,35 T 240,10 T 300,5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M 0,45 Q 30,35 60,38 T 120,20 T 180,35 T 240,10 T 300,5 L 300,60 L 0,60 Z" fill="currentColor" opacity="0.05"/>
+                      </svg>
+                    </div>
+
+                    <div class="widget-footer">
+                      <span class="widget-sub">Target: $50k</span>
+                      <span class="widget-sub">96.5% reached</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Code Export Panel -->
+          <section class="card code-export-card">
+            <div class="card-header">
+              <!-- Export Sub-tabs -->
+              <div class="tab-controls code-tab-controls">
+                <button id="code-tab-css" class="tab-btn active">CSS Code</button>
+                <button id="code-tab-tailwind" class="tab-btn">Tailwind CSS</button>
+              </div>
+              
+              <div class="header-actions">
+                <button id="btn-copy-code" class="action-link-btn" title="Copy code to clipboard">Copy Code</button>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper">
+              <div class="code-output-pane">
+                <!-- CSS Output display -->
+                <pre id="code-display-css" class="code-pre active"><code class="language-css">/* Generated CSS style */</code></pre>
+                
+                <!-- Tailwind Output display -->
+                <pre id="code-display-tailwind" class="code-pre"><code class="language-html">&lt;!-- Tailwind CSS classes --&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Generator Active</span>
+        <span class="dot">·</span>
+        <span id="stat-active-mode">Mode: Glassmorphism</span>
+        <span class="dot">·</span>
+        <span id="stat-css-size">CSS rules ready</span>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>Understanding Glassmorphism & Modern CSS Gradients</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p><strong>Glassmorphism</strong> is a modern design trend characterized by translucent, frosted-glass-like elements floating over colorful backgrounds. It creates visual hierarchy, depth, and a premium aesthetic by combining transparency, blur, and borders to mimic real-world materials.</p>
+          
+          <h3>Key CSS Properties for Glassmorphism:</h3>
+          <ul>
+            <li><code>background-color</code>: Typically uses semi-transparent white (e.g., <code>rgba(255, 255, 255, 0.15)</code>) or black, allowing colors behind it to seep through.</li>
+            <li><code>backdrop-filter: blur(Xpx)</code>: The magical property that diffuses the background behind the element. Webkit prefix (<code>-webkit-backdrop-filter</code>) is required for Safari support.</li>
+            <li><code>border</code>: A thin, semi-transparent border mimics the light-refracting edge of a physical glass sheet.</li>
+            <li><code>box-shadow</code>: Soft, dark shadows anchor the glass card to the page, giving it elevation.</li>
+          </ul>
+        </div>
+        
+        <div class="seo-text-col">
+          <h3>High-Performance CSS Gradients</h3>
+          <p>Gradients blend multiple colors smoothly, adding depth and motion to web layouts. They are rendered directly by the browser's engine, ensuring zero-latency loading and perfect scalability compared to image assets.</p>
+          
+          <h3>Linear vs. Radial Gradients:</h3>
+          <ul>
+            <li><strong>Linear Gradients:</strong> Color transitions progress in a straight line, defined by a specific angle (e.g., <code>135deg</code>).</li>
+            <li><strong>Radial Gradients:</strong> Colors radiate outward in a circular or elliptical shape from a source position (e.g., <code>circle at top left</code>).</li>
+          </ul>
+          <p>Combine gradients with glassmorphic cards to create beautiful portfolios, dashboards, credit card UI designs, and landing page hero containers that stand out.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // State variables & Defaults
+  // ==========================================================================
+  
+  const defaults = {
+    glassColor: '#ffffff',
+    glassOpacity: 0.15,
+    glassBlur: 16,
+    borderColor: '#ffffff',
+    borderOpacity: 0.20,
+    borderWidth: 1,
+    borderRadius: 20,
+    shadowColor: '#000000',
+    shadowOpacity: 0.15,
+    shadowBlur: 32,
+    reflection: true,
+    
+    gradType: 'linear',
+    gradAngle: 135,
+    gradPosition: 'circle at center',
+    colorStops: [
+      { id: 1, color: '#FF512F', position: 0 },
+      { id: 2, color: '#DD2476', position: 100 }
+    ],
+    
+    bgMode: 'custom', // custom, pattern, dark
+    cardContent: 'credit' // credit, widget
+  };
+
+  let state = JSON.parse(JSON.stringify(defaults));
+  let stopIdCounter = 3;
+
+  // Preset Gradients Data
+  const presets = {
+    1: [
+      { color: '#FF512F', position: 0 },
+      { color: '#DD2476', position: 100 }
+    ],
+    2: [
+      { color: '#833ab4', position: 0 },
+      { color: '#fd1d1d', position: 50 },
+      { color: '#fcb045', position: 100 }
+    ],
+    3: [
+      { color: '#00c6ff', position: 0 },
+      { color: '#0072ff', position: 100 }
+    ],
+    4: [
+      { color: '#f72585', position: 0 },
+      { color: '#7209b7', position: 50 },
+      { color: '#3f37c9', position: 100 }
+    ],
+    5: [
+      { color: '#11998e', position: 0 },
+      { color: '#38ef7d', position: 100 }
+    ],
+    6: [
+      { color: '#ff0844', position: 0 },
+      { color: '#ffb199', position: 100 }
+    ]
+  };
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  // Theme & Global
+  const themeToggle = document.getElementById('theme-toggle');
+  const btnReset = document.getElementById('btn-reset');
+  const statActiveMode = document.getElementById('stat-active-mode');
+  const statCssSize = document.getElementById('stat-css-size');
+
+  // Tabs
+  const tabGlassBtn = document.getElementById('tab-glass-btn');
+  const tabGradientBtn = document.getElementById('tab-gradient-btn');
+  const controlsGlass = document.getElementById('controls-glass');
+  const controlsGradient = document.getElementById('controls-gradient');
+  const panelTitle = document.getElementById('panel-title');
+
+  // Glass Inputs
+  const inputGlassColor = document.getElementById('input-glass-color');
+  const valGlassColor = document.getElementById('val-glass-color');
+  const colorDots = document.querySelectorAll('.color-dot');
+  const inputGlassOpacity = document.getElementById('input-glass-opacity');
+  const valGlassOpacity = document.getElementById('val-glass-opacity');
+  const inputGlassBlur = document.getElementById('input-glass-blur');
+  const valGlassBlur = document.getElementById('val-glass-blur');
+  
+  const inputBorderColor = document.getElementById('input-border-color');
+  const inputBorderOpacity = document.getElementById('input-border-opacity');
+  const valBorderColorDisplay = document.getElementById('val-border-color-display');
+  const inputBorderWidth = document.getElementById('input-border-width');
+  const valBorderWidth = document.getElementById('val-border-width');
+  const inputBorderRadius = document.getElementById('input-border-radius');
+  const valBorderRadius = document.getElementById('val-border-radius');
+  
+  const inputShadowColor = document.getElementById('input-shadow-color');
+  const inputShadowOpacity = document.getElementById('input-shadow-opacity');
+  const valShadowOpacity = document.getElementById('val-shadow-opacity');
+  const inputShadowBlur = document.getElementById('input-shadow-blur');
+  const valShadowBlur = document.getElementById('val-shadow-blur');
+  
+  const inputGlassReflection = document.getElementById('input-glass-reflection');
+  const reflectionSheen = document.getElementById('reflection-sheen');
+
+  // Gradient Inputs
+  const btnGradLinear = document.getElementById('btn-grad-linear');
+  const btnGradRadial = document.getElementById('btn-grad-radial');
+  const groupAngle = document.getElementById('group-angle');
+  const groupPosition = document.getElementById('group-position');
+  const inputGradAngle = document.getElementById('input-grad-angle');
+  const valGradAngle = document.getElementById('val-grad-angle');
+  const inputGradPosition = document.getElementById('input-grad-position');
+  const stopsContainer = document.getElementById('stops-container');
+  const btnAddStop = document.getElementById('btn-add-stop');
+  const presetCards = document.querySelectorAll('.preset-card');
+
+  // Preview Area
+  const bgModeCustom = document.getElementById('bg-mode-custom');
+  const bgModePattern = document.getElementById('bg-mode-pattern');
+  const bgModeDark = document.getElementById('bg-mode-dark');
+  const previewBackgroundContainer = document.getElementById('preview-background-container');
+  const patternShapes = document.getElementById('pattern-shapes');
+
+  const contentCardCredit = document.getElementById('content-card-credit');
+  const contentCardWidget = document.getElementById('content-card-widget');
+  const contentCredit = document.getElementById('content-credit');
+  const contentWidget = document.getElementById('content-widget');
+  const previewGlassCard = document.getElementById('preview-glass-card');
+
+  // Code Export
+  const codeTabCss = document.getElementById('code-tab-css');
+  const codeTabTailwind = document.getElementById('code-tab-tailwind');
+  const codeDisplayCss = document.getElementById('code-display-css');
+  const codeDisplayTailwind = document.getElementById('code-display-tailwind');
+  const btnCopyCode = document.getElementById('btn-copy-code');
+
+  // ==========================================================================
+  // Helper Functions
+  // ==========================================================================
+
+  // Convert HEX to RGBA string
+  function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 255, g: 255, b: 255 };
+  }
+
+  function getRgbaString(hex, opacity) {
+    const rgb = hexToRgb(hex);
+    return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+  }
+
+  // ==========================================================================
+  // App Logic & Render Functions
+  // ==========================================================================
+
+  // Switch between Glassmorphism and Gradient designer controls
+  function switchTab(mode) {
+    if (mode === 'glass') {
+      tabGlassBtn.classList.add('active');
+      tabGradientBtn.classList.remove('active');
+      controlsGlass.classList.add('active');
+      controlsGradient.classList.remove('active');
+      panelTitle.textContent = 'Glassmorphism Settings';
+      statActiveMode.textContent = 'Mode: Glassmorphism';
+    } else {
+      tabGlassBtn.classList.remove('active');
+      tabGradientBtn.classList.add('active');
+      controlsGlass.classList.remove('active');
+      controlsGradient.classList.add('active');
+      panelTitle.textContent = 'Gradient Designer';
+      statActiveMode.textContent = 'Mode: Gradient Designer';
+    }
+  }
+
+  // Generate CSS code block
+  function generateCSS() {
+    const glassBg = getRgbaString(state.glassColor, state.glassOpacity);
+    const borderBg = getRgbaString(state.borderColor, state.borderOpacity);
+    const shadowBg = getRgbaString(state.shadowColor, state.shadowOpacity);
+    
+    let css = `/* Glassmorphism Card Style */\n.glass-card {\n`;
+    css += `  background: ${glassBg};\n`;
+    if (state.glassBlur > 0) {
+      css += `  backdrop-filter: blur(${state.glassBlur}px);\n`;
+      css += `  -webkit-backdrop-filter: blur(${state.glassBlur}px);\n`;
+    }
+    if (state.borderRadius > 0) {
+      css += `  border-radius: ${state.borderRadius}px;\n`;
+    }
+    if (state.borderWidth > 0) {
+      css += `  border: ${state.borderWidth}px solid ${borderBg};\n`;
+    } else {
+      css += `  border: none;\n`;
+    }
+    if (state.shadowBlur > 0 && state.shadowOpacity > 0) {
+      css += `  box-shadow: 0 8px 32px 0 ${shadowBg};\n`;
+    } else {
+      css += `  box-shadow: none;\n`;
+    }
+    css += `}`;
+
+    // Add Gradient rules if in Custom mode or gradient is customized
+    const gradientRule = getGradientStyleString();
+    css += `\n\n/* Background Gradient */\n.gradient-bg {\n`;
+    css += `  background: ${gradientRule};\n`;
+    css += `}`;
+
+    return css;
+  }
+
+  // Generate Tailwind classes
+  function generateTailwind() {
+    const glassColorName = state.glassColor.toLowerCase() === '#ffffff' ? 'white' : (state.glassColor.toLowerCase() === '#000000' ? 'black' : null);
+    const glassBgClass = glassColorName 
+      ? `bg-${glassColorName}/[${state.glassOpacity}]` 
+      : `bg-[${getRgbaString(state.glassColor, state.glassOpacity)}]`;
+
+    const blurClass = state.glassBlur > 0 ? `backdrop-blur-[${state.glassBlur}px]` : '';
+    const roundedClass = state.borderRadius > 0 ? `rounded-[${state.borderRadius}px]` : '';
+    
+    const borderColorName = state.borderColor.toLowerCase() === '#ffffff' ? 'white' : (state.borderColor.toLowerCase() === '#000000' ? 'black' : null);
+    const borderColClass = borderColorName 
+      ? `border-${borderColorName}/[${state.borderOpacity}]` 
+      : `border-[${getRgbaString(state.borderColor, state.borderOpacity)}]`;
+    
+    const borderClass = state.borderWidth > 0 
+      ? `border-[${state.borderWidth}px] ${borderColClass}` 
+      : '';
+
+    const shadowClass = (state.shadowBlur > 0 && state.shadowOpacity > 0)
+      ? `shadow-[0_8px_32px_0_${getRgbaString(state.shadowColor, state.shadowOpacity)}]`
+      : '';
+
+    let code = `<!-- Glass Card Markup -->\n`;
+    code += `<div class="${glassBgClass} ${blurClass} ${roundedClass} ${borderClass} ${shadowClass} relative p-6 w-80 h-48 overflow-hidden">\n`;
+    if (state.reflection) {
+      code += `  <!-- Diagonal Reflection Sheen -->\n`;
+      code += `  <div class="absolute inset-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-white/20 via-white/5 to-transparent pointer-events-none z-10"></div>\n`;
+    }
+    code += `  <!-- Card Content Goes Here -->\n`;
+    code += `  <div class="relative z-20">\n`;
+    code += `    <p class="text-white">Glassmorphism Element</p>\n`;
+    code += `  </div>\n`;
+    code += `</div>`;
+
+    // Add gradient container markup
+    code += `\n\n<!-- Gradient Container -->\n`;
+    const gradTailwindMarkup = getGradientTailwindString();
+    code += `<div class="${gradTailwindMarkup} w-full h-96 flex items-center justify-center">\n`;
+    code += `  <!-- Your Centered Content -->\n`;
+    code += `</div>`;
+
+    return code;
+  }
+
+  // Get gradient CSS string
+  function getGradientStyleString() {
+    // Sort stops by position
+    const sortedStops = [...state.colorStops].sort((a, b) => a.position - b.position);
+    const stopStrings = sortedStops.map(s => `${s.color} ${s.position}%`).join(', ');
+    
+    if (state.gradType === 'linear') {
+      return `linear-gradient(${state.gradAngle}deg, ${stopStrings})`;
+    } else {
+      return `radial-gradient(${state.gradPosition}, ${stopStrings})`;
+    }
+  }
+
+  // Helper to translate CSS color stops to arbitrary Tailwind classes or custom arb values
+  function getGradientTailwindString() {
+    const sortedStops = [...state.colorStops].sort((a, b) => a.position - b.position);
+    // Arbitrary background gradient since Tailwind standard classes only support 2-3 stops at predefined values easily
+    const gradStyle = getGradientStyleString();
+    return `bg-[${gradStyle}]`;
+  }
+
+  // Update Visual outputs and Code templates
+  function updateCSS() {
+    const glassBg = getRgbaString(state.glassColor, state.glassOpacity);
+    const borderBg = getRgbaString(state.borderColor, state.borderOpacity);
+    const shadowBg = getRgbaString(state.shadowColor, state.shadowOpacity);
+
+    // 1. Apply to the Live Preview Glass Card
+    previewGlassCard.style.background = glassBg;
+    if (state.glassBlur > 0) {
+      previewGlassCard.style.backdropFilter = `blur(${state.glassBlur}px)`;
+      previewGlassCard.style.webkitBackdropFilter = `blur(${state.glassBlur}px)`;
+    } else {
+      previewGlassCard.style.backdropFilter = 'none';
+      previewGlassCard.style.webkitBackdropFilter = 'none';
+    }
+    previewGlassCard.style.borderRadius = `${state.borderRadius}px`;
+    
+    if (state.borderWidth > 0) {
+      previewGlassCard.style.border = `${state.borderWidth}px solid ${borderBg}`;
+    } else {
+      previewGlassCard.style.border = 'none';
+    }
+
+    if (state.shadowBlur > 0 && state.shadowOpacity > 0) {
+      previewGlassCard.style.boxShadow = `0 8px 32px 0 ${shadowBg}`;
+    } else {
+      previewGlassCard.style.boxShadow = 'none';
+    }
+
+    // Sheen reflection display toggle
+    if (state.reflection) {
+      reflectionSheen.style.display = 'block';
+    } else {
+      reflectionSheen.style.display = 'none';
+    }
+
+    // 2. Apply background mode
+    if (state.bgMode === 'custom') {
+      const gradCss = getGradientStyleString();
+      previewBackgroundContainer.style.background = gradCss;
+      patternShapes.style.display = 'none';
+      previewBackgroundContainer.className = 'card-body-wrapper preview-area-wrapper';
+    } else if (state.bgMode === 'pattern') {
+      previewBackgroundContainer.style.background = '#12151c';
+      patternShapes.style.display = 'block';
+      previewBackgroundContainer.className = 'card-body-wrapper preview-area-wrapper';
+    } else {
+      previewBackgroundContainer.style.background = '';
+      patternShapes.style.display = 'none';
+      previewBackgroundContainer.className = 'card-body-wrapper preview-area-wrapper bg-dark-grid';
+    }
+
+    // 3. Render Code Displays
+    const cssCode = generateCSS();
+    const twCode = generateTailwind();
+    
+    codeDisplayCss.querySelector('code').textContent = cssCode;
+    codeDisplayTailwind.querySelector('code').textContent = twCode;
+
+    // 4. Update Stats bar info
+    const sizeBytes = new Blob([cssCode]).size;
+    statCssSize.textContent = `${sizeBytes} Bytes Generated`;
+  }
+
+  // Render Gradient Color Stops
+  function renderStops() {
+    stopsContainer.innerHTML = '';
+    
+    // Sort stops to make visual sense but maintain current editing order in State
+    state.colorStops.forEach((stop, index) => {
+      const stopItem = document.createElement('div');
+      stopItem.className = 'color-stop-item';
+      
+      const isRemovable = state.colorStops.length > 2;
+      
+      stopItem.innerHTML = `
+        <div class="stop-color-wrap">
+          <input type="color" class="stop-color-input" data-id="${stop.id}" value="${stop.color}">
+        </div>
+        <div class="stop-slider-wrap">
+          <input type="range" class="slider stop-pos-slider" data-id="${stop.id}" min="0" max="100" value="${stop.position}">
+          <span class="stop-pos-display">${stop.position}%</span>
+        </div>
+        ${isRemovable ? `
+          <button class="btn-remove-stop" data-id="${stop.id}" title="Remove color stop">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        ` : ''}
+      `;
+      
+      stopsContainer.appendChild(stopItem);
+    });
+
+    // Color stop event listeners
+    const colorInputs = stopsContainer.querySelectorAll('.stop-color-input');
+    colorInputs.forEach(input => {
+      input.addEventListener('input', (e) => {
+        const id = parseInt(e.target.dataset.id);
+        const stop = state.colorStops.find(s => s.id === id);
+        if (stop) {
+          stop.color = e.target.value;
+          updateCSS();
+        }
+      });
+    });
+
+    const posSliders = stopsContainer.querySelectorAll('.stop-pos-slider');
+    posSliders.forEach(slider => {
+      slider.addEventListener('input', (e) => {
+        const id = parseInt(e.target.dataset.id);
+        const stop = state.colorStops.find(s => s.id === id);
+        if (stop) {
+          stop.position = parseInt(e.target.value);
+          // Update adjacent label
+          e.target.nextElementSibling.textContent = `${stop.position}%`;
+          updateCSS();
+        }
+      });
+    });
+
+    const removeBtns = stopsContainer.querySelectorAll('.btn-remove-stop');
+    removeBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget;
+        const id = parseInt(target.dataset.id);
+        state.colorStops = state.colorStops.filter(s => s.id !== id);
+        renderStops();
+        updateCSS();
+      });
+    });
+  }
+
+  // Apply visual settings from state to form inputs
+  function syncStateToInputs() {
+    // Glass inputs
+    inputGlassColor.value = state.glassColor;
+    valGlassColor.textContent = state.glassColor;
+    
+    // Sync active color dot
+    colorDots.forEach(dot => {
+      if (dot.dataset.color.toLowerCase() === state.glassColor.toLowerCase()) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    inputGlassOpacity.value = state.glassOpacity;
+    valGlassOpacity.textContent = state.glassOpacity.toFixed(2);
+
+    inputGlassBlur.value = state.glassBlur;
+    valGlassBlur.textContent = `${state.glassBlur}px`;
+
+    inputBorderColor.value = state.borderColor;
+    inputBorderOpacity.value = state.borderOpacity;
+    valBorderColorDisplay.textContent = `${state.borderColor} (${state.borderOpacity.toFixed(2)})`;
+
+    inputBorderWidth.value = state.borderWidth;
+    valBorderWidth.textContent = `${state.borderWidth}px`;
+
+    inputBorderRadius.value = state.borderRadius;
+    valBorderRadius.textContent = `${state.borderRadius}px`;
+
+    inputShadowColor.value = state.shadowColor;
+    inputShadowOpacity.value = state.shadowOpacity;
+    valShadowOpacity.textContent = state.shadowOpacity.toFixed(2);
+    inputShadowBlur.value = state.shadowBlur;
+    valShadowBlur.textContent = `${state.shadowBlur}px`;
+
+    inputGlassReflection.checked = state.reflection;
+
+    // Gradient inputs
+    if (state.gradType === 'linear') {
+      btnGradLinear.classList.add('active');
+      btnGradRadial.classList.remove('active');
+      groupAngle.style.display = 'flex';
+      groupPosition.style.display = 'none';
+    } else {
+      btnGradLinear.classList.remove('active');
+      btnGradRadial.classList.add('active');
+      groupAngle.style.display = 'none';
+      groupPosition.style.display = 'flex';
+    }
+
+    inputGradAngle.value = state.gradAngle;
+    valGradAngle.textContent = `${state.gradAngle}°`;
+    inputGradPosition.value = state.gradPosition;
+
+    renderStops();
+  }
+
+  // ==========================================================================
+  // Event Listeners Setup
+  // ==========================================================================
+
+  // Tab switcher controls
+  tabGlassBtn.addEventListener('click', () => switchTab('glass'));
+  tabGradientBtn.addEventListener('click', () => switchTab('gradient'));
+
+  // Reset to default settings
+  btnReset.addEventListener('click', () => {
+    state = JSON.parse(JSON.stringify(defaults));
+    syncStateToInputs();
+    updateCSS();
+  });
+
+  // Card background color inputs
+  inputGlassColor.addEventListener('input', (e) => {
+    state.glassColor = e.target.value;
+    valGlassColor.textContent = state.glassColor;
+    
+    // Clear color dot actives
+    colorDots.forEach(dot => dot.classList.remove('active'));
+    updateCSS();
+  });
+
+  colorDots.forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      colorDots.forEach(d => d.classList.remove('active'));
+      e.target.classList.add('active');
+      state.glassColor = e.target.dataset.color;
+      inputGlassColor.value = state.glassColor;
+      valGlassColor.textContent = state.glassColor;
+      updateCSS();
+    });
+  });
+
+  // Sliders input listening
+  inputGlassOpacity.addEventListener('input', (e) => {
+    state.glassOpacity = parseFloat(e.target.value);
+    valGlassOpacity.textContent = state.glassOpacity.toFixed(2);
+    updateCSS();
+  });
+
+  inputGlassBlur.addEventListener('input', (e) => {
+    state.glassBlur = parseInt(e.target.value);
+    valGlassBlur.textContent = `${state.glassBlur}px`;
+    updateCSS();
+  });
+
+  inputBorderColor.addEventListener('input', (e) => {
+    state.borderColor = e.target.value;
+    valBorderColorDisplay.textContent = `${state.borderColor} (${state.borderOpacity.toFixed(2)})`;
+    updateCSS();
+  });
+
+  inputBorderOpacity.addEventListener('input', (e) => {
+    state.borderOpacity = parseFloat(e.target.value);
+    valBorderColorDisplay.textContent = `${state.borderColor} (${state.borderOpacity.toFixed(2)})`;
+    updateCSS();
+  });
+
+  inputBorderWidth.addEventListener('input', (e) => {
+    state.borderWidth = parseInt(e.target.value);
+    valBorderWidth.textContent = `${state.borderWidth}px`;
+    updateCSS();
+  });
+
+  inputBorderRadius.addEventListener('input', (e) => {
+    state.borderRadius = parseInt(e.target.value);
+    valBorderRadius.textContent = `${state.borderRadius}px`;
+    updateCSS();
+  });
+
+  inputShadowColor.addEventListener('input', (e) => {
+    state.shadowColor = e.target.value;
+    updateCSS();
+  });
+
+  inputShadowOpacity.addEventListener('input', (e) => {
+    state.shadowOpacity = parseFloat(e.target.value);
+    valShadowOpacity.textContent = state.shadowOpacity.toFixed(2);
+    updateCSS();
+  });
+
+  inputShadowBlur.addEventListener('input', (e) => {
+    state.shadowBlur = parseInt(e.target.value);
+    valShadowBlur.textContent = `${state.shadowBlur}px`;
+    updateCSS();
+  });
+
+  inputGlassReflection.addEventListener('change', (e) => {
+    state.reflection = e.target.checked;
+    updateCSS();
+  });
+
+  // Gradient configuration listeners
+  btnGradLinear.addEventListener('click', () => {
+    state.gradType = 'linear';
+    btnGradLinear.classList.add('active');
+    btnGradRadial.classList.remove('active');
+    groupAngle.style.display = 'flex';
+    groupPosition.style.display = 'none';
+    updateCSS();
+  });
+
+  btnGradRadial.addEventListener('click', () => {
+    state.gradType = 'radial';
+    btnGradLinear.classList.remove('active');
+    btnGradRadial.classList.add('active');
+    groupAngle.style.display = 'none';
+    groupPosition.style.display = 'flex';
+    updateCSS();
+  });
+
+  inputGradAngle.addEventListener('input', (e) => {
+    state.gradAngle = parseInt(e.target.value);
+    valGradAngle.textContent = `${state.gradAngle}°`;
+    updateCSS();
+  });
+
+  inputGradPosition.addEventListener('change', (e) => {
+    state.gradPosition = e.target.value;
+    updateCSS();
+  });
+
+  btnAddStop.addEventListener('click', () => {
+    // Generate a default color and position that's at the middle/unused range
+    let position = 50;
+    if (state.colorStops.length >= 2) {
+      // Find largest gap
+      const sorted = [...state.colorStops].sort((a,b) => a.position - b.position);
+      let maxGap = 0;
+      let gapIndex = 0;
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const gap = sorted[i+1].position - sorted[i].position;
+        if (gap > maxGap) {
+          maxGap = gap;
+          gapIndex = i;
+        }
+      }
+      if (maxGap > 10) {
+        position = Math.round(sorted[gapIndex].position + maxGap / 2);
+      }
+    }
+    
+    // Add color stop
+    const newStop = {
+      id: stopIdCounter++,
+      color: '#ffffff',
+      position: position
+    };
+    state.colorStops.push(newStop);
+    renderStops();
+    updateCSS();
+  });
+
+  // Preset gradients click
+  presetCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const presetNum = parseInt(e.currentTarget.dataset.preset);
+      const presetStops = presets[presetNum];
+      if (presetStops) {
+        // Map presets to state stops with fresh IDs
+        state.colorStops = presetStops.map((s, idx) => ({
+          id: stopIdCounter++,
+          color: s.color,
+          position: s.position
+        }));
+        renderStops();
+        updateCSS();
+      }
+    });
+  });
+
+  // Background Mode switches
+  bgModeCustom.addEventListener('click', () => {
+    state.bgMode = 'custom';
+    bgModeCustom.classList.add('active');
+    bgModePattern.classList.remove('active');
+    bgModeDark.classList.remove('active');
+    updateCSS();
+  });
+
+  bgModePattern.addEventListener('click', () => {
+    state.bgMode = 'pattern';
+    bgModeCustom.classList.remove('active');
+    bgModePattern.classList.add('active');
+    bgModeDark.classList.remove('active');
+    updateCSS();
+  });
+
+  bgModeDark.addEventListener('click', () => {
+    state.bgMode = 'dark';
+    bgModeCustom.classList.remove('active');
+    bgModePattern.classList.remove('active');
+    bgModeDark.classList.add('active');
+    updateCSS();
+  });
+
+  // Card Content Widget Swapper
+  contentCardCredit.addEventListener('click', () => {
+    state.cardContent = 'credit';
+    contentCardCredit.classList.add('active');
+    contentCardWidget.classList.remove('active');
+    contentCredit.style.display = 'flex';
+    contentWidget.style.display = 'none';
+  });
+
+  contentCardWidget.addEventListener('click', () => {
+    state.cardContent = 'widget';
+    contentCardCredit.classList.remove('active');
+    contentCardWidget.classList.add('active');
+    contentCredit.style.display = 'none';
+    contentWidget.style.display = 'flex';
+  });
+
+  // Code Export tab controls
+  codeTabCss.addEventListener('click', () => {
+    codeTabCss.classList.add('active');
+    codeTabTailwind.classList.remove('active');
+    codeDisplayCss.classList.add('active');
+    codeDisplayTailwind.classList.remove('active');
+  });
+
+  codeTabTailwind.addEventListener('click', () => {
+    codeTabCss.classList.remove('active');
+    codeTabTailwind.classList.add('active');
+    codeDisplayCss.classList.remove('active');
+    codeDisplayTailwind.classList.add('active');
+  });
+
+  // Clipboard copy functions
+  btnCopyCode.addEventListener('click', () => {
+    const isCss = codeDisplayCss.classList.contains('active');
+    const textToCopy = isCss 
+      ? codeDisplayCss.querySelector('code').textContent 
+      : codeDisplayTailwind.querySelector('code').textContent;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalText = btnCopyCode.textContent;
+      btnCopyCode.textContent = 'Copied!';
+      btnCopyCode.style.color = '#38ef7d';
+      
+      setTimeout(() => {
+        btnCopyCode.textContent = originalText;
+        btnCopyCode.style.color = '';
+      }, 1500);
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  });
+
+  // Theme switch logic (adapted from portal)
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Retrieve Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // ==========================================================================
+  // Premium Touch: 3D Mouse Tilt card effect
+  // ==========================================================================
+  const container = document.querySelector('.glass-card-container');
+  const card = document.getElementById('preview-glass-card');
+
+  // Listen to mouse movements in preview box
+  previewBackgroundContainer.addEventListener('mousemove', (e) => {
+    if (window.innerWidth <= 800) {
+      // Disable on mobile/tablet to avoid jitter
+      card.style.transform = '';
+      return;
+    }
+
+    const rect = previewBackgroundContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left; // x position within element.
+    const y = e.clientY - rect.top;  // y position within element.
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Calculate rotation limits (-15deg to 15deg)
+    const rotateX = ((centerY - y) / centerY) * 15;
+    const rotateY = ((x - centerX) / centerX) * 15;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+  // Reset rotation on mouse leave
+  previewBackgroundContainer.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  });
+
+  // ==========================================================================
+  // Initial Init
+  // ==========================================================================
+  syncStateToInputs();
+  updateCSS();
+
+});
+
+
+  </script>
+</body>
+</html>

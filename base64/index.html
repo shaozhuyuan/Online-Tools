@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Base64 Encoder/Decoder & Image to Base64 | Online Tools</title>
+  <meta name="description" content="Encode and decode text strings or binary files to and from Base64 instantly. Upload files to generate Base64 Data URLs, or paste Base64 Data URIs to preview and download as files. 100% secure client-side sandbox.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Base64 Hub)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(187, 100%, 45%);
+}
+
+&.light-theme .logo-icon {
+  color: hsl(187, 100%, 40%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Tab Controls */
+.tab-controls {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  gap: 4px;
+}
+
+&.light-theme .tab-controls {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Grid)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 290px);
+  min-height: 520px;
+}
+
+@media (max-width: 800px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: auto;
+  }
+  .editor-card, .preview-card {
+    height: 380px !important;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body & Textareas */
+.card-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.editor-pane {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#text-input, #text-output {
+  width: 100%;
+  height: 100%;
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: transparent;
+  resize: none;
+  overflow-y: auto;
+}
+
+#text-output {
+  color: var(--text-secondary);
+}
+
+/* Footer Actions */
+.panel-footer-actions {
+  display: flex;
+  gap: 16px;
+  padding: 8px 20px;
+  border-top: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.15);
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+&.light-theme .panel-footer-actions {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.header-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.action-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-link-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Mode Selection buttons */
+.mode-select-row {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 2px;
+  border-radius: 6px;
+  gap: 2px;
+}
+
+&.light-theme .mode-select-row {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.toggle-mode-btn {
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.toggle-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.toggle-mode-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+&.light-theme .toggle-mode-btn.active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   File Mode Workspace Components
+   ========================================================================== */
+
+.file-mode-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Drag and Drop Box */
+.drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 120px;
+  flex-shrink: 0;
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+  border-color: var(--border-color-focus);
+  background: rgba(6, 182, 212, 0.02);
+}
+
+.drop-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.drop-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.browse-link {
+  color: hsl(187, 100%, 45%);
+  text-decoration: underline;
+}
+
+&.light-theme .browse-link {
+  color: hsl(187, 100%, 40%);
+}
+
+.drop-subtext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Separator LINE */
+.text-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin: 14px 0;
+  flex-shrink: 0;
+}
+
+.text-separator::before, .text-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.text-separator:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.text-separator:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* URI Input Area */
+.paste-uri-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 120px;
+}
+
+#file-input-uri {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 70px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  resize: none;
+  color: var(--text-primary);
+}
+
+&.light-theme #file-input-uri {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.paste-uri-container .panel-footer-actions {
+  padding: 6px 0 0 0;
+  border-top: none;
+  background: transparent;
+}
+
+/* File info table */
+.file-info-table {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+&.light-theme .file-info-table {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-label {
+  color: var(--text-muted);
+}
+
+.info-value {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* Preview Window Frame */
+.preview-frame {
+  height: 140px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+&.light-theme .preview-frame {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#preview-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Code Result Box */
+.raw-output-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 100px;
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+#file-output-base64 {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 70px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  resize: none;
+  color: var(--text-secondary);
+}
+
+&.light-theme #file-output-base64 {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   Bottom Status Bar & Error Badges
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+/* Badges */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.status-empty {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.status-valid {
+  background: rgba(6, 182, 212, 0.15);
+  color: hsl(187, 100%, 45%);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.status-invalid {
+  background: rgba(239, 68, 68, 0.15);
+  color: hsl(0, 84%, 60%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+&.light-theme .status-valid {
+  color: hsl(187, 100%, 40%);
+}
+&.light-theme .status-invalid {
+  color: hsl(0, 75%, 45%);
+}
+
+.error-msg-container {
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid hsl(0, 84%, 60%);
+  color: var(--text-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   SEO Section & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col li {
+  margin-top: 6px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-meta p {
+  margin-top: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3L21 7L17 11"></path>
+            <path d="M3 17L7 21L3 17"></path>
+            <path d="M21 7H9"></path>
+            <path d="M3 17H15"></path>
+          </svg>
+          <h1>Base64 Hub</h1>
+        </div>
+      </div>
+
+      <!-- Controls & Tabs -->
+      <div class="header-right">
+        <!-- Tab Swappers -->
+        <div class="tab-controls">
+          <button id="tab-text-btn" class="tab-btn active">Text Converter</button>
+          <button id="tab-file-btn" class="tab-btn">Image & File Tool</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      
+      <!-- TAB 1: Text Mode -->
+      <div id="tab-text-content" class="tab-pane-content">
+        <div class="workspace-layout">
+          
+          <!-- Input Card -->
+          <section class="card editor-card">
+            <div class="card-header">
+              <h3>Input String</h3>
+              <div class="mode-select-row">
+                <!-- Toggle Switch for Encode/Decode -->
+                <button id="btn-mode-encode" class="toggle-mode-btn active" title="Encode text to Base64">Encode</button>
+                <button id="btn-mode-decode" class="toggle-mode-btn" title="Decode Base64 to text">Decode</button>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper">
+              <div class="editor-pane">
+                <textarea id="text-input" spellcheck="false" placeholder="Type or paste plain text to encode..."></textarea>
+              </div>
+              <div class="panel-footer-actions">
+                <button id="btn-text-sample" class="action-link-btn">Load Sample</button>
+                <button id="btn-text-paste" class="action-link-btn">Paste</button>
+                <button id="btn-text-clear" class="action-link-btn">Clear</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Output Card -->
+          <section class="card preview-card">
+            <div class="card-header">
+              <h3>Output Result</h3>
+              <div class="header-actions">
+                <button id="btn-text-copy" class="action-link-btn" title="Copy output text">Copy</button>
+                <button id="btn-text-download" class="action-link-btn" title="Download output text file">Download</button>
+              </div>
+            </div>
+            <div class="card-body-wrapper">
+              <div class="editor-pane">
+                <textarea id="text-output" readonly spellcheck="false" placeholder="Base64 output results will appear here..."></textarea>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: Image & File Mode -->
+      <div id="tab-file-content" class="tab-pane-content" style="display: none;">
+        <div class="workspace-layout">
+          
+          <!-- File Input Card -->
+          <section class="card editor-card">
+            <div class="card-header">
+              <h3>Source File / Data URL</h3>
+            </div>
+            
+            <div class="card-body-wrapper file-mode-body">
+              <!-- Drag and Drop Zone -->
+              <div id="file-drop-zone" class="drop-zone">
+                <svg class="drop-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <div class="drop-text">Drag and drop file here, or <span class="browse-link">browse</span></div>
+                <div class="drop-subtext">Supports PNG, JPEG, SVG, WebP, PDF, TXT (Max 5MB)</div>
+                <input type="file" id="file-input-uploader" style="display: none;">
+              </div>
+
+              <div class="text-separator"><span>OR PASTE BASE64 / DATA URI</span></div>
+
+              <!-- Base64 URI Paste Area -->
+              <div class="paste-uri-container">
+                <textarea id="file-input-uri" spellcheck="false" placeholder="Paste data:image/...;base64,... string here to decode and render..."></textarea>
+                <div class="panel-footer-actions">
+                  <button id="btn-file-paste" class="action-link-btn">Paste URI</button>
+                  <button id="btn-file-clear" class="action-link-btn">Clear All</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- File Output / Preview Card -->
+          <section class="card preview-card">
+            <div class="card-header">
+              <h3>Output Base64 / File Preview</h3>
+              <div class="header-actions">
+                <button id="btn-file-copy" class="action-link-btn" title="Copy Base64 output">Copy Code</button>
+                <button id="btn-file-download" class="action-link-btn" title="Download decoded binary file">Download File</button>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper file-mode-body">
+              <!-- File Details Table -->
+              <div id="file-details" class="file-info-table" style="display: none;">
+                <div class="info-row">
+                  <span class="info-label">File Name:</span>
+                  <span id="detail-name" class="info-value">image.png</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">File Size:</span>
+                  <span id="detail-size" class="info-value">12.5 KB</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Mime Type:</span>
+                  <span id="detail-mime" class="info-value">image/png</span>
+                </div>
+              </div>
+
+              <!-- Rendered Visual Preview -->
+              <div class="preview-frame">
+                <div id="preview-placeholder" class="placeholder-text">Preview window will show rendered image or file details...</div>
+                <img id="preview-img" src="" alt="Base64 Decoded Image Preview" style="display: none;">
+                <iframe id="preview-iframe" src="" style="display: none;"></iframe>
+              </div>
+
+              <!-- Raw Base64 string Output -->
+              <div class="raw-output-wrapper">
+                <div class="preview-label">Base64 Code Result</div>
+                <textarea id="file-output-base64" readonly spellcheck="false" placeholder="Base64 text string will be compiled here..."></textarea>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-status" class="status-badge status-empty">Empty Input</span>
+        <span class="dot">·</span>
+        <span id="stat-size">0 Characters</span>
+      </div>
+      <div class="error-msg-container" id="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>About EtheLab Base64 Encoder/Decoder</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>The **Online Base64 Encoder, Decoder & Converter** is a double-utility web application designed for processing strings and binary file formats. Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format, commonly used to embed images in HTML documents or transfer binary payloads over textual APIs.</p>
+          <h3>How to Convert Text to Base64:</h3>
+          <ul>
+            <li>Ensure the **Text Converter** tab is selected, and choose **Encode** mode.</li>
+            <li>Paste your raw text (e.g., config settings, HTML snippets, API payloads) in the input pane.</li>
+            <li>Copy the resulting Base64 string from the output pane instantly. Toggle **Decode** mode to reverse the operation.</li>
+          </ul>
+        </div>
+        <div class="seo-text-col">
+          <h3>File-to-Base64 Conversion & Visual Decoding</h3>
+          <p><strong>Secure Binary Processing:</strong> Skip the security risks of uploading files to servers. Our **Image & File Tool** runs 100% inside your browser sandbox. Drag and drop any image, vector SVG, text document, or PDF file to generate its raw Base64 data string or complete Data URL template (ideal for `<img> src` tags).</p>
+          <p><strong>Decode base64 to File:</strong> Paste any base64 string or Data URL on the left. The tool automatically extracts the MIME type and file extension, displays a visual thumbnail or preview, and allows you to download the file back to your system as a binary payload.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+  // DOM Elements - Tabs
+  const tabTextBtn = document.getElementById('tab-text-btn');
+  const tabFileBtn = document.getElementById('tab-file-btn');
+  const tabTextContent = document.getElementById('tab-text-content');
+  const tabFileContent = document.getElementById('tab-file-content');
+
+  // DOM Elements - Text Mode
+  const textInput = document.getElementById('text-input');
+  const textOutput = document.getElementById('text-output');
+  const btnModeEncode = document.getElementById('btn-mode-encode');
+  const btnModeDecode = document.getElementById('btn-mode-decode');
+  const btnTextSample = document.getElementById('btn-text-sample');
+  const btnTextPaste = document.getElementById('btn-text-paste');
+  const btnTextClear = document.getElementById('btn-text-clear');
+  const btnTextCopy = document.getElementById('btn-text-copy');
+  const btnTextDownload = document.getElementById('btn-text-download');
+
+  // DOM Elements - File Mode
+  const fileDropZone = document.getElementById('file-drop-zone');
+  const fileInputUploader = document.getElementById('file-input-uploader');
+  const fileInputUri = document.getElementById('file-input-uri');
+  const btnFilePaste = document.getElementById('btn-file-paste');
+  const btnFileClear = document.getElementById('btn-file-clear');
+  const btnFileCopy = document.getElementById('btn-file-copy');
+  const btnFileDownload = document.getElementById('btn-file-download');
+
+  const fileDetailsDiv = document.getElementById('file-details');
+  const detailName = document.getElementById('detail-name');
+  const detailSize = document.getElementById('detail-size');
+  const detailMime = document.getElementById('detail-mime');
+  
+  const previewPlaceholder = document.getElementById('preview-placeholder');
+  const previewImg = document.getElementById('preview-img');
+  const previewIframe = document.getElementById('preview-iframe');
+  const fileOutputBase64 = document.getElementById('file-output-base64');
+
+  // DOM Elements - Status Bar
+  const statStatus = document.getElementById('stat-status');
+  const statSize = document.getElementById('stat-size');
+  const errorMessage = document.getElementById('error-message');
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Active States
+  let activeTab = 'text'; // 'text' or 'file'
+  let textMode = 'encode'; // 'encode' or 'decode'
+  let activeFileBlob = null;
+  let activeFileMime = '';
+  let activeFileName = '';
+
+  // Sample Data
+  const samplePlainText = `EtheLab Hub - Premium Client-Side Web Utilities.
+--------------------------------------------------
+This is a UTF-8 test string showing international characters:
+- Simplified Chinese: 独立开发者工具
+- Traditional Chinese: 獨立開發者工具
+- Japanese: 開発者ツール
+- French: Outils de développement
+- Emojis: 🚀💻🔒🌟`;
+
+  // Shared Theme Logic
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // UTF-8 Safe Base64 Encoders / Decoders
+  function safeUtf8Encode(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function safeUtf8Decode(str) {
+    // Clean string from potential whitespace or newlines
+    const cleanStr = str.replace(/\s/g, '');
+    return decodeURIComponent(escape(window.atob(cleanStr)));
+  }
+
+  // Format File Size
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // Update Status bar helper
+  function updateStatus(status, isError = false, statLabel = '') {
+    if (isError) {
+      statStatus.textContent = 'Error';
+      statStatus.className = 'status-badge status-invalid';
+      errorMessage.textContent = status;
+      errorMessage.style.display = 'block';
+    } else {
+      statStatus.textContent = status;
+      statStatus.className = 'status-badge status-valid';
+      errorMessage.style.display = 'none';
+      errorMessage.textContent = '';
+    }
+    if (statLabel) {
+      statSize.textContent = statLabel;
+    }
+  }
+
+  function resetStatus(label = 'Empty Input') {
+    statStatus.textContent = label;
+    statStatus.className = 'status-badge status-empty';
+    statSize.textContent = activeTab === 'text' ? '0 Characters' : '0 Bytes';
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
+  }
+
+  // Tab Switching Actions
+  tabTextBtn.addEventListener('click', () => {
+    if (activeTab === 'text') return;
+    activeTab = 'text';
+    tabTextBtn.classList.add('active');
+    tabFileBtn.classList.remove('active');
+    tabTextContent.style.display = 'block';
+    tabFileContent.style.display = 'none';
+    processText();
+  });
+
+  tabFileBtn.addEventListener('click', () => {
+    if (activeTab === 'file') return;
+    activeTab = 'file';
+    tabFileBtn.classList.add('active');
+    tabTextBtn.classList.remove('active');
+    tabFileContent.style.display = 'block';
+    tabTextContent.style.display = 'none';
+    processFile();
+  });
+
+  // ==========================================================================
+  // TEXT MODE LOGIC
+  // ==========================================================================
+  function processText() {
+    const input = textInput.value;
+    if (!input) {
+      textOutput.value = '';
+      resetStatus();
+      return;
+    }
+
+    try {
+      if (textMode === 'encode') {
+        const encoded = safeUtf8Encode(input);
+        textOutput.value = encoded;
+        updateStatus('Encoded', false, `${input.length} Chars -> ${encoded.length} Base64`);
+      } else {
+        const decoded = safeUtf8Decode(input);
+        textOutput.value = decoded;
+        updateStatus('Decoded', false, `${input.length} Base64 -> ${decoded.length} Chars`);
+      }
+    } catch (err) {
+      textOutput.value = '';
+      updateStatus(err.message, true);
+    }
+  }
+
+  btnModeEncode.addEventListener('click', () => {
+    if (textMode === 'encode') return;
+    textMode = 'encode';
+    btnModeEncode.classList.add('active');
+    btnModeDecode.classList.remove('active');
+    textInput.placeholder = 'Type or paste plain text to encode...';
+    processText();
+  });
+
+  btnModeDecode.addEventListener('click', () => {
+    if (textMode === 'decode') return;
+    textMode = 'decode';
+    btnModeDecode.classList.add('active');
+    btnModeEncode.classList.remove('active');
+    textInput.placeholder = 'Paste Base64 encoded string to decode...';
+    processText();
+  });
+
+  textInput.addEventListener('input', processText);
+
+  btnTextSample.addEventListener('click', () => {
+    if (textMode === 'encode') {
+      textInput.value = samplePlainText;
+    } else {
+      textInput.value = safeUtf8Encode(samplePlainText);
+    }
+    processText();
+  });
+
+  btnTextPaste.addEventListener('click', () => {
+    navigator.clipboard.readText().then(text => {
+      textInput.value = text;
+      processText();
+    }).catch(err => {
+      alert('Clipboard access denied. Please paste manually.');
+    });
+  });
+
+  btnTextClear.addEventListener('click', () => {
+    textInput.value = '';
+    textOutput.value = '';
+    resetStatus();
+  });
+
+  btnTextCopy.addEventListener('click', () => {
+    const text = textOutput.value;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btnTextCopy.textContent;
+      btnTextCopy.textContent = 'Copied!';
+      setTimeout(() => btnTextCopy.textContent = orig, 1500);
+    });
+  });
+
+  btnTextDownload.addEventListener('click', () => {
+    const text = textOutput.value;
+    if (!text) return;
+    const filename = textMode === 'encode' ? 'base64_encoded.txt' : 'base64_decoded.txt';
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+
+  // ==========================================================================
+  // FILE MODE LOGIC
+  // ==========================================================================
+
+  // Drag over / Drag leave hooks
+  fileDropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileDropZone.classList.add('dragover');
+  });
+
+  fileDropZone.addEventListener('dragleave', () => {
+    fileDropZone.classList.remove('dragover');
+  });
+
+  fileDropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileDropZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      handleFileSelected(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileDropZone.addEventListener('click', () => {
+    fileInputUploader.click();
+  });
+
+  fileInputUploader.addEventListener('change', () => {
+    if (fileInputUploader.files.length > 0) {
+      handleFileSelected(fileInputUploader.files[0]);
+    }
+  });
+
+  function processFile() {
+    // If there is an active file, evaluate stats
+    if (activeFileBlob) {
+      updateStatus('File Compiled', false, `${formatBytes(activeFileBlob.size)} File`);
+    } else if (fileInputUri.value.trim()) {
+      parseDataUri();
+    } else {
+      resetStatus();
+    }
+  }
+
+  function handleFileSelected(file) {
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size exceeds the 5MB limit.');
+      return;
+    }
+
+    activeFileBlob = file;
+    activeFileMime = file.type;
+    activeFileName = file.name;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const dataUrl = e.target.result;
+      
+      // Update output
+      fileOutputBase64.value = dataUrl;
+      fileInputUri.value = ''; // Clear text area
+
+      // Details
+      detailName.textContent = file.name;
+      detailSize.textContent = formatBytes(file.size);
+      detailMime.textContent = file.type || 'unknown';
+      fileDetailsDiv.style.display = 'flex';
+
+      // Render Preview
+      renderFilePreview(dataUrl, file.type);
+      
+      updateStatus('File Encoded', false, `${formatBytes(file.size)} File`);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function renderFilePreview(dataUrl, mime) {
+    previewPlaceholder.style.display = 'none';
+    previewImg.style.display = 'none';
+    previewIframe.style.display = 'none';
+
+    if (mime.startsWith('image/') || mime === 'image/svg+xml') {
+      previewImg.src = dataUrl;
+      previewImg.style.display = 'block';
+    } else if (mime === 'application/pdf' || mime.startsWith('text/')) {
+      previewIframe.src = dataUrl;
+      previewIframe.style.display = 'block';
+    } else {
+      previewPlaceholder.textContent = `No preview available for mime type: ${mime}`;
+      previewPlaceholder.style.display = 'block';
+    }
+  }
+
+  function parseDataUri() {
+    const rawInput = fileInputUri.value.trim();
+    if (!rawInput) {
+      resetFileWorkspace();
+      return;
+    }
+
+    // Pattern for data uri: data:[<mediatype>][;base64],<data>
+    const match = rawInput.match(/^data:([^;]+);base64,(.+)$/);
+    if (match) {
+      const mime = match[1];
+      const base64Code = match[2];
+      
+      try {
+        const decodedBytes = window.atob(base64Code.replace(/\s/g, ''));
+        const byteNumbers = new Array(decodedBytes.length);
+        for (let i = 0; i < decodedBytes.length; i++) {
+          byteNumbers[i] = decodedBytes.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        
+        activeFileBlob = new Blob([byteArray], { type: mime });
+        activeFileMime = mime;
+        activeFileName = 'decoded_file.' + (mime.split('/')[1] || 'bin').split('+')[0];
+
+        // UI Updates
+        fileOutputBase64.value = rawInput;
+        
+        detailName.textContent = activeFileName;
+        detailSize.textContent = formatBytes(activeFileBlob.size);
+        detailMime.textContent = mime;
+        fileDetailsDiv.style.display = 'flex';
+
+        renderFilePreview(rawInput, mime);
+        updateStatus('URI Decoded', false, `${formatBytes(activeFileBlob.size)} File`);
+
+      } catch (err) {
+        updateStatus('Invalid Base64 payload in Data URL: ' + err.message, true);
+        previewPlaceholder.textContent = 'Failed to decode Data URL';
+        previewPlaceholder.style.display = 'block';
+        previewImg.style.display = 'none';
+        previewIframe.style.display = 'none';
+        fileDetailsDiv.style.display = 'none';
+        fileOutputBase64.value = '';
+      }
+    } else {
+      // Try treating as raw Base64 without data URI prefix
+      try {
+        const cleanBase64 = rawInput.replace(/\s/g, '');
+        const decodedBytes = window.atob(cleanBase64);
+        const byteNumbers = new Array(decodedBytes.length);
+        for (let i = 0; i < decodedBytes.length; i++) {
+          byteNumbers[i] = decodedBytes.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        // Detect basic mime type
+        let mime = 'application/octet-stream';
+        // Check image header signatures: PNG, JPG, GIF
+        if (cleanBase64.startsWith('iVBORw0KGgo')) {
+          mime = 'image/png';
+        } else if (cleanBase64.startsWith('/9j/')) {
+          mime = 'image/jpeg';
+        } else if (cleanBase64.startsWith('R0lGOD')) {
+          mime = 'image/gif';
+        } else if (cleanBase64.startsWith('PHN2Zy')) {
+          mime = 'image/svg+xml';
+        }
+
+        const dataUrl = `data:${mime};base64,${cleanBase64}`;
+
+        activeFileBlob = new Blob([byteArray], { type: mime });
+        activeFileMime = mime;
+        activeFileName = 'decoded_file.' + (mime.split('/')[1] || 'bin');
+
+        fileOutputBase64.value = dataUrl;
+        
+        detailName.textContent = activeFileName;
+        detailSize.textContent = formatBytes(activeFileBlob.size);
+        detailMime.textContent = mime;
+        fileDetailsDiv.style.display = 'flex';
+
+        renderFilePreview(dataUrl, mime);
+        updateStatus('Raw Base64 Decoded', false, `${formatBytes(activeFileBlob.size)} File`);
+
+      } catch (err) {
+        updateStatus('String is not a valid Base64 or Data URL.', true);
+        previewPlaceholder.textContent = 'Failed to decode raw Base64';
+        previewPlaceholder.style.display = 'block';
+        previewImg.style.display = 'none';
+        previewIframe.style.display = 'none';
+        fileDetailsDiv.style.display = 'none';
+        fileOutputBase64.value = '';
+      }
+    }
+  }
+
+  fileInputUri.addEventListener('input', parseDataUri);
+
+  btnFilePaste.addEventListener('click', () => {
+    navigator.clipboard.readText().then(text => {
+      fileInputUri.value = text;
+      parseDataUri();
+    }).catch(err => {
+      alert('Clipboard access denied.');
+    });
+  });
+
+  function resetFileWorkspace() {
+    activeFileBlob = null;
+    activeFileMime = '';
+    activeFileName = '';
+    fileInputUri.value = '';
+    fileOutputBase64.value = '';
+    fileInputUploader.value = '';
+    fileDetailsDiv.style.display = 'none';
+    previewPlaceholder.style.display = 'block';
+    previewPlaceholder.textContent = 'Preview window will show rendered image or file details...';
+    previewImg.style.display = 'none';
+    previewImg.src = '';
+    previewIframe.style.display = 'none';
+    previewIframe.src = '';
+    resetStatus();
+  }
+
+  btnFileClear.addEventListener('click', resetFileWorkspace);
+
+  btnFileCopy.addEventListener('click', () => {
+    const text = fileOutputBase64.value;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btnFileCopy.textContent;
+      btnFileCopy.textContent = 'Copied!';
+      setTimeout(() => btnFileCopy.textContent = orig, 1500);
+    });
+  });
+
+  btnFileDownload.addEventListener('click', () => {
+    if (!activeFileBlob) return;
+    const url = URL.createObjectURL(activeFileBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = activeFileName || 'download.bin';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+});
+
+
+  </script>
+</body>
+</html>

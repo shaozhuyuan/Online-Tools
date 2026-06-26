@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Case Converter | Upper, Lower, Title & Sentence Case Converter | Online Tools</title>
+  <meta name="description" content="Easily convert text blocks between UPPERCASE, lowercase, title case, sentence case, and alternating case instantly. Completely free and secure.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Case Converter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(340, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(340, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(244, 63, 94, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(340, 89%, 60%) 0%, hsl(325, 90%, 50%) 100%);
+  --accent-color: hsl(340, 89%, 60%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(340, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(340, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(244, 63, 94, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-main-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+.calc-body.no-padding {
+  padding: 0;
+  background: none;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+&.light-theme .calc-body.no-padding {
+  background: none;
+}
+
+/* ==========================================================================
+   Textarea Editor Card
+   ========================================================================== */
+
+.editor-card {
+  height: 100%;
+  min-height: 400px;
+}
+
+.editor-textarea {
+  width: 100%;
+  height: 300px;
+  min-height: 260px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  border-bottom: 1px solid var(--border-color);
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .editor-textarea {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.editor-textarea:focus {
+  border-color: var(--border-color-focus);
+}
+
+/* Action button strip */
+.action-buttons-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px;
+  background: rgba(0,0,0,0.1);
+}
+
+&.light-theme .action-buttons-panel {
+  background: rgba(0,0,0,0.01);
+}
+
+/* Buttons Styling */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.btn-case {
+  background: rgba(244, 63, 94, 0.06);
+  border-color: rgba(244, 63, 94, 0.15);
+  color: var(--text-secondary);
+}
+
+.btn-case:hover {
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255,255,255,0.08);
+}
+
+&.light-theme .btn-secondary {
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 0.74rem;
+}
+
+.btn-full-width {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+}
+
+/* ==========================================================================
+   Sidebar, Metrics & Descriptions
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.sidebar-actions-row {
+  margin-top: 10px;
+}
+
+/* List details */
+.case-desc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.case-desc-list li {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.case-desc-list li strong {
+  color: var(--text-primary);
+}
+
+/* Bottom Status, SEO, Footer */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path>
+          </svg>
+          <h1>CaseShift Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Interactive Area -->
+        <div class="workspace-main-column">
+          <div class="card editor-card">
+            <div class="card-header">
+              <h3>Type or Paste Text Below</h3>
+              <div class="header-actions">
+                <button id="btn-clear" class="btn btn-secondary btn-small">Clear Text</button>
+              </div>
+            </div>
+            <div class="calc-body no-padding">
+              <textarea id="text-input" class="editor-textarea" placeholder="Start typing or paste your content here..."></textarea>
+            </div>
+            
+            <!-- Conversion Controls Panel -->
+            <div class="action-buttons-panel">
+              <button class="btn btn-case" data-action="upper">UPPERCASE</button>
+              <button class="btn btn-case" data-action="lower">lowercase</button>
+              <button class="btn btn-case" data-action="title">Title Case</button>
+              <button class="btn btn-case" data-action="sentence">Sentence case</button>
+              <button class="btn btn-case" data-action="capitalized">Capitalized Case</button>
+              <button class="btn btn-case" data-action="alternating">aLtErNaTiNg CaSe</button>
+              <button class="btn btn-case" data-action="inverse">InVeRsE CaSe</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Sidebar Metrics & History -->
+        <div class="sidebar-column">
+          <!-- Text Metrics Card -->
+          <section class="card metrics-card">
+            <div class="card-header">
+              <h3>Text Metrics</h3>
+            </div>
+            <div class="calc-body">
+              <div class="analyzer-details">
+                <div class="analy-row">
+                  <span>Characters (with spaces):</span>
+                  <strong id="metric-chars">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Characters (no spaces):</span>
+                  <strong id="metric-chars-nospace">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Words:</span>
+                  <strong id="metric-words">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Lines:</span>
+                  <strong id="metric-lines">0</strong>
+                </div>
+              </div>
+              
+              <!-- Bottom copy row -->
+              <div class="sidebar-actions-row">
+                <button id="btn-copy" class="btn btn-primary btn-full-width">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; margin-right: 6px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy Text
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Instructions Card -->
+          <section class="card instructions-card">
+            <div class="card-header">
+              <h3>Case Descriptions</h3>
+            </div>
+            <div class="calc-body">
+              <ul class="case-desc-list">
+                <li><strong>Sentence case:</strong> Capitalizes first letter of each sentence.</li>
+                <li><strong>Title Case:</strong> Capitalizes major words (ignores small articles like 'a', 'to').</li>
+                <li><strong>Capitalized Case:</strong> Capitalizes the first letter of EVERY word.</li>
+                <li><strong>Inverse Case:</strong> Swaps uppercase to lowercase and vice versa.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Secure Local Processing</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">No server uploads</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Understanding Case Conversions: Title Case, Sentence Case, and inverse formatting</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>Converting document capitalization styles (e.g. UPPERCASE to lowercase) by hand is time-consuming. An online <strong>case converter</strong> allows writers, publishers, and programmers to instantly standardise paragraphs.</p>
+          <h3>Sentence Case vs. Capitalized Case:</h3>
+          <p>Sentence Case capitalizes only the first letter of each sentence, matching standard book style. Capitalized Case applies title-like styling by capitalising the first letter of every single word in the text block.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>Title Case Rules:</h3>
+          <p>Standard AP/Chicago Title Case capitalizes nouns, pronouns, verbs, adjectives, and adverbs, but keeps lowercase for short conjunctions and prepositions (like 'and', 'but', 'for', 'or', 'a', 'the', 'to').</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const textInput = document.getElementById('text-input');
+  
+  // Actions
+  const btnClear = document.getElementById('btn-clear');
+  const btnCopy = document.getElementById('btn-copy');
+  const actionButtons = document.querySelectorAll('.btn-case');
+
+  // Metrics labels
+  const metricChars = document.getElementById('metric-chars');
+  const metricCharsNoSpace = document.getElementById('metric-chars-nospace');
+  const metricWords = document.getElementById('metric-words');
+  const metricLines = document.getElementById('metric-lines');
+
+  // ==========================================================================
+  // Metrics Calculation Logic
+  // ==========================================================================
+
+  function calculateMetrics() {
+    const text = textInput.value;
+
+    metricChars.textContent = text.length;
+    metricCharsNoSpace.textContent = text.replace(/\s/g, '').length;
+
+    // Filter out empty arrays
+    const words = text.trim() ? text.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+    metricWords.textContent = words;
+
+    const lines = text ? text.split('\n').length : 0;
+    metricLines.textContent = lines;
+  }
+
+  // ==========================================================================
+  // Capitalization Formatter Methods
+  // ==========================================================================
+
+  // AP/Chicago Title Case rules
+  function toTitleCase(str) {
+    const smallWords = /^(a|an|and|as|at|but|by|for|in|nor|of|on|or|so|the|to|up|yet)$/i;
+    return str.toLowerCase().replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, (match, index, title) => {
+      if (index > 0 && index + match.length !== title.length &&
+          match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
+          (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+          title.charAt(index - 1).search(/[^\s-]/) < 0) {
+        return match.toLowerCase();
+      }
+      if (match.substr(1).search(/[A-Z]|\../) > -1) {
+        return match;
+      }
+      return match.charAt(0).toUpperCase() + match.substr(1);
+    });
+  }
+
+  // Sentence Case: capitalize first letter of each sentence
+  function toSentenceCase(str) {
+    return str.toLowerCase().replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+  }
+
+  // Capitalized Case: capitalize first letter of EVERY word
+  function toCapitalizedCase(str) {
+    return str.toLowerCase().replace(/\b[a-z]/g, (match) => match.toUpperCase());
+  }
+
+  // alternating case: e.g. aLtErNaTiNg
+  function toAlternatingCase(str) {
+    let chars = str.split('');
+    for (let i = 0; i < chars.length; i++) {
+      if (i % 2 === 0) {
+        chars[i] = chars[i].toLowerCase();
+      } else {
+        chars[i] = chars[i].toUpperCase();
+      }
+    }
+    return chars.join('');
+  }
+
+  // Swaps uppercase to lowercase and vice versa
+  function toInverseCase(str) {
+    return str.split('').map(c => {
+      if (c === c.toUpperCase()) return c.toLowerCase();
+      return c.toUpperCase();
+    }).join('');
+  }
+
+  // ==========================================================================
+  // Register Event Listeners
+  // ==========================================================================
+
+  // Live typing metrics
+  textInput.addEventListener('input', calculateMetrics);
+
+  // Conversion actions
+  actionButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.getAttribute('data-action');
+      const currentText = textInput.value;
+
+      if (!currentText.trim()) return;
+
+      let converted = '';
+      if (action === 'upper') {
+        converted = currentText.toUpperCase();
+      } else if (action === 'lower') {
+        converted = currentText.toLowerCase();
+      } else if (action === 'title') {
+        converted = toTitleCase(currentText);
+      } else if (action === 'sentence') {
+        converted = toSentenceCase(currentText);
+      } else if (action === 'capitalized') {
+        converted = toCapitalizedCase(currentText);
+      } else if (action === 'alternating') {
+        converted = toAlternatingCase(currentText);
+      } else if (action === 'inverse') {
+        converted = toInverseCase(currentText);
+      }
+
+      textInput.value = converted;
+      calculateMetrics();
+    });
+  });
+
+  // Clear text
+  btnClear.addEventListener('click', () => {
+    textInput.value = '';
+    calculateMetrics();
+    textInput.focus();
+  });
+
+  // Copy text to clipboard
+  btnCopy.addEventListener('click', () => {
+    const textToCopy = textInput.value;
+    if (!textToCopy) return;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalText = btnCopy.innerHTML;
+      btnCopy.textContent = 'Copied!';
+      btnCopy.style.background = '#e11d48'; // dark rose highlight
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalText;
+        btnCopy.style.background = '';
+      }, 1200);
+    });
+  });
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Run initial calculations
+  calculateMetrics();
+
+});
+
+
+  </script>
+</body>
+</html>

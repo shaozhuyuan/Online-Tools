@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online JSON Formatter, Validator & Converter | Online Tools</title>
+  <meta name="description" content="A professional client-side JSON formatter, validator, and converter. Beautify, validate, and minify JSON data. Convert JSON to YAML or XML instantly. 100% private, secure, and offline-capable.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (JSON Formatter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(16, 185, 129, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(142, 70%, 45%) 0%, hsl(160, 84%, 39%) 100%);
+  --secondary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(16, 185, 129, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(142, 70%, 45%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-color);
+  margin: 0 4px;
+}
+
+/* Dropdown Select Wrapper */
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-select {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dropdown-select:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.dropdown-select option {
+  background: hsl(222, 47%, 8%);
+  color: #fff;
+}
+
+&.light-theme .dropdown-select option {
+  background: #fff;
+  color: #000;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+.btn-primary:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+&.light-theme .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Pane)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 290px);
+  min-height: 480px;
+}
+
+@media (max-width: 868px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: auto;
+  }
+  .editor-pane, .preview-pane {
+    height: 400px !important;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Panels */
+.editor-pane {
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#editor-textarea {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  color: var(--text-primary);
+  background: transparent;
+  overflow-y: auto;
+}
+
+.preview-pane {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.01);
+  display: flex;
+  flex-direction: column;
+}
+
+&.light-theme .preview-pane {
+  background: rgba(0, 0, 0, 0.005);
+}
+
+.preview-pane pre {
+  margin: 0;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.preview-pane code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.text-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color var(--transition-fast);
+  margin-left: 12px;
+}
+
+.text-link-btn:hover {
+  color: var(--text-primary);
+}
+
+.preview-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Bottom Status Bar & Validation Badges
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+/* Badges */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.status-empty {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.status-valid {
+  background: rgba(16, 185, 129, 0.15);
+  color: hsl(150, 84%, 44%);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-invalid {
+  background: rgba(239, 68, 68, 0.15);
+  color: hsl(0, 84%, 60%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+&.light-theme .status-valid {
+  color: hsl(142, 76%, 36%);
+}
+&.light-theme .status-invalid {
+  color: hsl(0, 75%, 45%);
+}
+
+.error-msg-container {
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid hsl(0, 84%, 60%);
+  color: var(--text-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   SEO Section & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col li {
+  margin-top: 6px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-meta p {
+  margin-top: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" is:inline></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" is:inline></script>
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <h1>JSON Formatter</h1>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Controls Bar -->
+        <button id="btn-sample" class="btn btn-secondary text-btn">Load Sample</button>
+        <button id="btn-clear" class="btn btn-secondary text-btn">Clear</button>
+
+        <div class="divider"></div>
+
+        <!-- Indentation Level Dropdown -->
+        <div class="select-wrapper">
+          <label for="indent-select" class="sr-only">Indentation</label>
+          <select id="indent-select" class="dropdown-select" title="Indentation Spaces">
+            <option value="2">2 Spaces</option>
+            <option value="4" selected>4 Spaces</option>
+            <option value="tab">Tab Indent</option>
+          </select>
+        </div>
+
+        <!-- Format / Minify Actions -->
+        <button id="btn-format" class="btn btn-primary text-btn">Format</button>
+        <button id="btn-minify" class="btn btn-secondary text-btn">Minify</button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Input Panel -->
+        <section class="card editor-card">
+          <div class="card-header">
+            <h3>Input JSON / YAML</h3>
+            <div class="header-actions">
+              <button id="btn-paste" class="text-link-btn" title="Paste from Clipboard">Paste</button>
+            </div>
+          </div>
+          
+          <div class="editor-pane">
+            <textarea id="editor-textarea" spellcheck="false" placeholder="Paste your raw JSON or YAML here..."></textarea>
+          </div>
+        </section>
+
+        <!-- Output Panel -->
+        <section class="card preview-card">
+          <div class="card-header">
+            <h3>Result Output</h3>
+            <div class="preview-actions">
+              <!-- Output Target Selector -->
+              <div class="select-wrapper">
+                <select id="output-type" class="dropdown-select" title="Output format select">
+                  <option value="json" selected>JSON</option>
+                  <option value="yaml">YAML</option>
+                  <option value="xml">XML</option>
+                </select>
+              </div>
+              <button id="btn-copy" class="text-link-btn" title="Copy Output to Clipboard">Copy</button>
+              <button id="btn-download" class="text-link-btn" title="Download Output File">Download</button>
+            </div>
+          </div>
+          <div class="preview-pane" id="output-container">
+            <pre><code id="output-code" class="language-json"></code></pre>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-status" class="status-badge status-empty">Empty Input</span>
+        <span class="dot">·</span>
+        <span id="stat-size">0 Bytes</span>
+        <span class="dot">·</span>
+        <span id="stat-lines">0 Lines</span>
+        <span class="dot">·</span>
+        <span id="stat-keys">0 Keys</span>
+      </div>
+      <div class="error-msg-container" id="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>About EtheLab JSON Formatter & Converter</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>The **Online JSON Formatter, Validator & Converter** is a high-performance web utility built for developers, data engineers, and administrators. JSON (JavaScript Object Notation) is the standard format for API data exchanges, configuration files, and state storage. Our tool helps you format compact minified payload strings into human-readable structured configurations instantly.</p>
+          <h3>How to Validate & Format JSON:</h3>
+          <ul>
+            <li>Paste your raw, minified, or malformed JSON data in the input pane.</li>
+            <li>Click **Format** to clean and indent the text block, or choose custom indent depths (2 spaces, 4 spaces, or Tabs).</li>
+            <li>If there are syntax violations (like trailing commas or unquoted keys), the validation status indicator will turn red and detail the exact line and parsing issue.</li>
+            <li>Convert JSON directly to YAML syntax or clean XML nodes using the format selection dropdown.</li>
+          </ul>
+        </div>
+        <div class="seo-text-col">
+          <h3>Advanced Features and Privacy Protocols</h3>
+          <p><strong>100% Secure Client-Side Execution:</strong> We value your data security. Unlike typical web converters that upload your credentials, keys, or sensitive payload data to backend servers for processing, all parsing, validation, and conversion in EtheLab happens entirely in your local browser sandbox. No networks are queried, meaning zero risk of leakage.</p>
+          <p><strong>Multi-Format Conversion:</strong> Not only can you beautify and validate JSON, but you can also parse raw YAML documents and convert them back to formatted JSON or export straight to XML tags. Use our minification engine to reduce file sizes before deployment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+
+  <!-- CDN scripts: YAML Parser & syntax Highlighter -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+  // DOM Elements
+  const editorTextarea = document.getElementById('editor-textarea');
+  const outputCode = document.getElementById('output-code');
+  const outputTypeSelect = document.getElementById('output-type');
+  const indentSelect = document.getElementById('indent-select');
+  const btnFormat = document.getElementById('btn-format');
+  const btnMinify = document.getElementById('btn-minify');
+  const btnSample = document.getElementById('btn-sample');
+  const btnClear = document.getElementById('btn-clear');
+  const btnPaste = document.getElementById('btn-paste');
+  const btnCopy = document.getElementById('btn-copy');
+  const btnDownload = document.getElementById('btn-download');
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const statStatus = document.getElementById('stat-status');
+  const statSize = document.getElementById('stat-size');
+  const statLines = document.getElementById('stat-lines');
+  const statKeys = document.getElementById('stat-keys');
+  const errorMessage = document.getElementById('error-message');
+
+  // Shared Theme Logic
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Active state data
+  let currentData = null;
+
+  // Sample Data
+  const sampleJson = {
+    "appName": "EtheLab JSON Hub",
+    "version": 2.5,
+    "isActive": true,
+    "developer": {
+      "name": "Independent Web Tools Team",
+      "role": "Core Engineers",
+      "skills": ["JavaScript", "HTML5", "CSS3", "Serverless"]
+    },
+    "features": [
+      {
+        "name": "Syntax Formatter",
+        "offline": true
+      },
+      {
+        "name": "YAML & XML Transpiler",
+        "offline": true
+      },
+      {
+        "name": "Strict Validator",
+        "offline": true
+      }
+    ],
+    "security": {
+      "encryption": "none",
+      "dataStorage": "local-only",
+      "policy": "100% private sandbox execution"
+    },
+    "metadata": null
+  };
+
+  // Helper: Count keys recursively
+  function countKeys(obj) {
+    if (obj === null || typeof obj !== 'object') {
+      return 0;
+    }
+    let count = 0;
+    for (let key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        count++;
+        if (typeof obj[key] === 'object') {
+          count += countKeys(obj[key]);
+        }
+      }
+    }
+    return count;
+  }
+
+  // Helper: Convert JS object to raw XML
+  function jsonToXml(obj, rootName = 'root') {
+    function toXml(val, name) {
+      const tagName = name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+      
+      if (val === null) {
+        return `<${tagName} nil="true" />`;
+      }
+      
+      if (Array.isArray(val)) {
+        let arrXml = '';
+        val.forEach(item => {
+          arrXml += toXml(item, tagName + '_item');
+        });
+        return arrXml;
+      }
+      
+      if (typeof val === 'object') {
+        let childXml = '';
+        for (let key in val) {
+          if (Object.prototype.hasOwnProperty.call(val, key)) {
+            childXml += toXml(val[key], key);
+          }
+        }
+        return `<${tagName}>${childXml}</${tagName}>`;
+      }
+      
+      let safeVal = String(val)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+      return `<${tagName}>${safeVal}</${tagName}>`;
+    }
+    
+    return `<?xml version="1.0" encoding="UTF-8"?>\n` + toXml(obj, rootName);
+  }
+
+  // Helper: XML Pretty Printer
+  function formatXml(xml) {
+    let formatted = '';
+    let reg = /(>)(<)(\/*)/g;
+    xml = xml.replace(reg, '$1\r\n$2$3');
+    let pad = 0;
+    const split = xml.split('\r\n');
+    split.forEach(node => {
+      let indent = 0;
+      if (node.match(/.+<\/\w[^>]*>$/)) {
+        indent = 0;
+      } else if (node.match(/^<\/\w/)) {
+        if (pad !== 0) {
+          pad -= 1;
+        }
+      } else if (node.match(/^<\w[^>]*[^\/]>$/)) {
+        indent = 1;
+      } else {
+        indent = 0;
+      }
+
+      let padding = '';
+      for (let i = 0; i < pad; i++) {
+        padding += '  ';
+      }
+
+      formatted += padding + node + '\r\n';
+      pad += indent;
+    });
+    return formatted.trim();
+  }
+
+  // Helper: Convert to XML
+  function convertToXml(obj) {
+    const rawXml = jsonToXml(obj);
+    return formatXml(rawXml);
+  }
+
+  // Main Parser
+  function parseInput() {
+    const input = editorTextarea.value.trim();
+    if (!input) {
+      resetState();
+      return { success: false, empty: true };
+    }
+    
+    // Try to parse as JSON first
+    try {
+      currentData = JSON.parse(input);
+      return { success: true, type: 'json' };
+    } catch (jsonErr) {
+      // Try YAML
+      try {
+        if (window.jsyaml) {
+          const doc = jsyaml.load(input);
+          if (doc !== undefined && typeof doc === 'object') {
+            currentData = doc;
+            return { success: true, type: 'yaml' };
+          }
+        }
+      } catch (yamlErr) {
+        return { success: false, error: `JSON Parse Error:\n${jsonErr.message}\n\nYAML Parse Error:\n${yamlErr.message}` };
+      }
+      return { success: false, error: jsonErr.message };
+    }
+  }
+
+  // Render Output
+  function renderOutput(parsedType = 'json') {
+    if (currentData === null) return;
+    
+    const outputType = outputTypeSelect.value;
+    const indentVal = indentSelect.value;
+    let indent = 4;
+    if (indentVal === '2') indent = 2;
+    if (indentVal === 'tab') indent = '\t';
+    
+    let outputString = '';
+    
+    try {
+      if (outputType === 'json') {
+        outputString = JSON.stringify(currentData, null, indent);
+        outputCode.className = 'language-json';
+      } else if (outputType === 'yaml') {
+        if (window.jsyaml) {
+          outputString = jsyaml.dump(currentData, {
+            indent: typeof indent === 'number' ? indent : 2,
+            lineWidth: -1
+          });
+        } else {
+          outputString = 'YAML compiler not available.';
+        }
+        outputCode.className = 'language-yaml';
+      } else if (outputType === 'xml') {
+        outputString = convertToXml(currentData);
+        outputCode.className = 'language-xml';
+      }
+      
+      outputCode.textContent = outputString;
+      hljs.highlightElement(outputCode);
+      
+      // Update Stats
+      statStatus.textContent = `Valid ${parsedType.toUpperCase()}`;
+      statStatus.className = 'status-badge status-valid';
+      
+      const byteLength = new Blob([outputString]).size;
+      statSize.textContent = `${byteLength} Bytes`;
+      
+      const linesCount = outputString.split('\n').length;
+      statLines.textContent = `${linesCount} Line${linesCount !== 1 ? 's' : ''}`;
+      
+      const keyCount = countKeys(currentData);
+      statKeys.textContent = `${keyCount} Key${keyCount !== 1 ? 's' : ''}`;
+      
+      errorMessage.style.display = 'none';
+      errorMessage.textContent = '';
+    } catch (err) {
+      showError('Render / Conversion Error: ' + err.message);
+    }
+  }
+
+  // Show Error details
+  function showError(msg) {
+    statStatus.textContent = 'Invalid Syntax';
+    statStatus.className = 'status-badge status-invalid';
+    
+    errorMessage.textContent = msg;
+    errorMessage.style.display = 'block';
+    
+    outputCode.textContent = '';
+    statSize.textContent = '0 Bytes';
+    statLines.textContent = '0 Lines';
+    statKeys.textContent = '0 Keys';
+  }
+
+  // Reset UI State
+  function resetState() {
+    currentData = null;
+    outputCode.textContent = '';
+    statStatus.textContent = 'Empty Input';
+    statStatus.className = 'status-badge status-empty';
+    statSize.textContent = '0 Bytes';
+    statLines.textContent = '0 Lines';
+    statKeys.textContent = '0 Keys';
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
+  }
+
+  // Trigger formatting action
+  function handleFormat() {
+    const result = parseInput();
+    if (result.empty) {
+      return;
+    }
+    if (result.success) {
+      renderOutput(result.type);
+    } else {
+      showError(result.error);
+    }
+  }
+
+  // Format Button Click
+  btnFormat.addEventListener('click', handleFormat);
+
+  // Minify Action
+  btnMinify.addEventListener('click', () => {
+    const result = parseInput();
+    if (result.empty) return;
+    
+    if (result.success) {
+      const outputType = outputTypeSelect.value;
+      let outputString = '';
+      
+      try {
+        if (outputType === 'json') {
+          outputString = JSON.stringify(currentData);
+          outputCode.className = 'language-json';
+        } else if (outputType === 'yaml') {
+          // Flow style minifies YAML structures into inline formats
+          outputString = jsyaml.dump(currentData, { flowLevel: 0 });
+          outputCode.className = 'language-yaml';
+        } else if (outputType === 'xml') {
+          const rawXml = jsonToXml(currentData);
+          outputString = rawXml.replace(/>\s+</g, '><').trim();
+          outputCode.className = 'language-xml';
+        }
+        
+        outputCode.textContent = outputString;
+        hljs.highlightElement(outputCode);
+        
+        statStatus.textContent = 'Minified';
+        statStatus.className = 'status-badge status-valid';
+        
+        const byteLength = new Blob([outputString]).size;
+        statSize.textContent = `${byteLength} Bytes`;
+        
+        statLines.textContent = '1 Line';
+        
+        const keyCount = countKeys(currentData);
+        statKeys.textContent = `${keyCount} Key${keyCount !== 1 ? 's' : ''}`;
+        
+        errorMessage.style.display = 'none';
+      } catch (err) {
+        showError('Minification error: ' + err.message);
+      }
+    } else {
+      showError(result.error);
+    }
+  });
+
+  // Load Sample
+  btnSample.addEventListener('click', () => {
+    editorTextarea.value = JSON.stringify(sampleJson, null, 4);
+    handleFormat();
+  });
+
+  // Clear UI
+  btnClear.addEventListener('click', () => {
+    editorTextarea.value = '';
+    resetState();
+  });
+
+  // Clipboard Paste
+  btnPaste.addEventListener('click', () => {
+    navigator.clipboard.readText().then(text => {
+      editorTextarea.value = text;
+      handleFormat();
+    }).catch(err => {
+      alert('Failed to read from clipboard. Please paste manually into the editor.');
+    });
+  });
+
+  // Clipboard Copy
+  btnCopy.addEventListener('click', () => {
+    const text = outputCode.textContent;
+    if (!text) return;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = btnCopy.textContent;
+      btnCopy.textContent = 'Copied!';
+      setTimeout(() => {
+        btnCopy.textContent = originalText;
+      }, 1500);
+    }).catch(err => {
+      alert('Failed to copy to clipboard.');
+    });
+  });
+
+  // File Download
+  btnDownload.addEventListener('click', () => {
+    const text = outputCode.textContent;
+    if (!text) return;
+    
+    const outputType = outputTypeSelect.value;
+    let filename = 'output.json';
+    let mime = 'application/json';
+    
+    if (outputType === 'yaml') {
+      filename = 'output.yaml';
+      mime = 'text/yaml';
+    } else if (outputType === 'xml') {
+      filename = 'output.xml';
+      mime = 'application/xml';
+    }
+    
+    const blob = new Blob([text], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Listeners for real-time adjustments on dropdown changes
+  indentSelect.addEventListener('change', () => {
+    if (currentData) renderOutput();
+  });
+
+  outputTypeSelect.addEventListener('change', () => {
+    if (currentData) renderOutput();
+  });
+
+  // Auto-format on manual typing pause (optional/helpful)
+  let typingTimer;
+  editorTextarea.addEventListener('input', () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(handleFormat, 800); // Trigger after 800ms of inactivity
+  });
+});
+
+
+  </script>
+</body>
+</html>

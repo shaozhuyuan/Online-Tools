@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online RegEx Tester, Debugger & Cheat Sheet | Online Tools</title>
+  <meta name="description" content="A professional client-side regular expression tester and debugger. Test regex in real-time with visual match highlighting, capture group details, and a built-in interactive cheat sheet. 100% private, offline-capable.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (RegEx Tester)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(139, 92, 246, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(263, 70%, 50%) 0%, hsl(322, 85%, 60%) 100%);
+  --secondary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(139, 92, 246, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(263, 70%, 50%);
+}
+
+&.light-theme .logo-icon {
+  color: hsl(263, 70%, 45%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+.btn-primary:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+&.light-theme .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Columns)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 20px;
+  height: calc(100vh - 290px);
+  min-height: 520px;
+}
+
+.workspace-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: auto;
+  }
+  .test-string-card, .matches-card {
+    height: 300px !important;
+  }
+  .cheat-sheet-card {
+    height: auto !important;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body Sections */
+.card-body-content {
+  padding: 16px 20px;
+}
+
+/* Regex Editor */
+.regex-editor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .regex-editor-row {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.regex-editor-row:focus-within {
+  border-color: var(--border-color-focus);
+}
+
+.regex-slash {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  user-select: none;
+}
+
+#regex-pattern {
+  flex-grow: 1;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+#regex-flags {
+  width: 50px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: hsl(263, 70%, 50%);
+  text-align: center;
+  font-weight: 600;
+}
+
+&.light-theme #regex-flags {
+  color: hsl(263, 70%, 40%);
+}
+
+/* Flag tags toggler */
+.flags-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.toggles-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.flag-toggle-btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.flag-toggle-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.flag-toggle-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+}
+
+/* Editor Input Textarea */
+.regex-input-card {
+  flex-shrink: 0;
+}
+
+.test-string-card {
+  flex-grow: 1;
+}
+
+.editor-pane {
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#test-string {
+  width: 100%;
+  height: 100%;
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  color: var(--text-primary);
+  background: transparent;
+  overflow-y: auto;
+}
+
+/* Matches Panel Workspace */
+.matches-card {
+  flex-grow: 1;
+}
+
+.matches-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.matches-preview-wrapper,
+.group-details-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.matches-preview-wrapper {
+  flex-shrink: 0;
+}
+
+.group-details-wrapper {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* Highlighted Preview Box */
+.matches-highlight-pane {
+  min-height: 100px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--text-primary);
+}
+
+&.light-theme .matches-highlight-pane {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.placeholder-text {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Dynamic highlighting */
+.regex-match {
+  background: rgba(139, 92, 246, 0.25);
+  border-bottom: 2px solid hsl(263, 70%, 50%);
+  position: relative;
+  cursor: help;
+  transition: background var(--transition-fast);
+  padding: 1px 0;
+  border-radius: 2px;
+}
+
+.regex-match:hover {
+  background: rgba(139, 92, 246, 0.4);
+}
+
+.regex-match:nth-of-type(even) {
+  background: rgba(187, 154, 247, 0.22);
+  border-bottom: 2px solid hsl(270, 70%, 60%);
+}
+
+.regex-match:nth-of-type(even):hover {
+  background: rgba(187, 154, 247, 0.4);
+}
+
+/* Capture Groups List */
+.capture-groups-pane {
+  flex-grow: 1;
+  min-height: 100px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+&.light-theme .capture-groups-pane {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.empty-groups-placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  padding-top: 36px;
+}
+
+.group-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+&.light-theme .group-item {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.group-item-header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}
+
+.group-item-match {
+  color: hsl(263, 70%, 50%);
+  font-weight: 600;
+}
+
+&.light-theme .group-item-match {
+  color: hsl(263, 70%, 40%);
+}
+
+.group-captures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-left: 12px;
+  border-left: 1px dashed var(--border-color);
+}
+
+.capture-sub-item {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.capture-sub-index {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+/* Cheat Sheet Card */
+.cheat-sheet-card {
+  flex-shrink: 0;
+  height: 250px;
+}
+
+.cheat-sheet-pane {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.cheat-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .cheat-sheet-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.cheat-section h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.cheat-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cheat-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.cheat-token {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: hsl(263, 70%, 50%);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+&.light-theme .cheat-token {
+  background: rgba(0, 0, 0, 0.02);
+  color: hsl(263, 70%, 40%);
+}
+
+.cheat-token:hover {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(139, 92, 246, 0.2);
+}
+
+.cheat-desc {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.help-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.match-meta-info {
+  background: rgba(139, 92, 246, 0.1);
+  color: hsl(263, 70%, 50%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 2px 10px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+&.light-theme .match-meta-info {
+  color: hsl(263, 70%, 40%);
+}
+
+/* ==========================================================================
+   Bottom Status Bar & Error Badges
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+/* Badges */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.status-empty {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.status-valid {
+  background: rgba(139, 92, 246, 0.15);
+  color: hsl(263, 70%, 50%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.status-invalid {
+  background: rgba(239, 68, 68, 0.15);
+  color: hsl(0, 84%, 60%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+&.light-theme .status-valid {
+  color: hsl(263, 70%, 40%);
+}
+&.light-theme .status-invalid {
+  color: hsl(0, 75%, 45%);
+}
+
+.error-msg-container {
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid hsl(0, 84%, 60%);
+  color: var(--text-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   SEO Section & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col li {
+  margin-top: 6px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-meta p {
+  margin-top: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          <h1>RegEx Tester</h1>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Controls -->
+        <button id="btn-sample" class="btn btn-secondary text-btn">Load Sample</button>
+        <button id="btn-clear" class="btn btn-secondary text-btn">Clear</button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Inputs -->
+        <div class="workspace-column">
+          <!-- Card 1: Regular Expression Input -->
+          <section class="card regex-input-card">
+            <div class="card-header">
+              <h3>Regular Expression</h3>
+            </div>
+            <div class="card-body-content">
+              <div class="regex-editor-row">
+                <span class="regex-slash">/</span>
+                <input type="text" id="regex-pattern" placeholder="([a-zA-Z0-9._%-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,6})" autofocus>
+                <span class="regex-slash">/</span>
+                <input type="text" id="regex-flags" value="g" placeholder="flags" title="Flags: g (global), i (insensitive), m (multiline), s (dotAll)">
+              </div>
+              
+              <!-- Quick Flag Toggles -->
+              <div class="flags-toggle-row">
+                <span class="toggles-label">Flags:</span>
+                <button type="button" class="flag-toggle-btn active" data-flag="g" title="Global (g) - Find all matches rather than stopping at the first">g</button>
+                <button type="button" class="flag-toggle-btn active" data-flag="i" title="Case Insensitive (i) - Ignore case differences">i</button>
+                <button type="button" class="flag-toggle-btn" data-flag="m" title="Multiline (m) - ^ and $ match start/end of lines">m</button>
+                <button type="button" class="flag-toggle-btn" data-flag="s" title="dotAll (s) - Allows . to match newlines">s</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 2: Test String Textarea -->
+          <section class="card test-string-card">
+            <div class="card-header">
+              <h3>Test String</h3>
+            </div>
+            <div class="editor-pane">
+              <textarea id="test-string" spellcheck="false" placeholder="Insert your text here to test your regular expression against..."></textarea>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column: Outputs & Cheat Sheet -->
+        <div class="workspace-column">
+          <!-- Card 3: Matches Preview & Group Details -->
+          <section class="card matches-card">
+            <div class="card-header">
+              <h3>Match Result</h3>
+              <div class="match-meta-info" id="match-stats">0 Matches</div>
+            </div>
+            
+            <div class="matches-workspace">
+              <!-- Rendered highlight panel -->
+              <div class="matches-preview-wrapper">
+                <div class="preview-label">Highlighted Preview</div>
+                <div id="matches-highlighted" class="matches-highlight-pane">
+                  <span class="placeholder-text">Highlight preview will appear here...</span>
+                </div>
+              </div>
+              
+              <!-- Group captures list -->
+              <div class="group-details-wrapper">
+                <div class="preview-label">Capture Groups</div>
+                <div id="capture-groups-list" class="capture-groups-pane">
+                  <div class="empty-groups-placeholder">No capture groups detected</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 4: Interactive Cheat Sheet -->
+          <section class="card cheat-sheet-card">
+            <div class="card-header">
+              <h3>Interactive Cheat Sheet</h3>
+              <span class="help-hint">Click tokens to insert</span>
+            </div>
+            <div class="cheat-sheet-pane">
+              <div class="cheat-sheet-grid">
+                
+                <div class="cheat-section">
+                  <h4>Character Classes</h4>
+                  <ul class="cheat-list">
+                    <li><code class="cheat-token" data-token="." title="Any character except newline">.</code> <span class="cheat-desc">any character</span></li>
+                    <li><code class="cheat-token" data-token="\d" title="Any digit (0-9)">\d</code> <span class="cheat-desc">digit</span></li>
+                    <li><code class="cheat-token" data-token="\D" title="Any non-digit character">\D</code> <span class="cheat-desc">non-digit</span></li>
+                    <li><code class="cheat-token" data-token="\w" title="Word character (letters, digits, underscore)">\w</code> <span class="cheat-desc">word char</span></li>
+                    <li><code class="cheat-token" data-token="\W" title="Non-word character">\W</code> <span class="cheat-desc">non-word char</span></li>
+                    <li><code class="cheat-token" data-token="\s" title="Whitespace character (spaces, tabs, newlines)">\s</code> <span class="cheat-desc">whitespace</span></li>
+                    <li><code class="cheat-token" data-token="\S" title="Non-whitespace character">\S</code> <span class="cheat-desc">non-whitespace</span></li>
+                  </ul>
+                </div>
+
+                <div class="cheat-section">
+                  <h4>Anchors</h4>
+                  <ul class="cheat-list">
+                    <li><code class="cheat-token" data-token="^" title="Start of string or start of line (in multiline mode)">^</code> <span class="cheat-desc">start of line</span></li>
+                    <li><code class="cheat-token" data-token="$" title="End of string or end of line (in multiline mode)">$</code> <span class="cheat-desc">end of line</span></li>
+                    <li><code class="cheat-token" data-token="\b" title="Word boundary position">\b</code> <span class="cheat-desc">word boundary</span></li>
+                    <li><code class="cheat-token" data-token="\B" title="Non-word boundary position">\B</code> <span class="cheat-desc">non-word bound</span></li>
+                  </ul>
+                </div>
+
+                <div class="cheat-section">
+                  <h4>Groups & Ranges</h4>
+                  <ul class="cheat-list">
+                    <li><code class="cheat-token" data-token="[abc]" title="Matches any single character in the set (a, b, or c)">[abc]</code> <span class="cheat-desc">set (a, b, c)</span></li>
+                    <li><code class="cheat-token" data-token="[^abc]" title="Matches any character NOT in the set">[^abc]</code> <span class="cheat-desc">negated set</span></li>
+                    <li><code class="cheat-token" data-token="[a-z]" title="Matches any character in the range a-z">[a-z]</code> <span class="cheat-desc">range a to z</span></li>
+                    <li><code class="cheat-token" data-token="(abc)" title="Capturing group">(...)</code> <span class="cheat-desc">capture group</span></li>
+                    <li><code class="cheat-token" data-token="(?:abc)" title="Non-capturing group">(?:...)</code> <span class="cheat-desc">non-cap group</span></li>
+                    <li><code class="cheat-token" data-token="a|b" title="Matches either pattern a or pattern b">a|b</code> <span class="cheat-desc">alternation</span></li>
+                  </ul>
+                </div>
+
+                <div class="cheat-section">
+                  <h4>Quantifiers</h4>
+                  <ul class="cheat-list">
+                    <li><code class="cheat-token" data-token="*" title="0 or more times">*</code> <span class="cheat-desc">0 or more</span></li>
+                    <li><code class="cheat-token" data-token="+" title="1 or more times">+</code> <span class="cheat-desc">1 or more</span></li>
+                    <li><code class="cheat-token" data-token="?" title="0 or 1 time (optional)">?</code> <span class="cheat-desc">optional</span></li>
+                    <li><code class="cheat-token" data-token="{3}" title="Exactly 3 times">&#123;3&#125;</code> <span class="cheat-desc">exactly 3</span></li>
+                    <li><code class="cheat-token" data-token="{2,5}" title="Between 2 and 5 times">&#123;2,5&#125;</code> <span class="cheat-desc">between 2 and 5</span></li>
+                    <li><code class="cheat-token" data-token="{2,}" title="2 or more times">&#123;2,&#125;</code> <span class="cheat-desc">2 or more</span></li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-status" class="status-badge status-empty">Empty Input</span>
+        <span class="dot">·</span>
+        <span id="stat-time">0 ms</span>
+      </div>
+      <div class="error-msg-container" id="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>About EtheLab RegEx Tester & Cheat Sheet</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>The **Online RegEx Tester & Debugger** is a client-side regular expression workbench designed to help you construct, test, and analyze regex matching patterns. Regular expressions are sequences of characters defining search patterns, widely used for string validation, parsing, and replacements in software engineering.</p>
+          <h3>How to Test and Debug Regex:</h3>
+          <ul>
+            <li>Enter your matching pattern in the **Regular Expression** text input (omit wrapping forward slashes).</li>
+            <li>Configure matching modifiers/flags (like global, case-insensitive, multiline) using the interactive tag toggles.</li>
+            <li>Type or paste your source text in the **Test String** input box.</li>
+            <li>Matches will instantly be highlighted in the results panel. Hovering over matches details indexes and captured groups.</li>
+            <li>Explore captured group values in the structural sidebar breakdown list.</li>
+          </ul>
+        </div>
+        <div class="seo-text-col">
+          <h3>Interactive Cheat Sheet & Privacy Safeguards</h3>
+          <p><strong>100% Local Processing Sandbox:</strong> We prioritize your data safety. Traditional regex validation tools query backend server APIs, meaning your test inputs, passwords, or emails are transmitted over the web. EtheLab processes everything locally inside your browser sandbox. None of your inputs ever leave your local computer.</p>
+          <p><strong>Interactive Syntax Injection:</strong> Learn regex as you build. Our built-in cheat sheet classifies common tokens (Character classes, Anchors, Quantifiers, and Groupings). Simply click any token element to append it directly into your active expression input at the exact cursor position.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+  // DOM Elements
+  const regexPatternInput = document.getElementById('regex-pattern');
+  const regexFlagsInput = document.getElementById('regex-flags');
+  const testStringTextarea = document.getElementById('test-string');
+  const matchesHighlightedDiv = document.getElementById('matches-highlighted');
+  const captureGroupsListDiv = document.getElementById('capture-groups-list');
+  const matchStatsSpan = document.getElementById('match-stats');
+  const statStatus = document.getElementById('stat-status');
+  const statTime = document.getElementById('stat-time');
+  const errorMessageDiv = document.getElementById('error-message');
+
+  const btnSample = document.getElementById('btn-sample');
+  const btnClear = document.getElementById('btn-clear');
+  const themeToggle = document.getElementById('theme-toggle');
+  const flagButtons = document.querySelectorAll('.flag-toggle-btn');
+  const cheatTokens = document.querySelectorAll('.cheat-token');
+
+  // Shared Theme Logic
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Sample data
+  const sampleRegex = '([a-zA-Z0-9._%-]+)@([a-zA-Z0-9.-]+)\\.([a-zA-Z]{2,6})';
+  const sampleFlags = 'g';
+  const sampleTestString = `Welcome to EtheLab regex debugger!
+Please test our matching engine by looking for email patterns:
+- support@yourdomain.com (Support Account)
+- info.marketing@agency-core.net (Marketing Team)
+- invalid-email@domain (missing TLD)
+- contact@ethelab.com (Community Portal)
+
+Feel free to select different flags, modify the pattern, or click tokens in our Interactive Cheat Sheet!`;
+
+  // HTML Escape Helper
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Main evaluation logic
+  function evaluateRegex() {
+    const pattern = regexPatternInput.value;
+    const flags = regexFlagsInput.value;
+    const testStr = testStringTextarea.value;
+
+    // Reset display if empty pattern
+    if (!pattern) {
+      resetResults();
+      return;
+    }
+
+    const startTime = performance.now();
+    let matches = [];
+
+    try {
+      const regex = new RegExp(pattern, flags);
+      
+      // Execute matches with infinite loop protection
+      if (flags.includes('g')) {
+        let match;
+        let lastIndex = -1;
+        while ((match = regex.exec(testStr)) !== null) {
+          // Prevent infinite loops on zero-width matches (e.g. ^, $, \b, a*)
+          if (regex.lastIndex === match.index) {
+            regex.lastIndex++;
+          }
+          if (regex.lastIndex === lastIndex) {
+            break;
+          }
+          lastIndex = regex.lastIndex;
+          matches.push(match);
+        }
+      } else {
+        const match = regex.exec(testStr);
+        if (match !== null) {
+          matches.push(match);
+        }
+      }
+
+      const duration = (performance.now() - startTime).toFixed(1);
+
+      // Successful matching
+      errorMessageDiv.style.display = 'none';
+      errorMessageDiv.textContent = '';
+      statStatus.textContent = 'Valid RegEx';
+      statStatus.className = 'status-badge status-valid';
+      statTime.textContent = `${duration} ms`;
+      matchStatsSpan.textContent = `${matches.length} Match${matches.length !== 1 ? 'es' : ''}`;
+
+      // Build Highlighted Preview
+      renderHighlights(testStr, matches);
+
+      // Render Group Capture List
+      renderCaptureGroups(matches);
+
+    } catch (err) {
+      // RegEx has syntactic errors
+      const duration = (performance.now() - startTime).toFixed(1);
+      statStatus.textContent = 'Invalid RegEx';
+      statStatus.className = 'status-badge status-invalid';
+      statTime.textContent = `${duration} ms`;
+      matchStatsSpan.textContent = '0 Matches';
+      
+      errorMessageDiv.textContent = err.message;
+      errorMessageDiv.style.display = 'block';
+
+      // Fallback preview
+      matchesHighlightedDiv.innerHTML = escapeHtml(testStr) || '<span class="placeholder-text">Highlight preview will appear here...</span>';
+      captureGroupsListDiv.innerHTML = '<div class="empty-groups-placeholder">No capture groups detected</div>';
+    }
+  }
+
+  // Highlights Renderer
+  function renderHighlights(text, matches) {
+    if (!text) {
+      matchesHighlightedDiv.innerHTML = '<span class="placeholder-text">Highlight preview will appear here...</span>';
+      return;
+    }
+
+    if (matches.length === 0) {
+      matchesHighlightedDiv.innerHTML = escapeHtml(text);
+      return;
+    }
+
+    let html = '';
+    let lastIdx = 0;
+
+    matches.forEach((m, matchIdx) => {
+      const start = m.index;
+      const end = start + m[0].length;
+
+      // Escape and append text preceding the match
+      if (start > lastIdx) {
+        html += escapeHtml(text.slice(lastIdx, start));
+      }
+
+      // Escape, highlight and append matched text
+      const matchVal = escapeHtml(text.slice(start, end));
+      const titleAttr = `Match ${matchIdx + 1}\nIndex: ${start}-${end}`;
+      html += `<span class="regex-match" title="${titleAttr}">${matchVal}</span>`;
+
+      lastIdx = end;
+    });
+
+    // Append any trailing text
+    if (lastIdx < text.length) {
+      html += escapeHtml(text.slice(lastIdx));
+    }
+
+    matchesHighlightedDiv.innerHTML = html;
+  }
+
+  // Capture Groups Details Renderer
+  function renderCaptureGroups(matches) {
+    let groupsHtml = '';
+
+    matches.forEach((m, matchIdx) => {
+      if (m.length > 1) {
+        groupsHtml += `
+          <div class="group-item">
+            <div class="group-item-header">
+              <span>Match #${matchIdx + 1}</span>
+              <span class="group-item-index">Index: ${m.index}-${m.index + m[0].length}</span>
+            </div>
+            <div class="group-item-match">${escapeHtml(m[0])}</div>
+            <div class="group-captures-list">
+        `;
+        
+        for (let i = 1; i < m.length; i++) {
+          const captureVal = m[i] !== undefined ? m[i] : 'undefined';
+          groupsHtml += `
+            <div class="capture-sub-item">
+              <strong>Group $${i}:</strong> "${escapeHtml(captureVal)}"
+            </div>
+          `;
+        }
+
+        groupsHtml += `
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    if (!groupsHtml) {
+      groupsHtml = '<div class="empty-groups-placeholder">No capture groups detected</div>';
+    }
+
+    captureGroupsListDiv.innerHTML = groupsHtml;
+  }
+
+  // Reset UI State
+  function resetResults() {
+    statStatus.textContent = 'Empty Input';
+    statStatus.className = 'status-badge status-empty';
+    statTime.textContent = '0 ms';
+    matchStatsSpan.textContent = '0 Matches';
+    errorMessageDiv.style.display = 'none';
+    errorMessageDiv.textContent = '';
+    matchesHighlightedDiv.innerHTML = '<span class="placeholder-text">Highlight preview will appear here...</span>';
+    captureGroupsListDiv.innerHTML = '<div class="empty-groups-placeholder">No capture groups detected</div>';
+  }
+
+  // Flag buttons alignment
+  function syncFlagsFromInput() {
+    const flags = regexFlagsInput.value;
+    flagButtons.forEach(btn => {
+      const flag = btn.getAttribute('data-flag');
+      if (flags.includes(flag)) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function syncInputFromFlags() {
+    let flags = '';
+    flagButtons.forEach(btn => {
+      if (btn.classList.contains('active')) {
+        flags += btn.getAttribute('data-flag');
+      }
+    });
+    regexFlagsInput.value = flags;
+  }
+
+  // Event Listeners for flag buttons
+  flagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      syncInputFromFlags();
+      evaluateRegex();
+    });
+  });
+
+  // Listener for text flags field
+  regexFlagsInput.addEventListener('input', () => {
+    syncFlagsFromInput();
+    evaluateRegex();
+  });
+
+  // Interactive Cheat Sheet Token Injection
+  cheatTokens.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const token = btn.getAttribute('data-token');
+      const start = regexPatternInput.selectionStart;
+      const end = regexPatternInput.selectionEnd;
+      const val = regexPatternInput.value;
+
+      regexPatternInput.value = val.slice(0, start) + token + val.slice(end);
+      
+      // Keep input focused and advance selection range past inserted token
+      regexPatternInput.focus();
+      const newCursorPos = start + token.length;
+      regexPatternInput.setSelectionRange(newCursorPos, newCursorPos);
+
+      // Trigger evaluation immediately
+      evaluateRegex();
+    });
+  });
+
+  // Real-time Inputs Event Listeners
+  regexPatternInput.addEventListener('input', evaluateRegex);
+  testStringTextarea.addEventListener('input', evaluateRegex);
+
+  // Load Sample
+  btnSample.addEventListener('click', () => {
+    regexPatternInput.value = sampleRegex;
+    regexFlagsInput.value = sampleFlags;
+    testStringTextarea.value = sampleTestString;
+    syncFlagsFromInput();
+    evaluateRegex();
+  });
+
+  // Clear Form
+  btnClear.addEventListener('click', () => {
+    regexPatternInput.value = '';
+    regexFlagsInput.value = 'g';
+    testStringTextarea.value = '';
+    syncFlagsFromInput();
+    resetResults();
+    regexPatternInput.focus();
+  });
+
+  // Start in default empty state
+  resetResults();
+});
+
+
+  </script>
+</body>
+</html>

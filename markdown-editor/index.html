@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Markdown Live Editor & Previewer | Online Tools</title>
+  <meta name="description" content="A professional, client-side online Markdown editor. Live HTML preview with syntax highlighting, template presets, character/word count, keyboard shortcuts, Auto-Save, and file download support. 100% secure and offline-capable.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Markdown Editor)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(0, 242, 254, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+  --secondary-gradient: linear-gradient(135deg, hsl(263, 70%, 50%) 0%, hsl(322, 85%, 60%) 100%);
+  
+  /* Markdown Specific Colors */
+  --md-code-bg: rgba(0, 0, 0, 0.3);
+  --md-quote-border: hsl(187, 100%, 45%);
+  --md-quote-bg: rgba(0, 242, 254, 0.04);
+  --md-th-bg: rgba(255, 255, 255, 0.03);
+  
+  --ad-bg: rgba(30, 41, 59, 0.3);
+  --ad-border: rgba(255, 255, 255, 0.06);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(14, 165, 233, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+  
+  /* Markdown Specific Colors */
+  --md-code-bg: rgba(15, 23, 42, 0.05);
+  --md-quote-border: hsl(217, 100%, 56%);
+  --md-quote-bg: rgba(15, 23, 42, 0.02);
+  --md-th-bg: rgba(0, 0, 0, 0.02);
+  
+  --ad-bg: rgba(15, 23, 42, 0.03);
+  --ad-border: rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(187, 100%, 45%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.doc-title-field {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  max-width: 180px;
+  transition: all var(--transition-fast);
+}
+
+&.light-theme .doc-title-field {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.doc-title-field:focus {
+  border-color: var(--border-color-focus);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Dropdown select for presets */
+.dropdown-select {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dropdown-select:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.dropdown-select option {
+  background: hsl(222, 47%, 8%);
+  color: #fff;
+}
+
+&.light-theme .dropdown-select option {
+  background: #fff;
+  color: #000;
+}
+
+/* Custom Dropdown Wrapper for Exports */
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  min-width: 190px;
+  z-index: 100;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dropdown-content button {
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.dropdown-content button:hover {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.dropdown-wrapper.active .dropdown-content {
+  display: block;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+.btn-primary:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+&.light-theme .btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Pane)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 290px);
+  min-height: 480px;
+}
+
+@media (max-width: 868px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: auto;
+  }
+  .editor-pane, .preview-pane {
+    height: 450px !important;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Toolbar Buttons */
+.toolbar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.toolbar button {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.toolbar button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+&.light-theme .toolbar button:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Toggler Checkbox Switch */
+.action-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-toggle-wrapper .label-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: .3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background-color: hsl(187, 100%, 45%);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px hsl(187, 100%, 45%);
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Panels */
+.editor-pane {
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#editor-textarea {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: none;
+  color: var(--text-primary);
+  background: transparent;
+  overflow-y: auto;
+}
+
+.preview-pane {
+  flex-grow: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+&.light-theme .preview-pane {
+  background: rgba(0, 0, 0, 0.005);
+}
+
+.text-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color var(--transition-fast);
+}
+
+.text-link-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Markdown Elements Styling (.markdown-body)
+   ========================================================================== */
+
+.markdown-body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+
+.markdown-body h1 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.markdown-body h2 {
+  font-size: 1.4rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+}
+
+.markdown-body h3 {
+  font-size: 1.15rem;
+}
+
+.markdown-body p, 
+.markdown-body ul, 
+.markdown-body ol, 
+.markdown-body table, 
+.markdown-body pre, 
+.markdown-body blockquote {
+  margin-bottom: 16px;
+}
+
+.markdown-body ul, .markdown-body ol {
+  padding-left: 24px;
+}
+
+.markdown-body li {
+  margin-top: 4px;
+}
+
+.markdown-body a {
+  color: hsl(187, 100%, 45%);
+  text-decoration: underline;
+}
+.markdown-body a:hover {
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.2);
+}
+
+/* Blockquote */
+.markdown-body blockquote {
+  padding: 10px 20px;
+  border-left: 4px solid var(--md-quote-border);
+  background-color: var(--md-quote-bg);
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.markdown-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Tables */
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.markdown-body th, .markdown-body td {
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+
+.markdown-body th {
+  background-color: var(--md-th-bg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markdown-body tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.01);
+}
+
+/* Inline Code pills */
+.markdown-body code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--md-code-bg);
+  color: hsl(322, 85%, 60%);
+  border: 1px solid var(--border-color);
+}
+
+&.light-theme .markdown-body code:not(pre code) {
+  color: hsl(322, 80%, 40%);
+}
+
+/* Fenced Code Blocks (Highlight.js) */
+.markdown-body pre {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background-color: var(--md-code-bg);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.markdown-body hr {
+  height: 1px;
+  background-color: var(--border-color);
+  border: none;
+  margin: 24px 0;
+}
+
+/* ==========================================================================
+   Bottom Status Bar
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+.auto-saved-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: hsl(150, 84%, 44%);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: all var(--transition-fast);
+}
+
+&.light-theme .auto-saved-tag {
+  color: hsl(142, 76%, 36%);
+}
+
+.auto-saved-tag.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.auto-saved-tag svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ==========================================================================
+   SEO Section
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  list-style: none;
+}
+
+.seo-text-col li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.seo-text-col li::before {
+  content: "✦";
+  color: hsl(187, 100%, 45%);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* ==========================================================================
+   AdSense Mockup
+   ========================================================================== */
+
+.adsense-placeholder {
+  background: var(--ad-bg);
+  border: 1px dashed var(--ad-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-label {
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+.ad-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ad-stub-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.banner-ad {
+  min-height: 90px;
+}
+
+.rect-ad {
+  min-height: 180px;
+}
+
+/* ==========================================================================
+   Footer Section
+   ========================================================================== */
+
+.app-footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 8px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Fullscreen Preview Mode Style overrides
+   ========================================================================== */
+
+&.fullscreen-preview-active .app-container {
+  max-width: 100vw;
+  height: 100vh;
+  padding: 0;
+  gap: 0;
+}
+
+&.fullscreen-preview-active .main-header,
+&.fullscreen-preview-active .editor-card,
+&.fullscreen-preview-active .status-bar,
+&.fullscreen-preview-active .seo-content-card,
+&.fullscreen-preview-active .app-footer,
+&.fullscreen-preview-active .adsense-placeholder {
+  display: none !important;
+}
+
+&.fullscreen-preview-active .app-main {
+  height: 100vh;
+}
+
+&.fullscreen-preview-active .workspace-layout {
+  grid-template-columns: 1fr;
+  height: 100vh;
+}
+
+&.fullscreen-preview-active .preview-card {
+  border-radius: 0;
+  border: none;
+  height: 100vh;
+}
+
+&.fullscreen-preview-active .preview-pane {
+  height: 100%;
+}
+
+}
+
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #24292e;
+      background-color: #ffffff;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 8px;
+    }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    p, ul, ol, table, pre, blockquote {
+      margin-bottom: 16px;
+    }
+    a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    blockquote {
+      padding: 0 1em;
+      color: #6a737d;
+      border-left: 0.25em solid #dfe2e5;
+      margin: 0;
+    }
+    pre {
+      padding: 16px;
+      overflow: auto;
+      font-size: 85%;
+      line-height: 1.45;
+      background-color: #f6f8fa;
+      border-radius: 6px;
+    }
+    code {
+      font-family: monospace;
+      padding: 0.2em 0.4em;
+      margin: 0;
+      font-size: 85%;
+      background-color: rgba(27,31,35,0.05);
+      border-radius: 3px;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    table th, table td {
+      padding: 6px 13px;
+      border: 1px solid #dfe2e5;
+    }
+    table tr:nth-child(even) {
+      background-color: #f6f8fa;
+    }
+  
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js" is:inline></script>
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+          </svg>
+          <h1>MarkDown Editor</h1>
+        </div>
+        
+        <!-- Document Name Input -->
+        <input type="text" id="doc-title-input" class="doc-title-field" value="untitled.md" title="Rename Document">
+      </div>
+
+      <div class="header-right">
+        <!-- Template Preset Dropdown -->
+        <select id="template-selector" class="dropdown-select" title="Load Template Preset">
+          <option value="empty">Empty Canvas</option>
+          <option value="readme">README Template</option>
+          <option value="blog">Blog Post Template</option>
+          <option value="api">API Docs Template</option>
+        </select>
+
+        <!-- Import File button -->
+        <button id="btn-import" class="btn btn-secondary text-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          Import
+        </button>
+        <input type="file" id="file-uploader" accept=".md,.txt,.markdown" class="hidden">
+
+        <!-- Export Dropdown Actions -->
+        <div class="dropdown-wrapper">
+          <button id="btn-export-menu" class="btn btn-primary text-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Export
+          </button>
+          <div class="dropdown-content" id="export-dropdown">
+            <button id="export-md">Download Markdown (.md)</button>
+            <button id="export-html">Download HTML (.html)</button>
+            <button id="copy-html">Copy Clean HTML</button>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Editor Left Panel -->
+        <section class="card editor-card">
+          <div class="card-header">
+            <h3>Editor</h3>
+            <!-- Quick Toolbar -->
+            <div class="toolbar" id="editor-toolbar">
+              <button data-action="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+              <button data-action="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+              <button data-action="h1" title="H1 Header">H1</button>
+              <button data-action="h2" title="H2 Header">H2</button>
+              <button data-action="link" title="Insert Link">Link</button>
+              <button data-action="code" title="Insert Code Block">Code</button>
+              <button data-action="quote" title="Insert Blockquote">Quote</button>
+              <button data-action="list" title="Insert Unordered List">List</button>
+              <button data-action="table" title="Insert Table">Table</button>
+            </div>
+            <!-- Sync toggle -->
+            <div class="action-toggle-wrapper">
+              <label class="switch" title="Toggle Synchronized Scrolling">
+                <input type="checkbox" id="sync-scroll-toggle" checked>
+                <span class="slider round"></span>
+              </label>
+              <span class="label-text">Sync Scroll</span>
+            </div>
+          </div>
+          
+          <div class="editor-pane">
+            <textarea id="editor-textarea" spellcheck="false" placeholder="Write markdown content here... (Auto-saves to browser)"></textarea>
+          </div>
+        </section>
+
+        <!-- Preview Right Panel -->
+        <section class="card preview-card">
+          <div class="card-header">
+            <h3>Live Preview</h3>
+            <div class="preview-actions">
+              <button id="btn-fullscreen-preview" class="text-link-btn" title="Fullscreen Preview Mode">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                Fullscreen
+              </button>
+            </div>
+          </div>
+          <div class="preview-pane markdown-body" id="preview-container">
+            <!-- Rendered HTML Output -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-words">0 Words</span>
+        <span class="dot">·</span>
+        <span id="stat-chars">0 Characters</span>
+        <span class="dot">·</span>
+        <span id="stat-lines">0 Lines</span>
+        <span class="dot">·</span>
+        <span id="stat-readtime">0 Min Read</span>
+      </div>
+      <div class="auto-saved-tag" id="autosave-indicator">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Saved
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>About EtheLab Free Markdown Live Editor</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>This **Online Markdown Live Editor** is a professional-grade tool designed for developers, copywriters, and content builders. Markdown is a lightweight markup language that allows you to format plaintext documents easily. Our editor converts this markup into semantic, clean HTML markup in real-time.</p>
+          <h3>How to Write Markdown: Reference Guide</h3>
+          <ul>
+            <li><strong>Headings:</strong> Use `#` for H1, `##` for H2, `###` for H3, etc.</li>
+            <li><strong>Bold & Italic:</strong> Wrap words in `**` for **bold** and `*` for *italic*.</li>
+            <li><strong>Lists:</strong> Use `-` or `*` for unordered lists, and numbers `1.` for ordered lists.</li>
+            <li><strong>Code blocks:</strong> Wrap inline code with single backticks `` ` `` or multi-line blocks with triple backticks `` ``` ``.</li>
+            <li><strong>Links & Images:</strong> Use `[Text](URL)` for link anchors and `![Alt Text](ImageURL)` for media sources.</li>
+          </ul>
+        </div>
+        <div class="seo-text-col">
+          <h3>Advanced Features and Privacy</h3>
+          <p><strong>Auto-Save Integrity:</strong> Focus on your thoughts without the anxiety of losing your text. The editor automatically backups your data locally in the browser cache (`localStorage`) every second.</p>
+          <p><strong>100% Client-Side Processing:</strong> We care about confidentiality. Unlike other markdown editors that send your files to server APIs for compiling, our editor executes everything in-browser. Your texts never leave your machine.</p>
+          <p><strong>Clean Code Export:</strong> With one click, export your document as a standard `.md` file, compile it into stand-alone `.html` with styling hooks, or copy pure HTML straight to your clipboard to paste into CMS portals like WordPress or Webflow.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+
+  <!-- CDN scripts: Markdown Compiler & Code Highlighter -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  /**
+ * EtheLab - Markdown Live Editor Core Logic
+ * Implements real-time compilation, syntax highlighting, toolbar injections,
+ * scroll sync, document importing/exporting, reading analytics, and theme syncing.
+ */
+
+// --- Templates Database ---
+const Templates = {
+  empty: "",
+  readme: `# 🚀 Awesome Project Title
+
+A brief description of what this project does and who it's for.
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-diagonal)](http://makeapullrequest.com)
+
+## ✨ Key Features
+
+- ⚡ **High Performance:** Client-side processing.
+- 🎨 **Modern Interface:** Glassmorphic layout with responsive dark/light modes.
+- 📝 **Rich Presets:** Standard templates ready for launch.
+- 🔒 **Privacy First:** Data never leaves your local browser.
+
+## 🛠️ Installation
+
+Install dependencies using your favorite package manager:
+
+\`\`\`bash
+npm install awesome-library
+# or
+yarn add awesome-library
+\`\`\`
+
+## 💻 Code Example
+
+Here is a quick demo of how to use this library:
+
+\`\`\`javascript
+const { createEngine } = require('awesome-library');
+
+// Initialize the system
+const engine = createEngine({
+  precision: 'high',
+  realtime: true
+});
+
+engine.start((time) => {
+  console.log(\`Running cycle: \${time}ms\`);
+});
+\`\`\`
+
+## 📊 Parameter Configuration
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| \`precision\` | \`string\` | \`'low'\` | High/medium/low CPU cycles frequency |
+| \`realtime\` | \`boolean\` | \`false\` | Enable instant state hooks |
+| \`autoSave\` | \`number\` | \`3000\` | Auto-save database cache rate in ms |
+
+---
+
+## 🙋 FAQ
+
+> **Is this safe to run on enterprise systems?**
+> Absolutely. The code is compiled client-side in the sandboxed browser iframe.
+`,
+  blog: `---
+title: "Building High-Performance Static Web Applications"
+date: "2026-06-06"
+author: "Independent Web Tools Team"
+tags: ["Next.js", "Serverless", "Web Development"]
+---
+
+# Building High-Performance Static Web Applications
+
+Welcome to the future of web development. In this article, we will discuss how to optimize client-side applications to load in under a single second, satisfy crawlers, and keep server costs at **$0**.
+
+![Mock Cover Image](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=60)
+
+## The Philosophy of Zero Server Load
+
+Traditional websites process templates on dynamic servers, incurring costs and introducing response delays. Modern static sites (SSG) compile templates into raw HTML/CSS at build time.
+
+Here are the primary components of this workflow:
+1. **SSG Compilation:** Using frameworks like Next.js to pre-render pages.
+2. **Global CDN Distribution:** Deploying on platforms like Vercel or Netlify.
+3. **Decoupled BaaS APIs:** Using Supabase or Firebase only for necessary dynamic database fetches.
+
+> "A server is a liability. If it doesn't need to calculate, it should be served as a static file."
+
+### Performance Auditing Metrics
+
+Below is a benchmark log showing static assets vs dynamic server responses:
+
+- **Static HTML Document:**
+  - Time To First Byte (TTFB): \`15ms\`
+  - Largest Contentful Paint (LCP): \`0.6s\`
+- **Dynamic Database Response:**
+  - Time To First Byte (TTFB): \`230ms\`
+  - Largest Contentful Paint (LCP): \`1.4s\`
+
+---
+
+*Thank you for reading! Leave a star on GitHub if you found this template helpful.*
+`,
+  api: `# 🎛️ System API Documentation
+
+Welcome to the developer API reference. Below you will find endpoint descriptions, parameter specs, and code snippets.
+
+---
+
+## 🔐 1. Authentication
+
+All requests must include the Bearer token in the request header:
+\`\`\`http
+Authorization: Bearer YOUR_SECRET_API_TOKEN
+\`\`\`
+
+## 🚀 2. Run Stopwatch Engine
+
+Start or trigger an active timer instance in the background.
+
+- **Endpoint:** \`POST /api/v1/stopwatch/start\`
+- **Content-Type:** \`application/json\`
+
+### Request Body Parameters
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| \`instanceId\` | \`string\` | **Yes** | Unique UUID of the running stopwatch |
+| \`precision\` | \`string\` | No | Accuracy mode: \`ms\`, \`seconds\`, or \`minutes\` |
+| \`saveState\` | \`boolean\` | No | Backup checkpoints to persistent DB |
+
+### Example Request
+
+\`\`\`json
+{
+  "instanceId": "87f2b1a0-9c2b-4e12-b13c-e35f088a22bc",
+  "precision": "ms",
+  "saveState": true
+}
+\`\`\`
+
+### Example Response
+
+\`\`\`json
+{
+  "status": "success",
+  "code": 200,
+  "data": {
+    "instanceId": "87f2b1a0-9c2b-4e12-b13c-e35f088a22bc",
+    "timestamp": 1780744437215,
+    "active": true
+  }
+}
+\`\`\`
+`
+};
+
+// --- DOM References ---
+const DOM = {
+  themeToggle: document.getElementById('theme-toggle'),
+  docTitleInput: document.getElementById('doc-title-input'),
+  templateSelector: document.getElementById('template-selector'),
+  btnImport: document.getElementById('btn-import'),
+  fileUploader: document.getElementById('file-uploader'),
+  btnExportMenu: document.getElementById('btn-export-menu'),
+  exportDropdown: document.getElementById('export-dropdown'),
+  
+  exportMd: document.getElementById('export-md'),
+  exportHtml: document.getElementById('export-html'),
+  copyHtml: document.getElementById('copy-html'),
+  
+  editorToolbar: document.getElementById('editor-toolbar'),
+  syncScrollToggle: document.getElementById('sync-scroll-toggle'),
+  editorTextarea: document.getElementById('editor-textarea'),
+  previewContainer: document.getElementById('preview-container'),
+  btnFullscreenPreview: document.getElementById('btn-fullscreen-preview'),
+  
+  statWords: document.getElementById('stat-words'),
+  statChars: document.getElementById('stat-chars'),
+  statLines: document.getElementById('stat-lines'),
+  statReadtime: document.getElementById('stat-readtime'),
+  autosaveIndicator: document.getElementById('autosave-indicator')
+};
+
+// --- Scroll Synchronization Variables ---
+let isScrollingEditor = false;
+let isScrollingPreview = false;
+
+// --- Initialize Markdown Parser (Marked + Highlight.js) ---
+function initMarkdownParser() {
+  if (typeof marked !== 'undefined') {
+    // Configure Highlight.js configuration integration
+    marked.setOptions({
+      highlight: function (code, lang) {
+        if (typeof hljs !== 'undefined') {
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+          return hljs.highlight(code, { language }).value;
+        }
+        return code;
+      },
+      langPrefix: 'hljs language-',
+      gfm: true,
+      breaks: true
+    });
+  }
+}
+
+// --- Compile Markdown to HTML ---
+function compileMarkdown() {
+  const markdownText = DOM.editorTextarea.value;
+  
+  if (typeof marked !== 'undefined') {
+    try {
+      DOM.previewContainer.innerHTML = marked.parse(markdownText);
+    } catch (e) {
+      console.error("Markdown parsing failed:", e);
+      DOM.previewContainer.innerHTML = `<p class="error-msg">Compilation Error: ${e.message}</p>`;
+    }
+  } else {
+    // Fallback if library failed to load
+    DOM.previewContainer.textContent = markdownText;
+  }
+  
+  updateStatistics(markdownText);
+  triggerAutoSave();
+}
+
+// --- Document Statistics Calculator ---
+function updateStatistics(text) {
+  const charCount = text.length;
+  
+  // Clean whitespace to get words
+  const wordsArray = text.trim().split(/\s+/).filter(word => word.length > 0);
+  const wordCount = wordsArray.length;
+  
+  const lineCount = text.split('\n').length;
+  
+  // Calculate average reading time (assumes 200 words per minute)
+  const readingTime = Math.ceil(wordCount / 200);
+  
+  DOM.statChars.textContent = `${charCount} Character${charCount !== 1 ? 's' : ''}`;
+  DOM.statWords.textContent = `${wordCount} Word${wordCount !== 1 ? 's' : ''}`;
+  DOM.statLines.textContent = `${lineCount} Line${lineCount !== 1 ? 's' : ''}`;
+  DOM.statReadtime.textContent = `${readingTime} Min Read`;
+}
+
+// --- Auto-Save Mechanism (LocalStorage) ---
+let autosaveTimeout = null;
+
+function triggerAutoSave() {
+  // Clear previous debounce timeout
+  if (autosaveTimeout) {
+    clearTimeout(autosaveTimeout);
+  }
+  
+  autosaveTimeout = setTimeout(() => {
+    localStorage.setItem('ethelab_md_content', DOM.editorTextarea.value);
+    localStorage.setItem('ethelab_md_title', DOM.docTitleInput.value);
+    localStorage.setItem('ethelab_md_sync_scroll', DOM.syncScrollToggle.checked);
+    localStorage.setItem('ethelab_md_template', DOM.templateSelector.value);
+    
+    // Show visual confirmation save tag
+    DOM.autosaveIndicator.classList.add('show');
+    setTimeout(() => {
+      DOM.autosaveIndicator.classList.remove('show');
+    }, 1200);
+  }, 1000); // 1-second debounce auto-save
+}
+
+function restoreAutoSaveState() {
+  const savedContent = localStorage.getItem('ethelab_md_content');
+  const savedTitle = localStorage.getItem('ethelab_md_title');
+  const savedSync = localStorage.getItem('ethelab_md_sync_scroll');
+  const savedTemplate = localStorage.getItem('ethelab_md_template');
+  
+  // Restore title
+  if (savedTitle !== null) {
+    DOM.docTitleInput.value = savedTitle;
+  }
+  
+  // Restore sync status
+  if (savedSync !== null) {
+    DOM.syncScrollToggle.checked = savedSync === 'true';
+  }
+  
+  // Restore template choice
+  if (savedTemplate !== null) {
+    DOM.templateSelector.value = savedTemplate;
+  }
+  
+  // Restore text content (defaults to readme template if empty)
+  if (savedContent !== null) {
+    DOM.editorTextarea.value = savedContent;
+  } else {
+    DOM.editorTextarea.value = Templates.readme;
+    DOM.templateSelector.value = 'readme';
+  }
+  
+  compileMarkdown();
+}
+
+// --- Sync Scrolling Implementation ---
+function setupSyncScroll() {
+  const textarea = DOM.editorTextarea;
+  const preview = DOM.previewContainer;
+  
+  textarea.addEventListener('scroll', () => {
+    if (!DOM.syncScrollToggle.checked) return;
+    if (isScrollingPreview) {
+      isScrollingPreview = false;
+      return;
+    }
+    
+    isScrollingEditor = true;
+    
+    // Calculate scroll percentage ratio
+    const scrollableHeight = textarea.scrollHeight - textarea.clientHeight;
+    if (scrollableHeight <= 0) return;
+    const scrollPercentage = textarea.scrollTop / scrollableHeight;
+    
+    // Apply ratio to preview scroll height
+    const previewScrollableHeight = preview.scrollHeight - preview.clientHeight;
+    preview.scrollTop = scrollPercentage * previewScrollableHeight;
+  });
+  
+  preview.addEventListener('scroll', () => {
+    if (!DOM.syncScrollToggle.checked) return;
+    if (isScrollingEditor) {
+      isScrollingEditor = false;
+      return;
+    }
+    
+    isScrollingPreview = true;
+    
+    // Calculate scroll percentage ratio
+    const previewScrollableHeight = preview.scrollHeight - preview.clientHeight;
+    if (previewScrollableHeight <= 0) return;
+    const scrollPercentage = preview.scrollTop / previewScrollableHeight;
+    
+    // Apply ratio to textarea scroll height
+    const scrollableHeight = textarea.scrollHeight - textarea.clientHeight;
+    textarea.scrollTop = scrollPercentage * scrollableHeight;
+  });
+}
+
+// --- Toolbar Insert Helpers ---
+function insertMarkdownSyntax(action) {
+  const textarea = DOM.editorTextarea;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const text = textarea.value;
+  const selectedText = text.substring(start, end);
+  
+  let inserted = "";
+  let cursorOffset = 0;
+  
+  switch (action) {
+    case 'bold':
+      inserted = `**${selectedText || "bold text"}**`;
+      cursorOffset = selectedText ? inserted.length : 2;
+      break;
+    case 'italic':
+      inserted = `*${selectedText || "italic text"}*`;
+      cursorOffset = selectedText ? inserted.length : 1;
+      break;
+    case 'h1':
+      inserted = `\n# ${selectedText || "Heading 1"}\n`;
+      cursorOffset = inserted.length - 1;
+      break;
+    case 'h2':
+      inserted = `\n## ${selectedText || "Heading 2"}\n`;
+      cursorOffset = inserted.length - 1;
+      break;
+    case 'link':
+      inserted = `[${selectedText || "link title"}](https://example.com)`;
+      cursorOffset = selectedText ? inserted.length : 1;
+      break;
+    case 'code':
+      inserted = `\n\`\`\`javascript\n${selectedText || "// code goes here"}\n\`\`\`\n`;
+      cursorOffset = selectedText ? inserted.length - 5 : 13;
+      break;
+    case 'quote':
+      inserted = `\n> ${selectedText || "block quote"}\n`;
+      cursorOffset = inserted.length - 1;
+      break;
+    case 'list':
+      inserted = `\n- ${selectedText || "list item"}\n`;
+      cursorOffset = inserted.length - 1;
+      break;
+    case 'table':
+      inserted = `\n| Header 1 | Header 2 |\n| :--- | :--- |\n| Row 1 Col 1 | Row 1 Col 2 |\n`;
+      cursorOffset = inserted.length;
+      break;
+  }
+  
+  // Save scroll position to prevent jumping
+  const scrollTop = textarea.scrollTop;
+
+  // Replace text
+  textarea.value = text.substring(0, start) + inserted + text.substring(end);
+  
+  // Set selection range first, then focus, and restore scroll position
+  textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
+  textarea.focus();
+  textarea.scrollTop = scrollTop;
+  
+  compileMarkdown();
+}
+
+// --- Export Files Helpers ---
+function triggerDownload(content, mimeType, extension) {
+  const title = DOM.docTitleInput.value.trim().replace(/\.[^/.]+$/, ""); // strip existing extension
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `${title || "untitled"}.${extension}`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function getCompiledHTMLWrapper() {
+  const title = DOM.docTitleInput.value;
+  const compiledContent = DOM.previewContainer.innerHTML;
+  
+  // Wrap preview HTML in a clean, self-contained stylesheet template
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #24292e;
+      background-color: #ffffff;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 8px;
+    }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    p, ul, ol, table, pre, blockquote {
+      margin-bottom: 16px;
+    }
+    a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    blockquote {
+      padding: 0 1em;
+      color: #6a737d;
+      border-left: 0.25em solid #dfe2e5;
+      margin: 0;
+    }
+    pre {
+      padding: 16px;
+      overflow: auto;
+      font-size: 85%;
+      line-height: 1.45;
+      background-color: #f6f8fa;
+      border-radius: 6px;
+    }
+    code {
+      font-family: monospace;
+      padding: 0.2em 0.4em;
+      margin: 0;
+      font-size: 85%;
+      background-color: rgba(27,31,35,0.05);
+      border-radius: 3px;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    table th, table td {
+      padding: 6px 13px;
+      border: 1px solid #dfe2e5;
+    }
+    table tr:nth-child(even) {
+      background-color: #f6f8fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="markdown-body">
+    ${compiledContent}
+  </div>
+</body>
+</html>`;
+}
+
+// --- Bindings Setup ---
+function setupBindings() {
+  // Realtime Compilation Listener
+  DOM.editorTextarea.addEventListener('input', compileMarkdown);
+  DOM.docTitleInput.addEventListener('input', triggerAutoSave);
+  
+  // Theme Switching
+  DOM.themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+  
+  // Sync Global Theme Choice
+  const globalTheme = localStorage.getItem('ethelab_portal_theme');
+  if (globalTheme === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Template Selector loading
+  DOM.templateSelector.addEventListener('change', () => {
+    const val = DOM.templateSelector.value;
+    const currentText = DOM.editorTextarea.value.trim();
+    
+    // Ask confirmation if text exists to avoid accidental clearing
+    if (currentText.length > 0 && currentText !== Templates.readme && currentText !== Templates.blog && currentText !== Templates.api) {
+      const confirmLoad = confirm("Are you sure you want to load this template? Your current unsaved draft will be replaced.");
+      if (!confirmLoad) {
+        // Revert selector value
+        return;
+      }
+    }
+    
+    DOM.editorTextarea.value = Templates[val] || "";
+    compileMarkdown();
+  });
+  
+  // File Uploader/Importer
+  DOM.btnImport.addEventListener('click', () => {
+    DOM.fileUploader.click();
+  });
+  
+  DOM.fileUploader.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      DOM.editorTextarea.value = event.target.result;
+      DOM.docTitleInput.value = file.name;
+      compileMarkdown();
+    };
+    reader.readAsText(file);
+  });
+  
+  // Export Dropdown Click toggle
+  DOM.btnExportMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    DOM.exportDropdown.parentElement.classList.toggle('active');
+  });
+  
+  document.addEventListener('click', () => {
+    DOM.exportDropdown.parentElement.classList.remove('active');
+  });
+  
+  // Export Actions
+  DOM.exportMd.addEventListener('click', () => {
+    triggerDownload(DOM.editorTextarea.value, 'text/markdown;charset=utf-8', 'md');
+  });
+  
+  DOM.exportHtml.addEventListener('click', () => {
+    const html = getCompiledHTMLWrapper();
+    triggerDownload(html, 'text/html;charset=utf-8', 'html');
+  });
+  
+  DOM.copyHtml.addEventListener('click', () => {
+    const htmlOutput = DOM.previewContainer.innerHTML;
+    navigator.clipboard.writeText(htmlOutput).then(() => {
+      alert("HTML content successfully copied to clipboard!");
+    }).catch(err => {
+      console.error("Copy failed:", err);
+    });
+  });
+  
+  // Toolbar buttons click
+  DOM.editorToolbar.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const action = btn.getAttribute('data-action');
+    insertMarkdownSyntax(action);
+  });
+  
+  // Fullscreen Preview Toggle
+  DOM.btnFullscreenPreview.addEventListener('click', toggleFullscreenPreview);
+}
+
+// --- Fullscreen Preview Toggle ---
+function toggleFullscreenPreview() {
+  const isCurrentlyFS = toolWrapper.classList.contains('fullscreen-preview-active');
+  
+  if (!isCurrentlyFS) {
+    toolWrapper.classList.add('fullscreen-preview-active');
+    DOM.btnFullscreenPreview.innerHTML = `
+      <svg class="fs-exit-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4"/></svg>
+      Exit Fullscreen
+    `;
+    
+    // Request actual fullscreen API if available
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen().catch(() => {});
+    }
+  } else {
+    toolWrapper.classList.remove('fullscreen-preview-active');
+    DOM.btnFullscreenPreview.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      Fullscreen
+    `;
+    
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+}
+
+// Handle Esc key exiting native fullscreen to sync CSS classes
+document.addEventListener('fullscreenchange', () => {
+  const isNativeFS = !!document.fullscreenElement;
+  const hasFSClass = toolWrapper.classList.contains('fullscreen-preview-active');
+  
+  if (!isNativeFS && hasFSClass) {
+    toolWrapper.classList.remove('fullscreen-preview-active');
+    DOM.btnFullscreenPreview.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      Fullscreen
+    `;
+  }
+});
+
+// --- Window Keyboard Shortcuts ---
+window.addEventListener('keydown', (e) => {
+  // Ctrl+B / Cmd+B for Bold
+  if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+    e.preventDefault();
+    insertMarkdownSyntax('bold');
+  }
+  // Ctrl+I / Cmd+I for Italic
+  if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+    e.preventDefault();
+    insertMarkdownSyntax('italic');
+  }
+});
+
+// --- Page Initialization ---
+window.addEventListener('DOMContentLoaded', () => {
+  initMarkdownParser();
+  setupBindings();
+  setupSyncScroll();
+  
+  // Load saved content or default README
+  restoreAutoSaveState();
+});
+
+
+  </script>
+</body>
+</html>

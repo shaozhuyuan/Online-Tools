@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online UTM Campaign URL Builder & Preset Manager | Online Tools</title>
+  <meta name="description" content="Generate Google Analytics UTM campaign links quickly. Save custom templates, lowercase parameters automatically, build UTM URLs in bulk, and export to CSV. 100% secure, offline-ready.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (UTM Campaign Builder)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(255, 94, 98, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(255, 94, 98, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(14, 100%, 57%) 0%, hsl(340, 95%, 54%) 100%);
+  --accent-color: hsl(14, 100%, 57%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(255, 94, 98, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Tab Controls */
+.tab-controls {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  gap: 4px;
+}
+
+&.light-theme .tab-controls {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover, .icon-btn.active {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+&.light-theme .icon-btn:hover, &.light-theme .icon-btn.active {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Grid)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body Wrapper */
+.card-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* ==========================================================================
+   Controls Panel Elements
+   ========================================================================== */
+
+.editor-card {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .editor-card {
+    max-height: none;
+  }
+}
+
+.form-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Presets Section */
+.preset-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.preset-select-row {
+  display: flex;
+  gap: 8px;
+}
+
+.select-input {
+  flex-grow: 1;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238892b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  appearance: none;
+}
+
+&.light-theme .select-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Separator Line */
+.text-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin: 6px 0;
+  flex-shrink: 0;
+}
+
+.text-separator::before, .text-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.text-separator:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.text-separator:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* Controls Panel */
+.control-panel {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.control-panel.active {
+  display: flex;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-divider-top {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.required-indicator {
+  color: #ff5e62;
+  margin-left: 2px;
+}
+
+.help-badge {
+  font-size: 0.7rem;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+  background: var(--border-color);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  font-weight: bold;
+}
+
+.help-badge:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.field-subtext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Custom Table / Params Rows */
+.custom-params-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.param-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.param-input-key {
+  width: 35%;
+}
+
+.param-input-val {
+  flex-grow: 1;
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  user-select: none;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+&.light-theme .checkmark {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: var(--text-muted);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.checkmark::after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* Form Inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+  box-shadow: 0 0 0 2px rgba(255, 94, 98, 0.15);
+}
+
+.textarea-input {
+  height: 100px;
+  resize: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+/* Buttons */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-gradient);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  margin-top: 10px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-secondary-outline {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary-outline:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.action-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-link-btn:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.action-link-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Dimension Inputs & Scale Grids */
+.control-inputs-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.dimension-input-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   Preview Column (Right Panel)
+   ========================================================================== */
+
+.preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.output-card-wrapper {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.output-card-wrapper.active {
+  display: flex;
+}
+
+/* Live URL Output Card */
+.preview-card {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-area-wrapper {
+  background-color: #0d1117;
+  padding: 24px;
+  position: relative;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+&.light-theme .preview-area-wrapper {
+  background-color: #ffffff;
+}
+
+.url-output-box {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  word-break: break-all;
+  text-align: left;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+}
+
+&.light-theme .url-output-box {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* URL Highlight Spans */
+.url-protocol {
+  color: #ff5e62;
+  font-weight: 500;
+}
+.url-domain {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.url-path {
+  color: #4a90e2;
+}
+.url-query {
+  color: #2ecc71;
+}
+
+/* QR Code Card */
+.qr-card {
+  flex-grow: 1;
+  min-height: 300px;
+}
+
+.qr-area-wrapper {
+  background-color: #0b0d13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 30px;
+}
+
+&.light-theme .qr-area-wrapper {
+  background-color: #f7fafc;
+}
+
+.qr-render-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+#qr-code-canvas {
+  max-width: 200px;
+  max-height: 200px;
+  background: white;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: none;
+}
+
+/* Batch Output Card */
+.batch-output-card {
+  height: 480px;
+}
+
+.batch-textarea-wrapper {
+  flex-grow: 1;
+  padding: 16px;
+  background-color: #0d1117;
+}
+
+&.light-theme .batch-textarea-wrapper {
+  background-color: #ffffff;
+}
+
+#batch-output-list {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  word-break: break-all;
+}
+
+.batch-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.count-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Modal Styles
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-card {
+  background: hsl(222, 47%, 9%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modalScale 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+&.light-theme .modal-card {
+  background: #ffffff;
+}
+
+@keyframes modalScale {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-close-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   Bottom Status Bar
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-empty {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.status-valid {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.status-invalid {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.error-msg-container {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   SEO Content Card & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.seo-text-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seo-text-col li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  position: relative;
+}
+
+.seo-text-col li::before {
+  content: "•";
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Footer styling */
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" is:inline></script>
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <h1>UTM Campaign Builder</h1>
+        </div>
+      </div>
+
+      <!-- Controls & Tabs -->
+      <div class="header-right">
+        <div class="tab-controls">
+          <button id="tab-single-btn" class="tab-btn active">Single URL Builder</button>
+          <button id="tab-batch-btn" class="tab-btn">Batch URL Builder</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Parameters & Preset Controls -->
+        <section class="card editor-card">
+          <div class="card-header">
+            <h3 id="panel-title">Campaign Configuration</h3>
+            <button id="btn-clear" class="action-link-btn" title="Reset all input fields">Clear All</button>
+          </div>
+          
+          <div class="card-body-wrapper form-body">
+            
+            <!-- Preset Management Row -->
+            <div class="preset-section">
+              <span class="control-label">Load Template Preset</span>
+              <div class="preset-select-row">
+                <select id="preset-dropdown" class="form-input select-input">
+                  <option value="" disabled selected>Select a preset...</option>
+                  <!-- Populated via JS -->
+                </select>
+                <button id="btn-save-preset" class="icon-btn" title="Save current settings as new preset">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                  </svg>
+                </button>
+                <button id="btn-delete-preset" class="icon-btn" title="Delete selected preset" disabled>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="text-separator"><span>Campaign Parameters</span></div>
+
+            <!-- Single URL Form -->
+            <div id="panel-single-url" class="control-panel active">
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Website URL <span class="required-indicator">*</span></span>
+                </label>
+                <input type="url" id="input-url" placeholder="https://yourwebsite.com/landing-page" class="form-input" required>
+                <span class="field-subtext">The landing page address. Will auto-prepend https:// if missing.</span>
+              </div>
+
+              <!-- UTM Source -->
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Campaign Source (utm_source) <span class="required-indicator">*</span></span>
+                  <span class="help-badge" title="Referrer: google, facebook, newsletter, linkedin">?</span>
+                </label>
+                <input type="text" id="input-source" placeholder="e.g. google, newsletter, facebook" class="form-input" required>
+              </div>
+
+              <!-- UTM Medium -->
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Campaign Medium (utm_medium) <span class="required-indicator">*</span></span>
+                  <span class="help-badge" title="Marketing medium: cpc, banner, email, social">?</span>
+                </label>
+                <input type="text" id="input-medium" placeholder="e.g. cpc, email, social-post" class="form-input" required>
+              </div>
+
+              <!-- UTM Name -->
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Campaign Name (utm_campaign) <span class="required-indicator">*</span></span>
+                  <span class="help-badge" title="Product promo / slogan: summer_sale, launch_promo">?</span>
+                </label>
+                <input type="text" id="input-campaign" placeholder="e.g. black_friday_2026" class="form-input" required>
+              </div>
+
+              <!-- UTM Term -->
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Campaign Term (utm_term)</span>
+                  <span class="help-badge" title="Paid keywords: marketing_automation, running_shoes">?</span>
+                </label>
+                <input type="text" id="input-term" placeholder="e.g. analytics-software" class="form-input">
+              </div>
+
+              <!-- UTM Content -->
+              <div class="control-group">
+                <label class="control-label-row">
+                  <span class="control-label">Campaign Content (utm_content)</span>
+                  <span class="help-badge" title="Ad content / A/B tests: sidebar_link, bottom_banner, v1">?</span>
+                </label>
+                <input type="text" id="input-content" placeholder="e.g. blue_button_abtest" class="form-input">
+              </div>
+            </div>
+
+            <!-- Batch URL Form -->
+            <div id="panel-batch-url" class="control-panel">
+              <div class="control-group">
+                <label class="control-label">Website URLs (One per line) <span class="required-indicator">*</span></label>
+                <textarea id="batch-input-urls" class="form-input textarea-input" placeholder="https://example.com/page1&#10;https://example.com/page2"></textarea>
+              </div>
+
+              <div class="control-inputs-row">
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Sources (Comma separated)</label>
+                  <input type="text" id="batch-input-sources" placeholder="google, facebook" class="form-input">
+                </div>
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Mediums (Comma separated)</label>
+                  <input type="text" id="batch-input-mediums" placeholder="cpc, social" class="form-input">
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">Campaign Name (utm_campaign) <span class="required-indicator">*</span></label>
+                <input type="text" id="batch-input-campaign" placeholder="e.g. summer_promo" class="form-input">
+              </div>
+
+              <div class="control-inputs-row">
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Campaign Term</label>
+                  <input type="text" id="batch-input-term" placeholder="e.g. keyword" class="form-input">
+                </div>
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Campaign Content</label>
+                  <input type="text" id="batch-input-content" placeholder="e.g. logo_link" class="form-input">
+                </div>
+              </div>
+            </div>
+
+            <div class="text-separator"><span>Advanced Optimization Options</span></div>
+
+            <!-- Configuration Checkboxes -->
+            <div class="checkbox-grid">
+              <label class="checkbox-container">
+                <input type="checkbox" id="opt-lowercase" checked>
+                <span class="checkmark"></span>
+                <span class="checkbox-label" title="Force all query parameters to be lowercase (Google Analytics recommendation)">Force Lowercase Parameters</span>
+              </label>
+
+              <label class="checkbox-container">
+                <input type="checkbox" id="opt-replacespaces" checked>
+                <span class="checkmark"></span>
+                <span class="checkbox-label" title="Replace space characters with underscores (_) instead of raw URL encoding (%20) for cleaner links">Replace Spaces with Underscores</span>
+              </label>
+            </div>
+
+            <!-- Custom Query Parameters Builder -->
+            <div class="control-group section-divider-top">
+              <span class="control-label">Custom Parameters (Key-Value)</span>
+              <div id="custom-params-list" class="custom-params-container">
+                <!-- Custom param rows dynamically populated -->
+              </div>
+              <button id="btn-add-param" class="btn-secondary-outline">+ Add Custom Parameter</button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Right Column: Outputs, Live Link, Batch Outputs, QR Code -->
+        <div class="preview-column">
+          
+          <!-- Tab 1 Live URL Output (Only active when tab is Single) -->
+          <div id="output-single-container" class="output-card-wrapper active">
+            
+            <!-- Live URL preview card -->
+            <section class="card preview-card">
+              <div class="card-header">
+                <h3>Live Trackable URL Output</h3>
+                <div class="header-actions">
+                  <button id="btn-copy-url" class="action-link-btn" title="Copy link to clipboard" disabled>Copy URL</button>
+                </div>
+              </div>
+              
+              <div class="card-body-wrapper preview-area-wrapper">
+                <div id="url-output-container" class="url-output-box">
+                  <span class="url-protocol" id="url-proto-highlight">https://</span><span class="url-domain" id="url-domain-highlight">yourwebsite.com</span><span class="url-path" id="url-path-highlight">/landing-page</span><span class="url-query" id="url-query-highlight">?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=black_friday</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- QR Code Card -->
+            <section class="card qr-card">
+              <div class="card-header">
+                <h3>Offline Asset: Scan QR Code</h3>
+                <div class="header-actions">
+                  <button id="btn-download-qr" class="action-link-btn" title="Download QR code as image file" disabled>Download QR</button>
+                </div>
+              </div>
+              
+              <div class="card-body-wrapper qr-area-wrapper">
+                <div class="qr-render-box">
+                  <canvas id="qr-code-canvas"></canvas>
+                  <div id="qr-placeholder" class="placeholder-text">Enter website URL and campaign parameters to render QR Code...</div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <!-- Tab 2 Batch URL Output (Only active when tab is Batch) -->
+          <div id="output-batch-container" class="output-card-wrapper">
+            <section class="card batch-output-card">
+              <div class="card-header">
+                <h3>Batch URLs Generated List</h3>
+                <div class="header-actions">
+                  <button id="btn-copy-batch" class="action-link-btn" title="Copy all links to clipboard" disabled>Copy All Links</button>
+                  <button id="btn-download-csv" class="action-link-btn" title="Download as CSV file" disabled>Download CSV</button>
+                </div>
+              </div>
+              
+              <div class="card-body-wrapper batch-textarea-wrapper">
+                <textarea id="batch-output-list" readonly placeholder="Batch links will populate here as you fill parameters...&#10;&#10;If multiple URLs, sources, and mediums are provided, this tool automatically builds all combinations."></textarea>
+              </div>
+              
+              <div class="card-footer batch-footer">
+                <span id="batch-count-tag" class="count-tag">0 Links Generated</span>
+              </div>
+            </section>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-badge" class="status-badge status-empty">Waiting Inputs</span>
+        <span class="dot">·</span>
+        <span id="stat-presets-count">0 Templates Loaded</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight" id="stat-active-mode">Single Mode</span>
+      </div>
+      <div class="error-msg-container" id="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>Maximizing Marketing Analytics with UTM Campaign Builders</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p><strong>UTM parameters</strong> (Urchin Tracking Module parameters) are simple query strings appended to your URLs. They are vital for digital marketing as they allow analytical systems like Google Analytics (GA4), Mixpanel, and HubSpot to accurately identify which campaign, medium, or banner button referred a user to your website.</p>
+          
+          <h3>The 5 Core UTM Parameters Explained:</h3>
+          <ul>
+            <li><strong>utm_source:</strong> Identifies the referrer platform bringing traffic (e.g. <code>newsletter</code>, <code>google</code>, <code>facebook</code>).</li>
+            <li><strong>utm_medium:</strong> Tracks the advertising or marketing medium (e.g. <code>cpc</code>, <code>email</code>, <code>social-post</code>).</li>
+            <li><strong>utm_campaign:</strong> Denotes the specific promotional or brand campaign (e.g. <code>summer_sale_2026</code>).</li>
+            <li><strong>utm_term:</strong> Used to track paid search keywords for search ads (e.g. <code>marketing-software</code>).</li>
+            <li><strong>utm_content:</strong> Distinguishes different links or CTA buttons within the same ad copy or email design.</li>
+          </ul>
+        </div>
+        
+        <div class="seo-text-col">
+          <h3>Best Practices & Features for Link Tagging</h3>
+          <p>Inconsistent link tagging ruins clean marketing analytics. Using a client-side UTM Campaign Builder with custom presets ensures syntax compliance across your entire team.</p>
+          
+          <h3>Why use this Campaign Builder?</h3>
+          <ul>
+            <li><strong>Parameter Case Enforcement:</strong> GA4 is case-sensitive (e.g., <code>Email</code> vs <code>email</code> are counted separately). Toggling <em>Force Lowercase</em> maintains unified reports.</li>
+            <li><strong>Offline QR Code Generation:</strong> Directly convert marketing link sequences into QR code elements. Ideal for print flyers, banners, and physical campaigns.</li>
+            <li><strong>Batch Combinations Builder:</strong> Build multi-channel links in seconds. Combine multiple pages with diverse channels, generating a download-ready CSV campaign list.</li>
+            <li><strong>100% Secure & Client-Side:</strong> Your tracking strategies, campaign structures, and link templates remain entirely inside your browser cache. No marketing plans are exposed to third-party databases.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preset Save Modal -->
+    <div id="modal-save-preset" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Save Preset Template</h3>
+          <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label">Preset Name</label>
+            <input type="text" id="input-preset-name" placeholder="e.g. Google Ads CPC Search" class="form-input">
+            <span class="field-subtext">This template will capture all campaign values and custom parameters.</span>
+          </div>
+          <div id="modal-error-message" class="error-msg-container" style="display: none; margin-top: 10px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button id="modal-cancel-btn" class="btn-secondary-outline">Cancel</button>
+          <button id="modal-confirm-save-btn" class="btn-primary" style="margin-top:0;">Save Preset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // State variables & Defaults
+  // ==========================================================================
+  
+  let activeTab = 'single'; // single, batch
+  let customParams = [];    // Array of { key: '', value: '' }
+  let presets = [];         // Array of preset objects
+  let generatedSingleUrl = '';
+  let generatedBatchUrls = [];
+
+  const defaultPresets = [
+    {
+      id: 'default-google-cpc',
+      name: 'Google Ads (cpc)',
+      isDefault: true,
+      source: 'google',
+      medium: 'cpc',
+      campaign: 'search_ad_campaign',
+      term: '',
+      content: '',
+      custom: []
+    },
+    {
+      id: 'default-fb-social',
+      name: 'Facebook Social Post',
+      isDefault: true,
+      source: 'facebook',
+      medium: 'social-post',
+      campaign: 'brand_awareness_2026',
+      term: '',
+      content: 'image_card_v1',
+      custom: []
+    },
+    {
+      id: 'default-news-email',
+      name: 'Email Newsletter',
+      isDefault: true,
+      source: 'newsletter',
+      medium: 'email',
+      campaign: 'monthly_digest_june',
+      term: '',
+      content: 'cta_button_blue',
+      custom: []
+    },
+    {
+      id: 'default-li-sponsored',
+      name: 'LinkedIn Sponsored Content',
+      isDefault: true,
+      source: 'linkedin',
+      medium: 'paid-social',
+      campaign: 'b2b_lead_gen',
+      term: '',
+      content: 'post_link',
+      custom: []
+    }
+  ];
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  // Theme & Global controls
+  const themeToggle = document.getElementById('theme-toggle');
+  const btnClear = document.getElementById('btn-clear');
+  const statBadge = document.getElementById('stat-badge');
+  const statActiveMode = document.getElementById('stat-active-mode');
+  const errorMessage = document.getElementById('error-message');
+
+  // Tabs
+  const tabSingleBtn = document.getElementById('tab-single-btn');
+  const tabBatchBtn = document.getElementById('tab-batch-btn');
+  const panelSingleUrl = document.getElementById('panel-single-url');
+  const panelBatchUrl = document.getElementById('panel-batch-url');
+  const outputSingleContainer = document.getElementById('output-single-container');
+  const outputBatchContainer = document.getElementById('output-batch-container');
+  const panelTitle = document.getElementById('panel-title');
+
+  // Presets
+  const presetDropdown = document.getElementById('preset-dropdown');
+  const btnSavePreset = document.getElementById('btn-save-preset');
+  const btnDeletePreset = document.getElementById('btn-delete-preset');
+
+  // Single URL inputs
+  const inputUrl = document.getElementById('input-url');
+  const inputSource = document.getElementById('input-source');
+  const inputMedium = document.getElementById('input-medium');
+  const inputCampaign = document.getElementById('input-campaign');
+  const inputTerm = document.getElementById('input-term');
+  const inputContent = document.getElementById('input-content');
+
+  // Batch URL inputs
+  const batchInputUrls = document.getElementById('batch-input-urls');
+  const batchInputSources = document.getElementById('batch-input-sources');
+  const batchInputMediums = document.getElementById('batch-input-mediums');
+  const batchInputCampaign = document.getElementById('batch-input-campaign');
+  const batchInputTerm = document.getElementById('batch-input-term');
+  const batchInputContent = document.getElementById('batch-input-content');
+
+  // Advanced Optimization Options
+  const optLowercase = document.getElementById('opt-lowercase');
+  const optReplaceSpaces = document.getElementById('opt-replacespaces');
+  const customParamsList = document.getElementById('custom-params-list');
+  const btnAddParam = document.getElementById('btn-add-param');
+
+  // Single URL outputs
+  const urlOutputContainer = document.getElementById('url-output-container');
+  const urlProtoHighlight = document.getElementById('url-proto-highlight');
+  const urlDomainHighlight = document.getElementById('url-domain-highlight');
+  const urlPathHighlight = document.getElementById('url-path-highlight');
+  const urlQueryHighlight = document.getElementById('url-query-highlight');
+  const btnCopyUrl = document.getElementById('btn-copy-url');
+
+  // QR Code Elements
+  const qrCodeCanvas = document.getElementById('qr-code-canvas');
+  const qrPlaceholder = document.getElementById('qr-placeholder');
+  const btnDownloadQr = document.getElementById('btn-download-qr');
+
+  // Batch URL outputs
+  const batchOutputList = document.getElementById('batch-output-list');
+  const btnCopyBatch = document.getElementById('btn-copy-batch');
+  const btnDownloadCsv = document.getElementById('btn-download-csv');
+  const batchCountTag = document.getElementById('batch-count-tag');
+
+  // Presets Save Modal
+  const modalSavePreset = document.getElementById('modal-save-preset');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalCancelBtn = document.getElementById('modal-cancel-btn');
+  const modalConfirmSaveBtn = document.getElementById('modal-confirm-save-btn');
+  const inputPresetName = document.getElementById('input-preset-name');
+  const modalErrorMessage = document.getElementById('modal-error-message');
+
+  // QR Code Instance
+  let qrCodeInstance = null;
+
+  // ==========================================================================
+  // Preset Management
+  // ==========================================================================
+
+  // Load presets from localStorage or defaults
+  function initPresets() {
+    const stored = localStorage.getItem('ethelab_utm_presets');
+    if (stored) {
+      try {
+        presets = JSON.parse(stored);
+      } catch (e) {
+        console.error('Failed to parse stored presets. Using defaults.');
+        presets = [...defaultPresets];
+      }
+    } else {
+      presets = [...defaultPresets];
+      localStorage.setItem('ethelab_utm_presets', JSON.stringify(presets));
+    }
+    renderPresetsDropdown();
+  }
+
+  // Populate dropdown
+  function renderPresetsDropdown() {
+    // Keep placeholder
+    presetDropdown.innerHTML = '<option value="" disabled selected>Select a template preset...</option>';
+    
+    // Sort presets so custom ones are on top, then default ones
+    const sorted = [...presets].sort((a, b) => {
+      if (a.isDefault && !b.isDefault) return 1;
+      if (!a.isDefault && b.isDefault) return -1;
+      return a.name.localeCompare(b.name);
+    });
+
+    sorted.forEach(p => {
+      const option = document.createElement('option');
+      option.value = p.id;
+      option.textContent = p.name + (p.isDefault ? ' (Default)' : '');
+      presetDropdown.appendChild(option);
+    });
+
+    document.getElementById('stat-presets-count').textContent = `${presets.length} Template${presets.length !== 1 ? 's' : ''} Loaded`;
+  }
+
+  // Load a single preset into input fields
+  function loadPreset(presetId) {
+    const preset = presets.find(p => p.id === presetId);
+    if (!preset) return;
+
+    if (activeTab === 'single') {
+      inputSource.value = preset.source || '';
+      inputMedium.value = preset.medium || '';
+      inputCampaign.value = preset.campaign || '';
+      inputTerm.value = preset.term || '';
+      inputContent.value = preset.content || '';
+      
+      // Load custom parameters
+      customParamsList.innerHTML = '';
+      customParams = [];
+      if (preset.custom && Array.isArray(preset.custom)) {
+        preset.custom.forEach(item => {
+          addCustomParamRow(item.key, item.value);
+        });
+      }
+    } else {
+      batchInputSources.value = preset.source || '';
+      batchInputMediums.value = preset.medium || '';
+      batchInputCampaign.value = preset.campaign || '';
+      batchInputTerm.value = preset.term || '';
+      batchInputContent.value = preset.content || '';
+    }
+
+    // Toggle delete button
+    btnDeletePreset.disabled = !!preset.isDefault;
+
+    // Trigger update
+    updateLinkGeneration();
+  }
+
+  // Save new preset
+  function saveCurrentAsPreset(name) {
+    if (!name.trim()) {
+      showModalError('Preset name cannot be empty.');
+      return;
+    }
+
+    const exists = presets.some(p => p.name.toLowerCase() === name.trim().toLowerCase());
+    if (exists) {
+      showModalError('A preset with this name already exists.');
+      return;
+    }
+
+    const newPreset = {
+      id: 'custom-' + Date.now(),
+      name: name.trim(),
+      isDefault: false,
+      source: activeTab === 'single' ? inputSource.value.trim() : batchInputSources.value.trim(),
+      medium: activeTab === 'single' ? inputMedium.value.trim() : batchInputMediums.value.trim(),
+      campaign: activeTab === 'single' ? inputCampaign.value.trim() : batchInputCampaign.value.trim(),
+      term: activeTab === 'single' ? inputTerm.value.trim() : batchInputTerm.value.trim(),
+      content: activeTab === 'single' ? inputContent.value.trim() : batchInputContent.value.trim(),
+      custom: activeTab === 'single' ? [...customParams] : []
+    };
+
+    presets.push(newPreset);
+    localStorage.setItem('ethelab_utm_presets', JSON.stringify(presets));
+    
+    renderPresetsDropdown();
+    presetDropdown.value = newPreset.id;
+    btnDeletePreset.disabled = false;
+    
+    closeSavePresetModal();
+  }
+
+  // Delete custom preset
+  function deleteSelectedPreset() {
+    const selectedId = presetDropdown.value;
+    if (!selectedId) return;
+
+    const preset = presets.find(p => p.id === selectedId);
+    if (!preset || preset.isDefault) return; // Cannot delete defaults
+
+    presets = presets.filter(p => p.id !== selectedId);
+    localStorage.setItem('ethelab_utm_presets', JSON.stringify(presets));
+
+    renderPresetsDropdown();
+    btnDeletePreset.disabled = true;
+    presetDropdown.value = '';
+  }
+
+  // ==========================================================================
+  // Custom Parameters Table Builder
+  // ==========================================================================
+
+  function addCustomParamRow(key = '', value = '') {
+    const paramId = 'param-' + Date.now() + '-' + Math.floor(Math.random() * 100);
+    const rowObj = { id: paramId, key: key, value: value };
+    customParams.push(rowObj);
+
+    const rowEl = document.createElement('div');
+    rowEl.className = 'param-row';
+    rowEl.id = paramId;
+
+    rowEl.innerHTML = `
+      <input type="text" class="form-input param-input-key" placeholder="Key" value="${key}">
+      <input type="text" class="form-input param-input-val" placeholder="Value" value="${value}">
+      <button class="icon-btn btn-delete-param" title="Remove parameter">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      </button>
+    `;
+
+    // Add event listeners for dynamic changes
+    const inputKey = rowEl.querySelector('.param-input-key');
+    const inputVal = rowEl.querySelector('.param-input-val');
+    const btnDel = rowEl.querySelector('.btn-delete-param');
+
+    const updateParamObj = () => {
+      rowObj.key = inputKey.value.trim();
+      rowObj.value = inputVal.value.trim();
+      updateLinkGeneration();
+    };
+
+    inputKey.addEventListener('input', updateParamObj);
+    inputVal.addEventListener('input', updateParamObj);
+
+    btnDel.addEventListener('click', () => {
+      rowEl.remove();
+      customParams = customParams.filter(p => p.id !== paramId);
+      updateLinkGeneration();
+    });
+
+    customParamsList.appendChild(rowEl);
+  }
+
+  // ==========================================================================
+  // Core URL Generation Engines
+  // ==========================================================================
+
+  // Format parameter text based on options
+  function formatParamValue(str) {
+    if (!str) return '';
+    let val = str.trim();
+    if (optReplaceSpaces.checked) {
+      val = val.replace(/\s+/g, '_');
+    }
+    if (optLowercase.checked) {
+      val = val.toLowerCase();
+    }
+    return val;
+  }
+
+  // Clear inputs
+  function clearAllInputs() {
+    presetDropdown.value = '';
+    btnDeletePreset.disabled = true;
+
+    // Single Form
+    inputUrl.value = '';
+    inputSource.value = '';
+    inputMedium.value = '';
+    inputCampaign.value = '';
+    inputTerm.value = '';
+    inputContent.value = '';
+    customParamsList.innerHTML = '';
+    customParams = [];
+
+    // Batch Form
+    batchInputUrls.value = '';
+    batchInputSources.value = '';
+    batchInputMediums.value = '';
+    batchInputCampaign.value = '';
+    batchInputTerm.value = '';
+    batchInputContent.value = '';
+
+    // Advanced Checkboxes (Defaults)
+    optLowercase.checked = true;
+    optReplaceSpaces.checked = true;
+
+    updateLinkGeneration();
+  }
+
+  // Tab switcher
+  function switchTab(tab) {
+    activeTab = tab;
+    if (tab === 'single') {
+      tabSingleBtn.classList.add('active');
+      tabBatchBtn.classList.remove('active');
+      panelSingleUrl.classList.add('active');
+      panelBatchUrl.classList.remove('active');
+      outputSingleContainer.classList.add('active');
+      outputBatchContainer.classList.remove('active');
+      panelTitle.textContent = 'Campaign Configuration';
+      statActiveMode.textContent = 'Single Mode';
+    } else {
+      tabSingleBtn.classList.remove('active');
+      tabBatchBtn.classList.add('active');
+      panelSingleUrl.classList.remove('active');
+      panelBatchUrl.classList.add('active');
+      outputSingleContainer.classList.remove('active');
+      outputBatchContainer.classList.add('active');
+      panelTitle.textContent = 'Batch Campaign Parameters';
+      statActiveMode.textContent = 'Batch Mode';
+    }
+    
+    // Clear deletion status when tab changes
+    const selectedId = presetDropdown.value;
+    if (selectedId) {
+      const preset = presets.find(p => p.id === selectedId);
+      btnDeletePreset.disabled = !preset || !!preset.isDefault;
+    } else {
+      btnDeletePreset.disabled = true;
+    }
+
+    updateLinkGeneration();
+  }
+
+  // Main coordinator
+  function updateLinkGeneration() {
+    errorMessage.style.display = 'none';
+    if (activeTab === 'single') {
+      generateSingleLink();
+    } else {
+      generateBatchLinks();
+    }
+  }
+
+  // Single URL Builder Logic
+  function generateSingleLink() {
+    let rawUrl = inputUrl.value.trim();
+    const sourceVal = formatParamValue(inputSource.value);
+    const mediumVal = formatParamValue(inputMedium.value);
+    const campaignVal = formatParamValue(inputCampaign.value);
+    const termVal = formatParamValue(inputTerm.value);
+    const contentVal = formatParamValue(inputContent.value);
+
+    // If website URL is missing, reset outputs
+    if (!rawUrl) {
+      urlOutputContainer.style.display = 'none';
+      qrCodeCanvas.style.display = 'none';
+      qrPlaceholder.style.display = 'flex';
+      btnCopyUrl.disabled = true;
+      btnDownloadQr.disabled = true;
+      statBadge.textContent = 'Waiting Inputs';
+      statBadge.className = 'status-badge status-empty';
+      generatedSingleUrl = '';
+      return;
+    }
+
+    // Auto prepend protocol if missing entirely
+    if (!/^[a-zA-Z]+:\/\//.test(rawUrl)) {
+      rawUrl = 'https://' + rawUrl;
+    }
+
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(rawUrl);
+    } catch (e) {
+      // Invalid URL input
+      urlOutputContainer.style.display = 'none';
+      qrCodeCanvas.style.display = 'none';
+      qrPlaceholder.style.display = 'flex';
+      btnCopyUrl.disabled = true;
+      btnDownloadQr.disabled = true;
+      statBadge.textContent = 'Invalid URL';
+      statBadge.className = 'status-badge status-invalid';
+      errorMessage.textContent = 'URL Syntax Error: Please provide a valid website address.';
+      errorMessage.style.display = 'block';
+      generatedSingleUrl = '';
+      return;
+    }
+
+    // Accumulate query params
+    const queryParams = new URLSearchParams(parsedUrl.search);
+    
+    if (sourceVal) queryParams.set('utm_source', sourceVal);
+    if (mediumVal) queryParams.set('utm_medium', mediumVal);
+    if (campaignVal) queryParams.set('utm_campaign', campaignVal);
+    if (termVal) queryParams.set('utm_term', termVal);
+    if (contentVal) queryParams.set('utm_content', contentVal);
+
+    // Custom params append
+    customParams.forEach(p => {
+      const key = formatParamValue(p.key);
+      const val = formatParamValue(p.value);
+      if (key && val) {
+        queryParams.set(key, val);
+      }
+    });
+
+    // Construct final URL elements
+    const protocol = parsedUrl.protocol + '//';
+    const domain = parsedUrl.host;
+    const path = parsedUrl.pathname + parsedUrl.hash;
+    
+    // Convert params to string
+    const queryStr = queryParams.toString();
+    const query = queryStr ? '?' + queryStr : '';
+    
+    generatedSingleUrl = protocol + domain + path + query;
+
+    // Syntax highlight update
+    urlProtoHighlight.textContent = protocol;
+    urlDomainHighlight.textContent = domain;
+    urlPathHighlight.textContent = path;
+    urlQueryHighlight.textContent = query;
+    
+    urlOutputContainer.style.display = 'block';
+    btnCopyUrl.disabled = false;
+    
+    // Status badges logic
+    const hasRequired = sourceVal && mediumVal && campaignVal;
+    if (hasRequired) {
+      statBadge.textContent = 'Ready';
+      statBadge.className = 'status-badge status-valid';
+    } else {
+      statBadge.textContent = 'Missing UTM Params';
+      statBadge.className = 'status-badge status-empty';
+    }
+
+    // Render QR Code (Client side canvas compilation)
+    try {
+      if (typeof QRious !== 'undefined') {
+        qrPlaceholder.style.display = 'none';
+        qrCodeCanvas.style.display = 'block';
+        if (!qrCodeInstance) {
+          qrCodeInstance = new QRious({
+            element: qrCodeCanvas,
+            size: 200,
+            value: generatedSingleUrl,
+            level: 'H'
+          });
+        } else {
+          qrCodeInstance.value = generatedSingleUrl;
+        }
+        btnDownloadQr.disabled = false;
+      }
+    } catch (qrErr) {
+      console.error('QR rendering error: ', qrErr);
+    }
+  }
+
+  // Batch URLs Builder Logic (Cartesian combinations)
+  function generateBatchLinks() {
+    const urlsText = batchInputUrls.value.trim();
+    const sourcesText = batchInputSources.value.trim();
+    const mediumsText = batchInputMediums.value.trim();
+    const campaignVal = formatParamValue(batchInputCampaign.value);
+    const termVal = formatParamValue(batchInputTerm.value);
+    const contentVal = formatParamValue(batchInputContent.value);
+
+    // Clear previous batch list
+    generatedBatchUrls = [];
+    batchOutputList.value = '';
+    batchCountTag.textContent = '0 Links Generated';
+    btnCopyBatch.disabled = true;
+    btnDownloadCsv.disabled = true;
+
+    if (!urlsText || !campaignVal) {
+      statBadge.textContent = 'Waiting Inputs';
+      statBadge.className = 'status-badge status-empty';
+      return;
+    }
+
+    // Parse list arrays
+    const rawUrlsList = urlsText.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+    const rawSourcesList = sourcesText ? sourcesText.split(',').map(s => s.trim()).filter(s => s.length > 0) : [''];
+    const rawMediumsList = mediumsText ? mediumsText.split(',').map(m => m.trim()).filter(m => m.length > 0) : [''];
+
+    // Run combinations
+    let errorCount = 0;
+
+    rawUrlsList.forEach(urlInput => {
+      let formattedUrl = urlInput;
+      if (!/^[a-zA-Z]+:\/\//.test(formattedUrl)) {
+        formattedUrl = 'https://' + formattedUrl;
+      }
+
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(formattedUrl);
+      } catch (e) {
+        errorCount++;
+        return; // skip invalid URL in batch list
+      }
+
+      rawSourcesList.forEach(rawSource => {
+        rawMediumsList.forEach(rawMedium => {
+          
+          const sourceVal = formatParamValue(rawSource);
+          const mediumVal = formatParamValue(rawMedium);
+
+          const queryParams = new URLSearchParams(parsedUrl.search);
+          
+          if (sourceVal) queryParams.set('utm_source', sourceVal);
+          if (mediumVal) queryParams.set('utm_medium', mediumVal);
+          queryParams.set('utm_campaign', campaignVal);
+          if (termVal) queryParams.set('utm_term', termVal);
+          if (contentVal) queryParams.set('utm_content', contentVal);
+
+          const protocol = parsedUrl.protocol + '//';
+          const domain = parsedUrl.host;
+          const path = parsedUrl.pathname + parsedUrl.hash;
+          const queryStr = queryParams.toString();
+          const query = queryStr ? '?' + queryStr : '';
+
+          const fullLink = protocol + domain + path + query;
+          generatedBatchUrls.push({
+            originalUrl: urlInput,
+            source: sourceVal || 'N/A',
+            medium: mediumVal || 'N/A',
+            campaign: campaignVal,
+            fullLink: fullLink
+          });
+
+        });
+      });
+    });
+
+    if (errorCount > 0) {
+      errorMessage.textContent = `Batch Warning: ${errorCount} URL lines could not be parsed due to invalid URL formats and were skipped.`;
+      errorMessage.style.display = 'block';
+    }
+
+    if (generatedBatchUrls.length > 0) {
+      const textOutput = generatedBatchUrls.map(item => item.fullLink).join('\n');
+      batchOutputList.value = textOutput;
+      batchCountTag.textContent = `${generatedBatchUrls.length} Link${generatedBatchUrls.length !== 1 ? 's' : ''} Generated`;
+      
+      btnCopyBatch.disabled = false;
+      btnDownloadCsv.disabled = false;
+      
+      statBadge.textContent = 'Batch Generated';
+      statBadge.className = 'status-badge status-valid';
+    } else {
+      statBadge.textContent = 'Invalid URLs';
+      statBadge.className = 'status-badge status-invalid';
+    }
+  }
+
+  // ==========================================================================
+  // Presets Save Modal Dialog
+  // ==========================================================================
+
+  function openSavePresetModal() {
+    inputPresetName.value = '';
+    modalErrorMessage.style.display = 'none';
+    modalSavePreset.classList.add('active');
+    inputPresetName.focus();
+  }
+
+  function closeSavePresetModal() {
+    modalSavePreset.classList.remove('active');
+  }
+
+  function showModalError(msg) {
+    modalErrorMessage.textContent = msg;
+    modalErrorMessage.style.display = 'block';
+  }
+
+  // ==========================================================================
+  // Event Listeners
+  // ==========================================================================
+
+  // Tab Buttons
+  tabSingleBtn.addEventListener('click', () => switchTab('single'));
+  tabBatchBtn.addEventListener('click', () => switchTab('batch'));
+
+  // Preset Controls
+  presetDropdown.addEventListener('change', (e) => {
+    loadPreset(e.target.value);
+  });
+
+  btnSavePreset.addEventListener('click', () => {
+    // Validate if they have typed anything before saving
+    let hasValues = false;
+    if (activeTab === 'single') {
+      hasValues = inputSource.value || inputMedium.value || inputCampaign.value;
+    } else {
+      hasValues = batchInputSources.value || batchInputMediums.value || batchInputCampaign.value;
+    }
+
+    if (!hasValues) {
+      errorMessage.textContent = 'Validation Error: Fill in at least Source, Medium or Campaign parameters before saving a preset.';
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    openSavePresetModal();
+  });
+
+  btnDeletePreset.addEventListener('click', deleteSelectedPreset);
+
+  // Modal actions
+  modalCloseBtn.addEventListener('click', closeSavePresetModal);
+  modalCancelBtn.addEventListener('click', closeSavePresetModal);
+  modalConfirmSaveBtn.addEventListener('click', () => {
+    saveCurrentAsPreset(inputPresetName.value);
+  });
+
+  // Modal overlay click
+  modalSavePreset.addEventListener('click', (e) => {
+    if (e.target === modalSavePreset) {
+      closeSavePresetModal();
+    }
+  });
+
+  // Form Inputs (Single)
+  const singleInputs = [inputUrl, inputSource, inputMedium, inputCampaign, inputTerm, inputContent];
+  singleInputs.forEach(input => {
+    input.addEventListener('input', updateLinkGeneration);
+  });
+
+  // Form Inputs (Batch)
+  const batchInputs = [batchInputUrls, batchInputSources, batchInputMediums, batchInputCampaign, batchInputTerm, batchInputContent];
+  batchInputs.forEach(input => {
+    input.addEventListener('input', updateLinkGeneration);
+  });
+
+  // Checkboxes
+  optLowercase.addEventListener('change', updateLinkGeneration);
+  optReplaceSpaces.addEventListener('change', updateLinkGeneration);
+  
+  // Custom Param additions
+  btnAddParam.addEventListener('click', () => {
+    addCustomParamRow();
+  });
+
+  // Clear button
+  btnClear.addEventListener('click', clearAllInputs);
+
+  // Copy Single URL
+  btnCopyUrl.addEventListener('click', () => {
+    if (!generatedSingleUrl) return;
+    navigator.clipboard.writeText(generatedSingleUrl).then(() => {
+      const originalText = btnCopyUrl.textContent;
+      btnCopyUrl.textContent = 'Copied!';
+      btnCopyUrl.style.color = '#2ecc71';
+      
+      setTimeout(() => {
+        btnCopyUrl.textContent = originalText;
+        btnCopyUrl.style.color = '';
+      }, 1500);
+    });
+  });
+
+  // Download QR Code image
+  btnDownloadQr.addEventListener('click', () => {
+    if (!generatedSingleUrl || !qrCodeCanvas) return;
+    try {
+      const dataUrl = qrCodeCanvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = `campaign_qr_${Date.now()}.png`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (e) {
+      console.error('Failed to download QR code image file: ', e);
+    }
+  });
+
+  // Copy Batch List
+  btnCopyBatch.addEventListener('click', () => {
+    if (generatedBatchUrls.length === 0) return;
+    const text = generatedBatchUrls.map(item => item.fullLink).join('\n');
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = btnCopyBatch.textContent;
+      btnCopyBatch.textContent = 'Copied All!';
+      btnCopyBatch.style.color = '#2ecc71';
+      
+      setTimeout(() => {
+        btnCopyBatch.textContent = originalText;
+        btnCopyBatch.style.color = '';
+      }, 1500);
+    });
+  });
+
+  // Export Batch to CSV
+  btnDownloadCsv.addEventListener('click', () => {
+    if (generatedBatchUrls.length === 0) return;
+    
+    // Prepare CSV rows
+    const csvHeader = 'Original URL,UTM Source,UTM Medium,UTM Campaign,Generated Trackable Link\r\n';
+    const csvContent = generatedBatchUrls.map(item => {
+      // Escape commas & quotes
+      const escOriginal = `"${item.originalUrl.replace(/"/g, '""')}"`;
+      const escSource = `"${item.source.replace(/"/g, '""')}"`;
+      const escMedium = `"${item.medium.replace(/"/g, '""')}"`;
+      const escCampaign = `"${item.campaign.replace(/"/g, '""')}"`;
+      const escLink = `"${item.fullLink.replace(/"/g, '""')}"`;
+      return `${escOriginal},${escSource},${escMedium},${escCampaign},${escLink}`;
+    }).join('\r\n');
+
+    const csvBlob = new Blob([csvHeader + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(csvBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `campaign_utm_links_${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  });
+
+  // Theme switch logic (adapted from portal)
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initialize presets & render dropdown
+  initPresets();
+  updateLinkGeneration();
+
+});
+
+
+  </script>
+</body>
+</html>

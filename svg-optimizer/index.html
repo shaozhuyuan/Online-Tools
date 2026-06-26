@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online SVG Optimizer & PNG/JPEG Converter | Online Tools</title>
+  <meta name="description" content="Optimize, minify, and clean up SVG files client-side. Convert vector SVGs to high-resolution PNG or JPEG images. 100% secure, offline-ready, no server uploads.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (SVG Vector Lab)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(187, 100%, 45%);
+}
+
+&.light-theme .logo-icon {
+  color: hsl(187, 100%, 40%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+}
+
+/* Tab Controls */
+.tab-controls {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  gap: 4px;
+}
+
+&.light-theme .tab-controls {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover, .icon-btn.active {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover, &.light-theme .icon-btn.active {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Grid)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body Wrapper */
+.card-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* ==========================================================================
+   Controls Panel Elements
+   ========================================================================== */
+
+.editor-card {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .editor-card {
+    max-height: none;
+  }
+}
+
+.file-mode-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Drag and Drop Box */
+.drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 110px;
+  flex-shrink: 0;
+}
+
+.drop-zone:hover, .drop-zone.dragover {
+  border-color: var(--border-color-focus);
+  background: rgba(6, 182, 212, 0.02);
+}
+
+.drop-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.drop-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.browse-link {
+  color: hsl(187, 100%, 45%);
+  text-decoration: underline;
+}
+
+&.light-theme .browse-link {
+  color: hsl(187, 100%, 40%);
+}
+
+.drop-subtext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Separator LINE */
+.text-separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin: 6px 0;
+  flex-shrink: 0;
+}
+
+.text-separator::before, .text-separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.text-separator:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.text-separator:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* XML Raw Code Textarea */
+.xml-textarea-container {
+  display: flex;
+  flex-direction: column;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+#svg-raw-input {
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  resize: none;
+  color: var(--text-primary);
+}
+
+&.light-theme #svg-raw-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+#svg-raw-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+/* Controls Panel */
+.control-panel {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.control-panel.active {
+  display: flex;
+}
+
+.control-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-divider-top {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.control-value-display {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: hsl(187, 100%, 45%);
+  font-weight: 600;
+}
+
+&.light-theme .control-value-display {
+  color: hsl(187, 100%, 40%);
+}
+
+.field-subtext {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  user-select: none;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+&.light-theme .checkmark {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: var(--text-muted);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: hsl(187, 100%, 45%);
+  border-color: hsl(187, 100%, 45%);
+}
+
+.checkmark::after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+}
+
+/* Slider Controls */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-round);
+  outline: none;
+  transition: background var(--transition-fast);
+}
+
+&.light-theme .slider {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-round);
+  background: hsl(187, 100%, 45%);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  border: 2px solid var(--bg-app);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: hsl(187, 100%, 50%);
+}
+
+.toggle-group-row {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  gap: 2px;
+}
+
+&.light-theme .toggle-group-row {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.toggle-group-row .toggle-mode-btn {
+  flex: 1;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle-group-row .toggle-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.toggle-group-row .toggle-mode-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+&.light-theme .toggle-group-row .toggle-mode-btn.active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Buttons */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: var(--primary-gradient);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  margin-top: 10px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.action-link-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-link-btn:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.action-link-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Dimension Inputs & Scale Grids */
+.control-inputs-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.dimension-input-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+.dimension-link-icon {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.dimension-link-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.scale-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.scale-btn {
+  padding: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.scale-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.scale-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+&.light-theme .scale-btn.active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Background Export Color Selectors */
+.bg-selector-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.bg-option-label {
+  position: relative;
+  cursor: pointer;
+}
+
+.bg-option-label input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.bg-option-box {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.bg-option-label:hover .bg-option-box {
+  transform: scale(1.08);
+}
+
+.bg-option-label input:checked ~ .bg-option-box {
+  border-color: hsl(187, 100%, 45%);
+  transform: scale(1.08);
+}
+
+.transparent-preview {
+  background-color: #1e1e24;
+  background-image: linear-gradient(45deg, #2a2a35 25%, transparent 25%),
+                    linear-gradient(-45deg, #2a2a35 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #2a2a35 75%),
+                    linear-gradient(-45deg, transparent 75%, #2a2a35 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+.white-preview {
+  background-color: #ffffff;
+}
+
+.black-preview {
+  background-color: #000000;
+}
+
+.custom-preview-dot {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px var(--border-color);
+  transition: all var(--transition-fast);
+  background-color: #6366f1;
+  position: relative;
+}
+
+.bg-option-label:hover .custom-preview-dot {
+  transform: scale(1.08);
+}
+
+.bg-option-label input:checked ~ .custom-preview-dot {
+  border-color: hsl(187, 100%, 45%);
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   Preview Column & Real-Time Preview Box
+   ========================================================================== */
+
+.preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.preview-card {
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview-label-small {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.preview-area-wrapper {
+  background-color: #12151c;
+  position: relative;
+  overflow: auto;
+  flex-grow: 1;
+  padding: 24px;
+}
+
+/* Checkerboard transparent grid backdrop */
+.transparent-grid {
+  background-color: #13141a;
+  background-image: linear-gradient(45deg, #1d1e26 25%, transparent 25%),
+                    linear-gradient(-45deg, #1d1e26 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #1d1e26 75%),
+                    linear-gradient(-45deg, transparent 75%, #1d1e26 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
+&.light-theme .transparent-grid {
+  background-color: #ffffff;
+  background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+                    linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
+.placeholder-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 10px;
+  width: 80%;
+}
+
+/* SVG Rendering Container */
+.svg-render-container {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.svg-render-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   Code Export Card Elements
+   ========================================================================== */
+
+.code-export-card {
+  flex-grow: 1;
+}
+
+.code-output-pane {
+  background: rgba(0, 0, 0, 0.25);
+  position: relative;
+  flex-grow: 1;
+  min-height: 140px;
+  max-height: 240px;
+  overflow: hidden;
+}
+
+&.light-theme .code-output-pane {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#svg-optimized-output {
+  width: 100%;
+  height: 100%;
+  padding: 16px 20px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: transparent;
+  resize: none;
+  outline: none;
+  border: none;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   Status Bar & Savings tag
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stats .dot {
+  opacity: 0.5;
+}
+
+/* Badges */
+.status-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.status-empty {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.status-valid {
+  background: rgba(6, 182, 212, 0.15);
+  color: hsl(187, 100%, 45%);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+&.light-theme .status-valid {
+  color: hsl(187, 100%, 40%);
+}
+
+.status-invalid {
+  background: rgba(239, 68, 68, 0.15);
+  color: hsl(0, 84%, 60%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+&.light-theme .status-invalid {
+  color: hsl(0, 75%, 45%);
+}
+
+.savings-highlight {
+  background: rgba(16, 185, 129, 0.15);
+  color: hsl(150, 100%, 38%);
+  padding: 2px 8px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+&.light-theme .savings-highlight {
+  color: hsl(150, 100%, 30%);
+}
+
+.error-msg-container {
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid hsl(0, 84%, 60%);
+  color: var(--text-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   SEO Section & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col li {
+  margin-top: 6px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-meta p {
+  margin-top: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <h1>SVG Vector Lab</h1>
+        </div>
+      </div>
+
+      <!-- Controls & Tabs -->
+      <div class="header-right">
+        <div class="tab-controls">
+          <button id="tab-optimize-btn" class="tab-btn active">Optimize Code</button>
+          <button id="tab-convert-btn" class="tab-btn">Raster Converter</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Controls & Input -->
+        <section class="card editor-card">
+          <div class="card-header">
+            <h3 id="panel-title">Upload & Optimize SVG</h3>
+            <button id="btn-clear" class="action-link-btn" title="Clear all loaded values">Clear All</button>
+          </div>
+          
+          <div class="card-body-wrapper file-mode-body">
+            
+            <!-- Upload Drop Zone -->
+            <div id="svg-drop-zone" class="drop-zone">
+              <svg class="drop-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <div class="drop-text">Drag & drop your SVG file here, or <span class="browse-link">browse</span></div>
+              <div class="drop-subtext">Runs 100% locally in your browser sandbox</div>
+              <input type="file" id="svg-file-uploader" accept=".svg" style="display: none;">
+            </div>
+
+            <div class="text-separator"><span>OR PASTE SVG XML CODE</span></div>
+
+            <!-- Paste Input Container -->
+            <div class="xml-textarea-container">
+              <textarea id="svg-raw-input" spellcheck="false" placeholder="Paste <svg> ... </svg> code directly here..."></textarea>
+            </div>
+
+            <!-- TAB 1: Optimizer Settings (Visible by default) -->
+            <div id="controls-optimize" class="control-panel active">
+              <span class="control-section-title">Minification Settings</span>
+
+              <!-- Optimization Checkboxes -->
+              <div class="checkbox-grid">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="opt-metadata" checked>
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label" title="Remove XML declarations, Doctypes, and editor namespaces (Inkscape, Sodipodi)">Clean Metadata & Namespaces</span>
+                </label>
+
+                <label class="checkbox-container">
+                  <input type="checkbox" id="opt-comments" checked>
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label" title="Remove HTML/XML comments inside the SVG code">Remove Comments</span>
+                </label>
+
+                <label class="checkbox-container">
+                  <input type="checkbox" id="opt-title-desc" checked>
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label" title="Remove <title> and <desc> elements from within SVG">Remove Title & Desc</legend>
+                </label>
+
+                <label class="checkbox-container">
+                  <input type="checkbox" id="opt-unused-ids">
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label" title="Remove IDs that aren't referenced by filters or gradient URLs">Strip Unreferenced IDs</span>
+                </label>
+              </div>
+
+              <!-- Decimal Precision -->
+              <div class="control-group section-divider-top">
+                <div class="control-label-row">
+                  <span class="control-label">Decimal Coordinate Precision</span>
+                  <span class="control-value-display" id="val-precision">2 places</span>
+                </div>
+                <input type="range" id="opt-precision" min="0" max="5" step="1" value="2" class="slider">
+                <span class="field-subtext">Rounds path coordinates to reduce file footprint. 0 = integer values.</span>
+              </div>
+
+              <!-- Output Format Selection -->
+              <div class="control-group section-divider-top">
+                <span class="control-label">Output Format</span>
+                <div class="toggle-group-row">
+                  <button id="btn-format-minify" class="toggle-mode-btn active">Minified (Single Line)</button>
+                  <button id="btn-format-pretty" class="toggle-mode-btn">Pretty Printed (Indented)</button>
+                </div>
+              </div>
+
+              <button id="btn-run-optimization" class="btn-primary" disabled>Optimize Code</button>
+            </div>
+
+            <!-- TAB 2: Converter Settings (Hidden by default) -->
+            <div id="controls-convert" class="control-panel">
+              <span class="control-section-title">Conversion Settings</span>
+
+              <!-- Target Format Selector -->
+              <div class="control-group">
+                <span class="control-label">Export Image Format</span>
+                <div class="toggle-group-row">
+                  <button id="btn-export-png" class="toggle-mode-btn active">PNG Image</button>
+                  <button id="btn-export-jpeg" class="toggle-mode-btn">JPEG Image</button>
+                </div>
+              </div>
+
+              <!-- JPEG Quality (Only shown for JPEG) -->
+              <div id="group-jpeg-quality" class="control-group" style="display: none;">
+                <div class="control-label-row">
+                  <span class="control-label">JPEG Compression Quality</span>
+                  <span class="control-value-display" id="val-jpeg-quality">90%</span>
+                </div>
+                <input type="range" id="input-jpeg-quality" min="10" max="100" step="5" value="90" class="slider">
+              </div>
+
+              <!-- Scale factor -->
+              <div class="control-group section-divider-top">
+                <span class="control-label">Export Dimensions Multiplier</span>
+                <div class="scale-buttons-grid">
+                  <button class="scale-btn active" data-scale="1">1x</button>
+                  <button class="scale-btn" data-scale="2">2x (Retina)</button>
+                  <button class="scale-btn" data-scale="3">3x</button>
+                  <button class="scale-btn" data-scale="4">4x (Ultra)</button>
+                </div>
+              </div>
+
+              <!-- Dimension inputs -->
+              <div class="control-inputs-row section-divider-top">
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Width (px)</label>
+                  <input type="number" id="input-export-width" placeholder="Width" min="1" class="form-input">
+                </div>
+                <div class="dimension-link-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                </div>
+                <div class="dimension-input-wrap">
+                  <label class="control-label">Height (px)</label>
+                  <input type="number" id="input-export-height" placeholder="Height" min="1" class="form-input">
+                </div>
+              </div>
+
+              <!-- Export Background Color -->
+              <div class="control-group section-divider-top">
+                <span class="control-label">Export Canvas Background</span>
+                <div class="bg-selector-row">
+                  <label class="bg-option-label">
+                    <input type="radio" name="export-bg" value="transparent" checked>
+                    <span class="bg-option-box transparent-preview" title="Transparent Background"></span>
+                  </label>
+                  <label class="bg-option-label">
+                    <input type="radio" name="export-bg" value="white">
+                    <span class="bg-option-box white-preview" title="Solid White Background"></span>
+                  </label>
+                  <label class="bg-option-label">
+                    <input type="radio" name="export-bg" value="black">
+                    <span class="bg-option-box black-preview" title="Solid Black Background"></span>
+                  </label>
+                  <label class="bg-option-label">
+                    <input type="radio" name="export-bg" value="custom">
+                    <span class="bg-option-box custom-preview-dot" id="custom-bg-dot-color" title="Custom Solid Color">
+                      <input type="color" id="input-export-bg-custom" value="#6366f1" style="opacity:0; position:absolute; inset:0; width:100%; height:100%; cursor:pointer;">
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <button id="btn-run-conversion" class="btn-primary" disabled>Convert & Download</button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Right Column: Live Visual View & Code Output -->
+        <div class="preview-column">
+          
+          <!-- Visual Preview Box -->
+          <section class="card preview-card">
+            <div class="card-header">
+              <h3>Live Vector Preview</h3>
+              <div class="preview-controls">
+                <span class="preview-label-small">Grid Backdrop:</span>
+                <button id="btn-toggle-grid" class="icon-btn active" title="Toggle Transparent Grid Background">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                    <line x1="15" y1="3" x2="15" y2="21"></line>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="3" y1="15" x2="21" y2="15"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper preview-area-wrapper transparent-grid" id="svg-preview-frame">
+              <div id="preview-placeholder" class="placeholder-text">Load or paste an SVG element to preview vectors here...</div>
+              <div id="preview-render-container" class="svg-render-container" style="display: none;"></div>
+            </div>
+          </section>
+
+          <!-- Code Output Panel -->
+          <section class="card code-export-card">
+            <div class="card-header">
+              <h3>Optimized SVG Output</h3>
+              <div class="header-actions">
+                <button id="btn-copy-code" class="action-link-btn" title="Copy code to clipboard" disabled>Copy Code</button>
+                <button id="btn-download-svg" class="action-link-btn" title="Download optimized SVG file" disabled>Download SVG</button>
+              </div>
+            </div>
+            
+            <div class="card-body-wrapper">
+              <div class="code-output-pane">
+                <textarea id="svg-optimized-output" readonly placeholder="Optimized SVG code will be output here..."></textarea>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-badge" class="status-badge status-empty">Waiting Input</span>
+        <span class="dot">·</span>
+        <span id="stat-original-size">Original: 0 KB</span>
+        <span class="dot">·</span>
+        <span id="stat-optimized-size">Optimized: 0 KB</span>
+        <span class="dot">·</span>
+        <span id="stat-saving-tag" class="savings-highlight" style="display: none;">0% Saved</span>
+      </div>
+      <div class="error-msg-container" id="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>Understanding SVG Optimization & Conversion</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p><strong>Scalable Vector Graphics (SVG)</strong> are XML-based vector files commonly used in modern web design. They scale indefinitely without pixelation. However, design editors like Adobe Illustrator, Inkscape, or Figma embed huge quantities of redundant metadata, editor-specific nodes, namespaces, and excess decimals that inflate web assets size unnecessarily.</p>
+          
+          <h3>How SVG Optimization Works:</h3>
+          <ul>
+            <li><strong>Metadata Removal:</strong> Deletes non-standard XML namespaces, custom editor nodes, XML declarations, and HTML comments.</li>
+            <li><strong>Coordinate Rounding:</strong> Coordinates are represented by high-precision floats. Rounding coordinates to 2 decimal places drastically shrinks code sizes with no visible quality loss.</li>
+            <li><strong>Minification:</strong> Strips line breaks and spacing, converting standard indented XML into a tightly packed single-line string.</li>
+          </ul>
+        </div>
+        
+        <div class="seo-text-col">
+          <h3>Sizing, Upscaling, & Rasterization</h3>
+          <p>Converting SVGs to raster files (PNG/JPEG) is a common requirement for platforms that do not support vector formats (like email templates, certain social media, or app stores). Vector rendering allows perfect upscaling.</p>
+          
+          <h3>Benefits of Vector to Raster conversion:</h3>
+          <ul>
+            <li><strong>Lossless Scaling:</strong> Select scale options like 2x, 3x, or 4x to rasterize vector drawings into extremely high-definition crystal clear images.</li>
+            <li><strong>Background Transparency:</strong> Control background nodes during rendering to generate either transparent PNG layouts or solid JPEG cards.</li>
+            <li><strong>100% Client-Side Privacy:</strong> None of your graphic documents or SVG code are sent to external databases or servers. Everything compiles directly inside your web browser sandbox.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // State variables & Defaults
+  // ==========================================================================
+  
+  let originalSvgCode = '';
+  let optimizedSvgCode = '';
+  let svgWidth = 300;
+  let svgHeight = 300;
+  let svgAspectRatio = 1;
+
+  let activeTab = 'optimize'; // optimize, convert
+  let exportFormat = 'png';   // png, jpeg
+  let exportBgMode = 'transparent'; // transparent, white, black, custom
+  let currentScale = 1;
+  let isGridVisible = true;
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  // Theme & Global controls
+  const themeToggle = document.getElementById('theme-toggle');
+  const btnClear = document.getElementById('btn-clear');
+  const statBadge = document.getElementById('stat-badge');
+  const statOriginalSize = document.getElementById('stat-original-size');
+  const statOptimizedSize = document.getElementById('stat-optimized-size');
+  const statSavingTag = document.getElementById('stat-saving-tag');
+  const errorMessage = document.getElementById('error-message');
+
+  // Tabs
+  const tabOptimizeBtn = document.getElementById('tab-optimize-btn');
+  const tabConvertBtn = document.getElementById('tab-convert-btn');
+  const controlsOptimize = document.getElementById('controls-optimize');
+  const controlsConvert = document.getElementById('controls-convert');
+  const panelTitle = document.getElementById('panel-title');
+
+  // Inputs
+  const svgDropZone = document.getElementById('svg-drop-zone');
+  const svgFileUploader = document.getElementById('svg-file-uploader');
+  const svgRawInput = document.getElementById('svg-raw-input');
+
+  // Optimize Panel Controls
+  const optMetadata = document.getElementById('opt-metadata');
+  const optComments = document.getElementById('opt-comments');
+  const optTitleDesc = document.getElementById('opt-title-desc');
+  const optUnusedIds = document.getElementById('opt-unused-ids');
+  const optPrecision = document.getElementById('opt-precision');
+  const valPrecision = document.getElementById('val-precision');
+  
+  const btnFormatMinify = document.getElementById('btn-format-minify');
+  const btnFormatPretty = document.getElementById('btn-format-pretty');
+  let outputFormatMode = 'minify'; // minify, pretty
+  const btnRunOptimization = document.getElementById('btn-run-optimization');
+
+  // Convert Panel Controls
+  const btnExportPng = document.getElementById('btn-export-png');
+  const btnExportJpeg = document.getElementById('btn-export-jpeg');
+  const groupJpegQuality = document.getElementById('group-jpeg-quality');
+  const inputJpegQuality = document.getElementById('input-jpeg-quality');
+  const valJpegQuality = document.getElementById('val-jpeg-quality');
+  const scaleBtns = document.querySelectorAll('.scale-btn');
+  const inputExportWidth = document.getElementById('input-export-width');
+  const inputExportHeight = document.getElementById('input-export-height');
+  const bgRadios = document.querySelectorAll('input[name="export-bg"]');
+  const inputExportBgCustom = document.getElementById('input-export-bg-custom');
+  const customBgDotColor = document.getElementById('custom-bg-dot-color');
+  const btnRunConversion = document.getElementById('btn-run-conversion');
+
+  // Preview Area
+  const btnToggleGrid = document.getElementById('btn-toggle-grid');
+  const svgPreviewFrame = document.getElementById('svg-preview-frame');
+  const previewPlaceholder = document.getElementById('preview-placeholder');
+  const previewRenderContainer = document.getElementById('preview-render-container');
+
+  // Code Output Panel
+  const svgOptimizedOutput = document.getElementById('svg-optimized-output');
+  const btnCopyCode = document.getElementById('btn-copy-code');
+  const btnDownloadSvg = document.getElementById('btn-download-svg');
+
+  // ==========================================================================
+  // Helper Functions
+  // ==========================================================================
+
+  // Format file size in readable format
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // XML Indenter / Beautifier
+  function beautifyXml(xml) {
+    const reg = /(>)(<)(\/*)/g;
+    const wspace = xml.replace(reg, '$1\r\n$2$3');
+    const wspace_split = wspace.split('\r\n');
+    let formatted = '';
+    let pad = 0;
+    
+    for (let i = 0; i < wspace_split.length; i++) {
+      const node = wspace_split[i].trim();
+      if (!node) continue;
+      
+      let indent = 0;
+      if (node.match(/^<\/\w/)) {
+        if (pad !== 0) pad -= 1;
+      } else if (node.match(/^<\w[^>]*[^\/]>$/) && !node.match(/^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)/)) {
+        indent = 1;
+      }
+      
+      formatted += '  '.repeat(pad) + node + '\n';
+      pad += indent;
+    }
+    return formatted.trim();
+  }
+
+  // Round floats inside coordinates and path attributes
+  function roundNumbersInString(str, precision) {
+    // Matches floating numbers (e.g. 10.234, -0.45, .56)
+    const regex = /[-+]?\d*\.\d+(?:[eE][-+]?\d+)?/g;
+    return str.replace(regex, (match) => {
+      const num = parseFloat(match);
+      const rounded = num.toFixed(precision);
+      // Strip trailing zeros and unnecessary dot
+      return parseFloat(rounded).toString();
+    });
+  }
+
+  // ==========================================================================
+  // Core Logic & Optimizer Pipeline
+  // ==========================================================================
+
+  // Switch between tabs
+  function switchTab(tab) {
+    activeTab = tab;
+    if (tab === 'optimize') {
+      tabOptimizeBtn.classList.add('active');
+      tabConvertBtn.classList.remove('active');
+      controlsOptimize.classList.add('active');
+      controlsConvert.classList.remove('active');
+      panelTitle.textContent = 'Upload & Optimize SVG';
+    } else {
+      tabOptimizeBtn.classList.remove('active');
+      tabConvertBtn.classList.add('active');
+      controlsOptimize.classList.remove('active');
+      controlsConvert.classList.add('active');
+      panelTitle.textContent = 'Convert Vector to Image';
+    }
+  }
+
+  // Clear states
+  function clearAll() {
+    originalSvgCode = '';
+    optimizedSvgCode = '';
+    svgWidth = 300;
+    svgHeight = 300;
+    svgAspectRatio = 1;
+    
+    svgRawInput.value = '';
+    svgOptimizedOutput.value = '';
+    
+    previewPlaceholder.style.display = 'block';
+    previewRenderContainer.style.display = 'none';
+    previewRenderContainer.innerHTML = '';
+    
+    btnRunOptimization.disabled = true;
+    btnRunConversion.disabled = true;
+    btnCopyCode.disabled = true;
+    btnDownloadSvg.disabled = true;
+
+    inputExportWidth.value = '';
+    inputExportHeight.value = '';
+
+    statBadge.textContent = 'Waiting Input';
+    statBadge.className = 'status-badge status-empty';
+    statOriginalSize.textContent = 'Original: 0 KB';
+    statOptimizedSize.textContent = 'Optimized: 0 KB';
+    statSavingTag.style.display = 'none';
+    errorMessage.style.display = 'none';
+  }
+
+  // Load and Parse raw SVG string
+  function processLoadedSvg(svgString) {
+    errorMessage.style.display = 'none';
+    
+    // Parse to ensure valid XML structure
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgString, 'image/svg+xml');
+    
+    // Check parser errors
+    const parserError = doc.querySelector('parsererror');
+    if (parserError) {
+      statBadge.textContent = 'Invalid SVG';
+      statBadge.className = 'status-badge status-invalid';
+      errorMessage.textContent = 'XML Parsing Error: ' + parserError.textContent.trim();
+      errorMessage.style.display = 'block';
+      
+      previewPlaceholder.style.display = 'block';
+      previewRenderContainer.style.display = 'none';
+      btnRunOptimization.disabled = true;
+      btnRunConversion.disabled = true;
+      return false;
+    }
+
+    const svgElement = doc.querySelector('svg');
+    if (!svgElement) {
+      statBadge.textContent = 'Invalid SVG';
+      statBadge.className = 'status-badge status-invalid';
+      errorMessage.textContent = 'No <svg> root element found in code.';
+      errorMessage.style.display = 'block';
+      
+      previewPlaceholder.style.display = 'block';
+      previewRenderContainer.style.display = 'none';
+      btnRunOptimization.disabled = true;
+      btnRunConversion.disabled = true;
+      return false;
+    }
+
+    // Success! Store raw code
+    originalSvgCode = svgString;
+    optimizedSvgCode = ''; // Reset optimized cache until rerun
+
+    // Calculate dimensions
+    let widthAttr = svgElement.getAttribute('width');
+    let heightAttr = svgElement.getAttribute('height');
+    const viewBoxAttr = svgElement.getAttribute('viewBox');
+
+    // Parse viewBox to fallback
+    if (viewBoxAttr) {
+      const parts = viewBoxAttr.split(/[\s,]+/);
+      if (parts.length === 4) {
+        const vbWidth = parseFloat(parts[2]);
+        const vbHeight = parseFloat(parts[3]);
+        
+        if (!widthAttr) widthAttr = vbWidth;
+        if (!heightAttr) heightAttr = vbHeight;
+      }
+    }
+
+    // Force default falls
+    svgWidth = parseFloat(widthAttr) || 300;
+    svgHeight = parseFloat(heightAttr) || 300;
+    svgAspectRatio = svgWidth / svgHeight;
+
+    // Set converter defaults
+    inputExportWidth.value = Math.round(svgWidth * currentScale);
+    inputExportHeight.value = Math.round(svgHeight * currentScale);
+
+    // Render original in preview box
+    previewPlaceholder.style.display = 'none';
+    previewRenderContainer.style.display = 'flex';
+    previewRenderContainer.innerHTML = '';
+    // Deep clone before appending to preserve raw values
+    const previewSvg = svgElement.cloneNode(true);
+    if (!previewSvg.getAttribute('width')) {
+      previewSvg.setAttribute('width', '100%');
+    }
+    if (!previewSvg.getAttribute('height')) {
+      previewSvg.setAttribute('height', '100%');
+    }
+    previewRenderContainer.appendChild(previewSvg);
+
+    // Enable buttons
+    btnRunOptimization.disabled = false;
+    btnRunConversion.disabled = false;
+
+    // Update stats
+    const sizeBytes = new Blob([originalSvgCode]).size;
+    statOriginalSize.textContent = `Original: ${formatBytes(sizeBytes)}`;
+    statOptimizedSize.textContent = 'Optimized: 0 KB';
+    statSavingTag.style.display = 'none';
+    statBadge.textContent = 'Valid SVG';
+    statBadge.className = 'status-badge status-valid';
+
+    return true;
+  }
+
+  // Optimize SVG Pipeline
+  function runOptimization() {
+    if (!originalSvgCode) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(originalSvgCode, 'image/svg+xml');
+    const svgElement = doc.querySelector('svg');
+
+    // 1. Clean Metadata & Editor Namespaces
+    if (optMetadata.checked) {
+      // Find all attributes and remove editor namespaces
+      const allElements = doc.getElementsByTagName('*');
+      for (let i = 0; i < allElements.length; i++) {
+        const el = allElements[i];
+        
+        // Remove namespaced attributes
+        const attrsToRemove = [];
+        for (let j = 0; j < el.attributes.length; j++) {
+          const attr = el.attributes[j];
+          if (attr.name.startsWith('sodipodi:') || 
+              attr.name.startsWith('inkscape:') || 
+              attr.name.startsWith('sketch:') || 
+              attr.name.startsWith('illustrator:') ||
+              attr.name.startsWith('adobe:') ||
+              attr.name.startsWith('i:') ||
+              attr.name.startsWith('xmlns:sodipodi') ||
+              attr.name.startsWith('xmlns:inkscape') ||
+              attr.name.startsWith('xmlns:sketch') ||
+              attr.name.startsWith('xmlns:illustrator') ||
+              attr.name.startsWith('xmlns:adobe') ||
+              attr.name.startsWith('xmlns:i')) {
+            attrsToRemove.push(attr.name);
+          }
+        }
+        attrsToRemove.forEach(attr => el.removeAttribute(attr));
+      }
+
+      // Remove specific editor tags
+      const sodipodiNamedView = doc.querySelector('sodipodi\\:namedview, namedview');
+      if (sodipodiNamedView) sodipodiNamedView.remove();
+      
+      const metadataTag = doc.querySelector('metadata');
+      if (metadataTag) metadataTag.remove();
+    }
+
+    // 2. Remove Title & Description tags
+    if (optTitleDesc.checked) {
+      const titles = doc.querySelectorAll('title');
+      titles.forEach(t => t.remove());
+      const descs = doc.querySelectorAll('desc');
+      descs.forEach(d => d.remove());
+    }
+
+    // 3. Strip Unreferenced IDs
+    if (optUnusedIds.checked) {
+      // Gather all referenced URL IDs in SVG: url(#id)
+      const svgText = new XMLSerializer().serializeToString(doc);
+      const urlRegex = /url\s*\(\s*#([^)]+)\)/g;
+      const referencedIds = new Set();
+      let match;
+      while ((match = urlRegex.exec(svgText)) !== null) {
+        referencedIds.add(match[1]);
+      }
+
+      // Check also href references: href="#id" or xlink:href="#id"
+      const hrefRegex = /(?:href|xlink:href)\s*=\s*["']#([^"']+)["']/g;
+      while ((match = hrefRegex.exec(svgText)) !== null) {
+        referencedIds.add(match[1]);
+      }
+
+      // Find all elements with an ID and remove the ID if not referenced
+      const elementsWithId = doc.querySelectorAll('[id]');
+      elementsWithId.forEach(el => {
+        const id = el.getAttribute('id');
+        
+        // We shouldn't remove IDs on gradents/masks/filters that are references in definitions
+        // But if they are not in the referenced list, they are truly unused!
+        if (!referencedIds.has(id)) {
+          // If it's a gradient, filter, clipPath, mask or symbol, it might be unused. We remove the whole node
+          // if it's in a defs, OR we just strip the ID. For safety, we just remove the ID attribute on paths/g
+          const tagName = el.tagName.toLowerCase();
+          if (tagName === 'path' || tagName === 'g' || tagName === 'circle' || tagName === 'rect' || tagName === 'polygon' || tagName === 'polyline' || tagName === 'ellipse') {
+            el.removeAttribute('id');
+          }
+        }
+      });
+    }
+
+    // Convert back to string
+    let optimizedString = new XMLSerializer().serializeToString(doc);
+
+    // 4. Remove Comments (Regex replacement is best since DOM parser handles comments as separate nodes but serializer might keep them)
+    if (optComments.checked) {
+      optimizedString = optimizedString.replace(/<!--[\s\S]*?-->/g, '');
+    }
+
+    // 5. Apply Decimal Coordinate Precision
+    const precisionVal = parseInt(optPrecision.value);
+    if (precisionVal < 5) {
+      // Round all numbers in path data and polygon/polyline points
+      // We parse the DOM elements to get the path data and points and replace them
+      const tempDoc = parser.parseFromString(optimizedString, 'image/svg+xml');
+      const paths = tempDoc.querySelectorAll('path');
+      paths.forEach(p => {
+        const d = p.getAttribute('d');
+        if (d) {
+          p.setAttribute('d', roundNumbersInString(d, precisionVal));
+        }
+      });
+
+      const polygons = tempDoc.querySelectorAll('polygon, polyline');
+      polygons.forEach(p => {
+        const points = p.getAttribute('points');
+        if (points) {
+          p.setAttribute('points', roundNumbersInString(points, precisionVal));
+        }
+      });
+
+      // Round structural floats like coordinates and sizes
+      const shapes = tempDoc.querySelectorAll('rect, circle, ellipse, line');
+      shapes.forEach(s => {
+        const attrs = ['x', 'y', 'width', 'height', 'cx', 'cy', 'r', 'rx', 'ry', 'x1', 'y1', 'x2', 'y2'];
+        attrs.forEach(attr => {
+          const val = s.getAttribute(attr);
+          if (val && !isNaN(val)) {
+            s.setAttribute(attr, parseFloat(parseFloat(val).toFixed(precisionVal)).toString());
+          }
+        });
+      });
+
+      optimizedString = new XMLSerializer().serializeToString(tempDoc);
+    }
+
+    // 6. Formatting (Minify vs Pretty Print)
+    if (outputFormatMode === 'minify') {
+      // Strips spaces between XML nodes and line breaks
+      optimizedString = optimizedString.replace(/>\s+</g, '><').replace(/\r?\n|\r/g, '').trim();
+    } else {
+      // Beautify
+      // First clean excess whitespace
+      const minified = optimizedString.replace(/>\s+</g, '><').replace(/\r?\n|\r/g, '').trim();
+      optimizedString = beautifyXml(minified);
+    }
+
+    // Cache result
+    optimizedSvgCode = optimizedString;
+
+    // Display in output textarea
+    svgOptimizedOutput.value = optimizedSvgCode;
+
+    // Enable download/copy buttons
+    btnCopyCode.disabled = false;
+    btnDownloadSvg.disabled = false;
+
+    // Update Rendered SVG Preview to show optimized version
+    const optParser = new DOMParser();
+    const optDoc = optParser.parseFromString(optimizedSvgCode, 'image/svg+xml');
+    const optSvg = optDoc.querySelector('svg');
+    if (optSvg) {
+      if (!optSvg.getAttribute('width')) {
+        optSvg.setAttribute('width', '100%');
+      }
+      if (!optSvg.getAttribute('height')) {
+        optSvg.setAttribute('height', '100%');
+      }
+      previewRenderContainer.innerHTML = '';
+      previewRenderContainer.appendChild(optSvg);
+    }
+
+    // Update stats bar sizes
+    const originalBytes = new Blob([originalSvgCode]).size;
+    const optimizedBytes = new Blob([optimizedSvgCode]).size;
+    statOptimizedSize.textContent = `Optimized: ${formatBytes(optimizedBytes)}`;
+
+    // Calculate savings
+    if (originalBytes > 0) {
+      const savings = ((originalBytes - optimizedBytes) / originalBytes) * 100;
+      if (savings > 0) {
+        statSavingTag.textContent = `${savings.toFixed(1)}% Saved`;
+        statSavingTag.style.display = 'inline-block';
+      } else {
+        statSavingTag.textContent = `0% Saved`;
+        statSavingTag.style.display = 'inline-block';
+      }
+    }
+  }
+
+  // Convert SVG to Raster Image (Canvas compilation)
+  function runConversion() {
+    const svgToConvert = optimizedSvgCode || originalSvgCode;
+    if (!svgToConvert) return;
+
+    // Get input dimensions
+    const width = parseInt(inputExportWidth.value) || 300;
+    const height = parseInt(inputExportHeight.value) || 300;
+
+    // Create virtual Image and Blob
+    const svgBlob = new Blob([svgToConvert], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    
+    const img = new Image();
+    img.onload = () => {
+      // Setup hidden canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+
+      // Handle backgrounds
+      if (exportFormat === 'jpeg') {
+        // JPEG doesn't support transparency, fill background white by default
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      if (exportBgMode === 'white') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+      } else if (exportBgMode === 'black') {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+      } else if (exportBgMode === 'custom') {
+        ctx.fillStyle = inputExportBgCustom.value;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Draw SVG onto canvas
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Export file format
+      let mimeType = 'image/png';
+      let extension = '.png';
+      let quality = 0.9;
+
+      if (exportFormat === 'jpeg') {
+        mimeType = 'image/jpeg';
+        extension = '.jpg';
+        quality = parseFloat(inputJpegQuality.value) / 100;
+      }
+
+      // Convert canvas to Data URL and trigger download
+      try {
+        const dataUrl = canvas.toDataURL(mimeType, quality);
+        const link = document.createElement('a');
+        link.download = `rasterized_vector_${width}x${height}${extension}`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error('Canvas serialization failed: ', err);
+        errorMessage.textContent = 'Conversion Error: Failed to rasterize SVG node (Check for external image links inside vector defs).';
+        errorMessage.style.display = 'block';
+      }
+
+      // Revoke virtual URL
+      URL.revokeObjectURL(url);
+    };
+
+    img.onerror = (e) => {
+      console.error('Failed to load SVG into virtual Image: ', e);
+      URL.revokeObjectURL(url);
+      errorMessage.textContent = 'Render Error: Unable to rasterize vector nodes. Verify SVG structure.';
+      errorMessage.style.display = 'block';
+    };
+
+    img.src = url;
+  }
+
+  // ==========================================================================
+  // Event Listeners
+  // ==========================================================================
+
+  // Tab buttons
+  tabOptimizeBtn.addEventListener('click', () => switchTab('optimize'));
+  tabConvertBtn.addEventListener('click', () => switchTab('convert'));
+
+  // Drag & Drop
+  svgDropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    svgDropZone.classList.add('dragover');
+  });
+
+  svgDropZone.addEventListener('dragleave', () => {
+    svgDropZone.classList.remove('dragover');
+  });
+
+  svgDropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    svgDropZone.classList.remove('dragover');
+    
+    if (e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type === 'image/svg+xml' || file.name.endsWith('.svg')) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          svgRawInput.value = evt.target.result;
+          processLoadedSvg(evt.target.result);
+        };
+        reader.readAsText(file);
+      }
+    }
+  });
+
+  svgDropZone.addEventListener('click', () => {
+    svgFileUploader.click();
+  });
+
+  svgFileUploader.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        svgRawInput.value = evt.target.result;
+        processLoadedSvg(evt.target.result);
+      };
+      reader.readAsText(file);
+    }
+  });
+
+  // Paste Code Input
+  svgRawInput.addEventListener('input', (e) => {
+    const code = e.target.value.trim();
+    if (code) {
+      processLoadedSvg(code);
+    } else {
+      clearAll();
+    }
+  });
+
+  // Precision Slider label update
+  optPrecision.addEventListener('input', (e) => {
+    const val = parseInt(e.target.value);
+    if (val === 5) {
+      valPrecision.textContent = 'None';
+    } else {
+      valPrecision.textContent = `${val} place${val !== 1 ? 's' : ''}`;
+    }
+  });
+
+  // Minify vs Pretty Print tabs
+  btnFormatMinify.addEventListener('click', () => {
+    outputFormatMode = 'minify';
+    btnFormatMinify.classList.add('active');
+    btnFormatPretty.classList.remove('active');
+  });
+
+  btnFormatPretty.addEventListener('click', () => {
+    outputFormatMode = 'pretty';
+    btnFormatMinify.classList.remove('active');
+    btnFormatPretty.classList.add('active');
+  });
+
+  // Run Optimization
+  btnRunOptimization.addEventListener('click', runOptimization);
+
+  // Conversion Export Format
+  btnExportPng.addEventListener('click', () => {
+    exportFormat = 'png';
+    btnExportPng.classList.add('active');
+    btnExportJpeg.classList.remove('active');
+    groupJpegQuality.style.display = 'none';
+  });
+
+  btnExportJpeg.addEventListener('click', () => {
+    exportFormat = 'jpeg';
+    btnExportPng.classList.remove('active');
+    btnExportJpeg.classList.add('active');
+    groupJpegQuality.style.display = 'flex';
+  });
+
+  inputJpegQuality.addEventListener('input', (e) => {
+    valJpegQuality.textContent = `${e.target.value}%`;
+  });
+
+  // Scale buttons
+  scaleBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      scaleBtns.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentScale = parseInt(e.target.dataset.scale);
+      
+      if (originalSvgCode) {
+        inputExportWidth.value = Math.round(svgWidth * currentScale);
+        inputExportHeight.value = Math.round(svgHeight * currentScale);
+      }
+    });
+  });
+
+  // Dimension sync aspect ratio locks
+  inputExportWidth.addEventListener('input', (e) => {
+    if (originalSvgCode && e.target.value) {
+      const val = parseInt(e.target.value);
+      inputExportHeight.value = Math.round(val / svgAspectRatio);
+    }
+  });
+
+  inputExportHeight.addEventListener('input', (e) => {
+    if (originalSvgCode && e.target.value) {
+      const val = parseInt(e.target.value);
+      inputExportWidth.value = Math.round(val * svgAspectRatio);
+    }
+  });
+
+  // Background Export options
+  bgRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      exportBgMode = e.target.value;
+      if (exportBgMode === 'custom') {
+        customBgDotColor.style.backgroundColor = inputExportBgCustom.value;
+      }
+    });
+  });
+
+  inputExportBgCustom.addEventListener('input', (e) => {
+    customBgDotColor.style.backgroundColor = e.target.value;
+    // Auto check custom radio if user edits color
+    const customRadio = document.querySelector('input[name="export-bg"][value="custom"]');
+    customRadio.checked = true;
+    exportBgMode = 'custom';
+  });
+
+  // Run Conversion
+  btnRunConversion.addEventListener('click', runConversion);
+
+  // Clear button
+  btnClear.addEventListener('click', clearAll);
+
+  // Toggle grid preview background
+  btnToggleGrid.addEventListener('click', () => {
+    isGridVisible = !isGridVisible;
+    if (isGridVisible) {
+      btnToggleGrid.classList.add('active');
+      svgPreviewFrame.classList.add('transparent-grid');
+    } else {
+      btnToggleGrid.classList.remove('active');
+      svgPreviewFrame.classList.remove('transparent-grid');
+    }
+  });
+
+  // Copy Code to Clipboard
+  btnCopyCode.addEventListener('click', () => {
+    if (!optimizedSvgCode) return;
+    navigator.clipboard.writeText(optimizedSvgCode).then(() => {
+      const originalText = btnCopyCode.textContent;
+      btnCopyCode.textContent = 'Copied!';
+      btnCopyCode.style.color = '#38ef7d';
+      
+      setTimeout(() => {
+        btnCopyCode.textContent = originalText;
+        btnCopyCode.style.color = '';
+      }, 1500);
+    });
+  });
+
+  // Download SVG file
+  btnDownloadSvg.addEventListener('click', () => {
+    if (!optimizedSvgCode) return;
+    const blob = new Blob([optimizedSvgCode], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'optimized_vector.svg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  });
+
+  // Theme switch logic (adapted from portal)
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+});
+
+
+  </script>
+</body>
+</html>

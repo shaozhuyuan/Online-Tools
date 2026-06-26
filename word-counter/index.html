@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Word Counter & Text Analyzer | Online Tools</title>
+  <meta name="description" content="Calculate word count, character count, sentence count, reading time, and keyword density. Completely free and secure offline text analysis tool.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Word Counter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(150, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(150, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(16, 185, 129, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(150, 84%, 37%) 0%, hsl(165, 89%, 35%) 100%);
+  --accent-color: hsl(150, 84%, 37%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(150, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(150, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(16, 185, 129, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-main-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+.calc-body.no-padding {
+  padding: 0;
+  background: none;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+&.light-theme .calc-body.no-padding {
+  background: none;
+}
+
+/* ==========================================================================
+   Textarea Editor Card
+   ========================================================================== */
+
+.editor-card {
+  height: 100%;
+}
+
+.editor-textarea {
+  width: 100%;
+  height: 380px;
+  min-height: 320px;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  border-bottom: 1px solid var(--border-color);
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .editor-textarea {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.editor-textarea:focus {
+  border-color: var(--border-color-focus);
+}
+
+.editor-bottom-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba(0,0,0,0.1);
+  justify-content: flex-end;
+}
+
+&.light-theme .editor-bottom-bar {
+  background: rgba(0,0,0,0.01);
+}
+
+/* Buttons Styling */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255,255,255,0.08);
+}
+
+&.light-theme .btn-secondary {
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.76rem;
+}
+
+/* ==========================================================================
+   Sidebar Metrics Grid & Keyword Density
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.metric-box {
+  background: rgba(0,0,0,0.15);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+&.light-theme .metric-box {
+  background: rgba(255,255,255,0.3);
+}
+
+.metric-val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+}
+
+.metric-lbl {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.border-top {
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+}
+
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.field-subtext {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Keyword Density list items with progress bar */
+.density-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.density-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.density-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.density-word {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.density-pct {
+  color: var(--text-muted);
+}
+
+.density-pct strong {
+  color: var(--accent-color);
+}
+
+.density-progress-bg {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-round);
+  overflow: hidden;
+}
+
+&.light-theme .density-progress-bg {
+  background: rgba(0,0,0,0.06);
+}
+
+.density-progress-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-round);
+}
+
+.empty-state-text {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+}
+
+/* Bottom Status, SEO, Footer */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <h1>WordScan Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Interactive Area -->
+        <div class="workspace-main-column">
+          <div class="card editor-card">
+            <div class="card-header">
+              <h3>Enter Your Paragraphs Below</h3>
+              <div class="header-actions">
+                <button id="btn-clear" class="btn btn-secondary btn-small">Clear Content</button>
+              </div>
+            </div>
+            <div class="calc-body no-padding">
+              <textarea id="text-input" class="editor-textarea" placeholder="Start typing, copy-paste your blog posts, essays or documents here..."></textarea>
+            </div>
+            
+            <!-- Quick Export and File Operations -->
+            <div class="editor-bottom-bar">
+              <button id="btn-copy" class="btn btn-secondary btn-small">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Content
+              </button>
+              <button id="btn-export" class="btn btn-primary btn-small">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export as TXT
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Sidebar Analytics -->
+        <div class="sidebar-column">
+          
+          <!-- Text Metrics Dashboard Card -->
+          <section class="card metrics-card">
+            <div class="card-header">
+              <h3>Detailed Metrics</h3>
+            </div>
+            <div class="calc-body">
+              <div class="metrics-grid">
+                <div class="metric-box">
+                  <span class="metric-val" id="metric-words">0</span>
+                  <span class="metric-lbl">Words</span>
+                </div>
+                <div class="metric-box">
+                  <span class="metric-val" id="metric-chars">0</span>
+                  <span class="metric-lbl">Characters</span>
+                </div>
+                <div class="metric-box">
+                  <span class="metric-val" id="metric-sentences">0</span>
+                  <span class="metric-lbl">Sentences</span>
+                </div>
+                <div class="metric-box">
+                  <span class="metric-val" id="metric-paragraphs">0</span>
+                  <span class="metric-lbl">Paragraphs</span>
+                </div>
+              </div>
+
+              <!-- Supplementary Stats rows -->
+              <div class="analyzer-details border-top">
+                <div class="analy-row">
+                  <span>Characters (no spaces):</span>
+                  <strong id="metric-chars-nospace">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Lines:</span>
+                  <strong id="metric-lines">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Est. Reading Time:</span>
+                  <strong id="metric-read-time">0 min</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Est. Speaking Time:</span>
+                  <strong id="metric-speak-time">0 min</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Keyword Frequency Density Analyzer -->
+          <section class="card density-card">
+            <div class="card-header">
+              <h3>Keyword Density</h3>
+            </div>
+            <div class="calc-body">
+              <p class="field-subtext">Density of major terms (words over 2 letters long):</p>
+              <div class="density-list" id="density-container">
+                <div class="empty-state-text">Start typing to see density analysis.</div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Secure Local Processing</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">No cookies / 100% private</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Advanced Word Counter: Writing metrics and SEO keyword density</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>For bloggers, students, and SEO marketers, tracking the length of essays or articles is critical. A secure <strong>online word counter</strong> helps you instantly check counts without risking leakage of draft ideas.</p>
+          <h3>How Reading and Speaking Times are Calculated:</h3>
+          <p>The standard reading speed for most adults is roughly 200 words per minute (WPM). Speaking speed for speeches or presentations averages around 130 WPM. The counter uses these factors to estimate speech durations.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>Keyword Density Importance:</h3>
+          <p>In search engine optimization, keyword density represents the percentage of times a specific keyword appears within a text body. Maintaining a natural density of 1% to 2% is ideal for search indexing compliance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const textInput = document.getElementById('text-input');
+  
+  // Actions
+  const btnClear = document.getElementById('btn-clear');
+  const btnCopy = document.getElementById('btn-copy');
+  const btnExport = document.getElementById('btn-export');
+
+  // Metrics Display Labels
+  const metricWords = document.getElementById('metric-words');
+  const metricChars = document.getElementById('metric-chars');
+  const metricSentences = document.getElementById('metric-sentences');
+  const metricParagraphs = document.getElementById('metric-paragraphs');
+
+  const metricCharsNoSpace = document.getElementById('metric-chars-nospace');
+  const metricLines = document.getElementById('metric-lines');
+  const metricReadTime = document.getElementById('metric-read-time');
+  const metricSpeakTime = document.getElementById('metric-speak-time');
+
+  const densityContainer = document.getElementById('density-container');
+
+  // ==========================================================================
+  // Text analysis logic core
+  // ==========================================================================
+
+  function analyzeText() {
+    const text = textInput.value;
+
+    // Word Count
+    const wordsArr = text.trim() ? text.trim().split(/\s+/).filter(w => w.length > 0) : [];
+    const wordCount = wordsArr.length;
+
+    // Character Counts
+    const charCount = text.length;
+    const charNoSpaceCount = text.replace(/\s/g, '').length;
+
+    // Sentence Count
+    let sentenceCount = 0;
+    if (text.trim()) {
+      const matches = text.match(/[.!?]+(\s+|$)/g);
+      sentenceCount = matches ? matches.length : 1;
+    }
+
+    // Paragraph Count
+    const paragraphCount = text.trim() ? text.split(/\n+/).filter(p => p.trim().length > 0).length : 0;
+
+    // Lines
+    const lineCount = text ? text.split('\n').length : 0;
+
+    // Estimations: Reading (200 wpm) & Speaking (130 wpm)
+    const readTimeMins = Math.ceil(wordCount / 200);
+    const speakTimeMins = Math.ceil(wordCount / 130);
+
+    // Render stats
+    metricWords.textContent = wordCount;
+    metricChars.textContent = charCount;
+    metricSentences.textContent = sentenceCount;
+    metricParagraphs.textContent = paragraphCount;
+
+    metricCharsNoSpace.textContent = charNoSpaceCount;
+    metricLines.textContent = lineCount;
+    metricReadTime.textContent = `${readTimeMins} min`;
+    metricSpeakTime.textContent = `${speakTimeMins} min`;
+
+    // Keyword Density List
+    calculateKeywordDensity(wordsArr);
+  }
+
+  // Calculates and renders density of words > 2 letters
+  function calculateKeywordDensity(wordsArr) {
+    densityContainer.innerHTML = '';
+
+    if (wordsArr.length === 0) {
+      densityContainer.innerHTML = '<div class="empty-state-text">Start typing to see density analysis.</div>';
+      return;
+    }
+
+    // Filter and count frequencies
+    const freq = {};
+    let totalAnalyzedCount = 0;
+
+    wordsArr.forEach(w => {
+      // Strip punctuation and numbers
+      const clean = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (clean.length > 2) {
+        freq[clean] = (freq[clean] || 0) + 1;
+        totalAnalyzedCount++;
+      }
+    });
+
+    if (totalAnalyzedCount === 0) {
+      densityContainer.innerHTML = '<div class="empty-state-text">Start typing to see density analysis.</div>';
+      return;
+    }
+
+    // Sort descending
+    const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+
+    // Show top 8 keywords
+    const topKeywords = sorted.slice(0, 8);
+
+    topKeywords.forEach(([word, count]) => {
+      const pct = ((count / wordsArr.length) * 100).toFixed(1);
+
+      const item = document.createElement('div');
+      item.className = 'density-item';
+      item.innerHTML = `
+        <div class="density-info-row">
+          <span class="density-word">${word}</span>
+          <span class="density-pct">${count} times (<strong>${pct}%</strong>)</span>
+        </div>
+        <div class="density-progress-bg">
+          <div class="density-progress-fill" style="width: ${Math.min(parseFloat(pct) * 5, 100)}%;"></div>
+        </div>
+      `;
+      densityContainer.appendChild(item);
+    });
+  }
+
+  // ==========================================================================
+  // Register Event Bindings
+  // ==========================================================================
+
+  // Live typing trigger
+  textInput.addEventListener('input', analyzeText);
+
+  // Clear content
+  btnClear.addEventListener('click', () => {
+    textInput.value = '';
+    analyzeText();
+    textInput.focus();
+  });
+
+  // Copy content
+  btnCopy.addEventListener('click', () => {
+    const textToCopy = textInput.value;
+    if (!textToCopy) return;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalText = btnCopy.innerHTML;
+      btnCopy.textContent = 'Copied!';
+      btnCopy.style.borderColor = '#10b981';
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalText;
+        btnCopy.style.borderColor = '';
+      }, 1200);
+    });
+  });
+
+  // Export content as TXT file
+  btnExport.addEventListener('click', () => {
+    const textToExport = textInput.value;
+    if (!textToExport.trim()) return;
+
+    const blob = new Blob([textToExport], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'wordscan-export.txt';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+  });
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initial trigger
+  analyzeText();
+
+});
+
+
+  </script>
+</body>
+</html>

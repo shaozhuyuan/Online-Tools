@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Percentage Calculator | Simple & Instant | Online Tools</title>
+  <meta name="description" content="Calculate percentages instantly. Features include: what is X% of Y, X is what % of Y, percentage increase/decrease calculator, and value changes. 100% free and client-side.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Percentage Calculator)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(188, 90%, 43%) 0%, hsl(217, 91%, 60%) 100%);
+  --accent-color: hsl(188, 90%, 43%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(6, 182, 212, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout (Split Grid)
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calculators-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 680px) {
+  .calculators-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Card Body Wrapper */
+.card-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* ==========================================================================
+   Calculator Inputs & Output Rows
+   ========================================================================== */
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.calc-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.calc-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Fraction styles */
+.fraction-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 76px;
+}
+
+.frac-input {
+  text-align: center !important;
+  padding: 6px !important;
+}
+
+.fraction-line {
+  width: 100%;
+  height: 2px;
+  background: var(--text-muted);
+  border-radius: 1px;
+}
+
+/* Form inputs */
+.form-input {
+  flex-grow: 1;
+  min-width: 70px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.15);
+}
+
+.short-input {
+  max-width: 80px;
+}
+
+/* Results panel */
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+}
+
+&.light-theme .result-row {
+  background: rgba(6, 182, 212, 0.03);
+}
+
+.result-row-double {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+  align-items: center;
+}
+
+&.light-theme .result-row-double {
+  background: rgba(6, 182, 212, 0.03);
+}
+
+.divider-v {
+  width: 1px;
+  height: 32px;
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.sub-result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flex-align {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.result-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-value {
+  font-size: 1.15rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-color);
+  word-break: break-all;
+}
+
+.result-value-sub {
+  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.text-green {
+  color: #10b981 !important;
+}
+
+.text-red {
+  color: #ef4444 !important;
+}
+
+/* Small copy icon button */
+.icon-btn-small {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn-small:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+  border-color: var(--border-color);
+}
+
+.copy-svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ==========================================================================
+   Sidebar: Visualizer & Historical Logs
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.visualizer-body {
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.visualizer-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+}
+
+/* SVG ring progress animation */
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s ease-out;
+}
+
+.visual-percentage-display {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#visualizer-percentage {
+  font-size: 1.6rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.visualizer-subtitle {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Bar visualizer block */
+.bar-visualizer-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.visual-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-round);
+  overflow: hidden;
+}
+
+&.light-theme .visual-bar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.visual-bar-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-round);
+  transition: width 0.35s ease-out;
+}
+
+/* Logs Panel */
+.logs-card {
+  flex-grow: 1;
+  max-height: 320px;
+}
+
+.logs-body {
+  padding: 14px;
+}
+
+.logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: 250px;
+}
+
+.empty-logs-msg {
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.log-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.74rem;
+}
+
+&.light-theme .log-item {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.log-equation {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.action-link-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-link-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Bottom Status Bar
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(6, 182, 212, 0.15);
+  color: #06b6d4;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   SEO Content Card & Footer
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.seo-text-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seo-text-col li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  position: relative;
+}
+
+.seo-text-col li::before {
+  content: "•";
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Footer styling */
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="5" x2="5" y2="19"></line>
+            <circle cx="6.5" cy="6.5" r="2.5"></circle>
+            <circle cx="17.5" cy="17.5" r="2.5"></circle>
+          </svg>
+          <h1>Percent Pro</h1>
+        </div>
+      </div>
+
+      <!-- Controls & Theme Toggle -->
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Various Calculators -->
+        <div class="calculators-grid">
+          
+          <!-- Calc 1: What is X% of Y -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>What is X% of Y?</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <span class="calc-text">What is</span>
+                <input type="number" id="c1-x" value="15" class="form-input short-input" placeholder="X">
+                <span class="calc-text">% of</span>
+                <input type="number" id="c1-y" value="200" class="form-input" placeholder="Y">
+                <span class="calc-text">?</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Result:</span>
+                <span id="c1-result" class="result-value">30</span>
+                <button class="icon-btn-small btn-copy" data-target="c1-result" title="Copy result">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calc 2: X is what percent of Y -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>X is what % of Y?</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <input type="number" id="c2-x" value="25" class="form-input" placeholder="X">
+                <span class="calc-text">is what % of</span>
+                <input type="number" id="c2-y" value="125" class="form-input" placeholder="Y">
+                <span class="calc-text">?</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Result:</span>
+                <span id="c2-result" class="result-value">20%</span>
+                <button class="icon-btn-small btn-copy" data-target="c2-result" title="Copy result">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calc 3: Percentage Increase/Decrease from X to Y -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Percentage Increase/Decrease</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <span class="calc-text">From</span>
+                <input type="number" id="c3-x" value="80" class="form-input" placeholder="X">
+                <span class="calc-text">to</span>
+                <input type="number" id="c3-y" value="120" class="form-input" placeholder="Y">
+                <span class="calc-text">?</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Difference:</span>
+                <span id="c3-result" class="result-value text-green">50% increase</span>
+                <button class="icon-btn-small btn-copy" data-target="c3-result" title="Copy result">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calc 4: Value X Increased/Decreased by Y% -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Increase/Decrease Value by %</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <span class="calc-text">Value</span>
+                <input type="number" id="c4-x" value="100" class="form-input" placeholder="Value">
+                <span class="calc-text">by</span>
+                <input type="number" id="c4-y" value="20" class="form-input short-input" placeholder="Y">
+                <span class="calc-text">%?</span>
+              </div>
+              <div class="result-row-double">
+                <div class="sub-result">
+                  <span class="result-label">Increased (+):</span>
+                  <div class="flex-align">
+                    <span id="c4-result-inc" class="result-value-sub">120</span>
+                    <button class="icon-btn-small btn-copy" data-target="c4-result-inc" title="Copy value">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="divider-v"></div>
+                <div class="sub-result">
+                  <span class="result-label">Decreased (-):</span>
+                  <div class="flex-align">
+                    <span id="c4-result-dec" class="result-value-sub">80</span>
+                    <button class="icon-btn-small btn-copy" data-target="c4-result-dec" title="Copy value">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calc 5: X is Y% of what? -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>X is Y% of What?</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <input type="number" id="c5-x" value="30" class="form-input" placeholder="X">
+                <span class="calc-text">is</span>
+                <input type="number" id="c5-y" value="15" class="form-input short-input" placeholder="Y">
+                <span class="calc-text">% of what?</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Result:</span>
+                <span id="c5-result" class="result-value">200</span>
+                <button class="icon-btn-small btn-copy" data-target="c5-result" title="Copy result">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calc 6: Fraction & Percentage Converter -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Fraction to Percentage Converter</h3>
+            </div>
+            <div class="card-body-wrapper calc-body">
+              <div class="calc-row">
+                <div class="fraction-input-container">
+                  <input type="number" id="c6-num" value="3" class="form-input frac-input" placeholder="Numerator">
+                  <div class="fraction-line"></div>
+                  <input type="number" id="c6-den" value="8" class="form-input frac-input" placeholder="Denominator">
+                </div>
+                <span class="calc-text">as a percentage is</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Result:</span>
+                <span id="c6-result" class="result-value">37.5%</span>
+                <button class="icon-btn-small btn-copy" data-target="c6-result" title="Copy result">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Right Column: Visualizer & Session Logs -->
+        <div class="sidebar-column">
+          
+          <!-- Live Math Visualizer (Dynamic SVG Gauge / Bar) -->
+          <section class="card visualizer-card">
+            <div class="card-header">
+              <h3>Interactive Visualizer</h3>
+            </div>
+            <div class="card-body-wrapper visualizer-body">
+              <div class="visualizer-container">
+                <!-- SVG Progress Ring -->
+                <svg class="progress-ring" width="160" height="160">
+                  <circle class="progress-ring-circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent" r="70" cx="80" cy="80"/>
+                  <circle id="visualizer-ring" class="progress-ring-circle" stroke="url(#cyan-gradient)" stroke-dasharray="439.8" stroke-dashoffset="439.8" stroke-width="12" stroke-linecap="round" fill="transparent" r="70" cx="80" cy="80"/>
+                  <defs>
+                    <linearGradient id="cyan-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#06b6d4" />
+                      <stop offset="100%" stop-color="#3b82f6" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="visual-percentage-display">
+                  <span id="visualizer-percentage">0%</span>
+                  <span class="visualizer-subtitle">of Total</span>
+                </div>
+              </div>
+
+              <!-- Bar visualizer -->
+              <div class="bar-visualizer-block">
+                <div class="bar-labels">
+                  <span id="visual-label-x" class="bar-label">Value (0)</span>
+                  <span id="visual-label-y" class="bar-label">Total (100)</span>
+                </div>
+                <div class="visual-bar-track">
+                  <div id="visualizer-bar" class="visual-bar-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+              <p class="field-subtext text-center">Visualizing calculator inputs in real-time.</p>
+            </div>
+          </section>
+
+          <!-- History Logs -->
+          <section class="card logs-card">
+            <div class="card-header">
+              <h3>Calculation History</h3>
+              <button id="btn-clear-logs" class="action-link-btn" title="Clear all logs">Clear</button>
+            </div>
+            <div class="card-body-wrapper logs-body">
+              <div id="logs-container" class="logs-list">
+                <!-- Log items populated here -->
+                <div class="empty-logs-msg">No calculations performed yet.</div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status Bar -->
+    <div class="status-bar">
+      <div class="stats">
+        <span id="stat-badge" class="status-badge status-valid">Active</span>
+        <span class="dot">·</span>
+        <span>Decimal Precision: 2 Places</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">Instant Client Calculations</span>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <section class="card seo-content-card">
+      <h2>Understanding Percentages: Equations, formulas & adjustments</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>A <strong>percentage</strong> is a number or ratio expressed as a fraction of 100. It is often denoted using the percent sign "%". Percentages are dimensionless numbers and have no associated unit of measurement.</p>
+          
+          <h3>General Percentage Formula:</h3>
+          <code style="display:block; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 12px; text-align: center;">Percentage = (Part / Whole) × 100</code>
+          
+          <h3>Percentage Increase/Decrease Formula:</h3>
+          <p>To calculate the percentage difference between two numbers $V_1$ (original) and $V_2$ (new):</p>
+          <code style="display:block; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 12px; text-align: center;">Percentage Change = ((V₂ - V₁) / |V₁|) × 100</code>
+          <p>If the result is positive, it represents an increase. If negative, it represents a decrease.</p>
+        </div>
+        
+        <div class="seo-text-col">
+          <h3>Real-World Applications</h3>
+          <ul>
+            <li><strong>Financial Margins:</strong> Markup and gross profit margins are calculated as percentages of cost and revenue.</li>
+            <li><strong>Sales & Discounts:</strong> "Save 25% today!" requires calculating 25% of the original price and subtracting it.</li>
+            <li><strong>Interest Rates & Inflation:</strong> Annual Percentage Rates (APR) and inflation indexes represent yearly compounded growths.</li>
+            <li><strong>School Grades:</strong> Test scores are calculated as the percentage of correct answers out of the total questions.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+  
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Calculator 1: What is X% of Y
+  const c1X = document.getElementById('c1-x');
+  const c1Y = document.getElementById('c1-y');
+  const c1Result = document.getElementById('c1-result');
+
+  // Calculator 2: X is what percent of Y
+  const c2X = document.getElementById('c2-x');
+  const c2Y = document.getElementById('c2-y');
+  const c2Result = document.getElementById('c2-result');
+
+  // Calculator 3: Percentage Increase/Decrease
+  const c3X = document.getElementById('c3-x');
+  const c3Y = document.getElementById('c3-y');
+  const c3Result = document.getElementById('c3-result');
+
+  // Calculator 4: Value X Increased/Decreased by Y%
+  const c4X = document.getElementById('c4-x');
+  const c4Y = document.getElementById('c4-y');
+  const c4ResultInc = document.getElementById('c4-result-inc');
+  const c4ResultDec = document.getElementById('c4-result-dec');
+
+  // Calculator 5: X is Y% of what?
+  const c5X = document.getElementById('c5-x');
+  const c5Y = document.getElementById('c5-y');
+  const c5Result = document.getElementById('c5-result');
+
+  // Calculator 6: Fraction to percentage
+  const c6Num = document.getElementById('c6-num');
+  const c6Den = document.getElementById('c6-den');
+  const c6Result = document.getElementById('c6-result');
+
+  // Visualizer Elements
+  const visualizerRing = document.getElementById('visualizer-ring');
+  const visualizerPercentage = document.getElementById('visualizer-percentage');
+  const visualizerBar = document.getElementById('visualizer-bar');
+  const visualLabelX = document.getElementById('visual-label-x');
+  const visualLabelY = document.getElementById('visual-label-y');
+
+  // Logs Elements
+  const logsContainer = document.getElementById('logs-container');
+  const btnClearLogs = document.getElementById('btn-clear-logs');
+
+  // ==========================================================================
+  // Config & State
+  // ==========================================================================
+
+  const RING_CIRCUMFERENCE = 439.82; // 2 * pi * r (r=70)
+  let lastActiveCalculator = 1; // Tracks which card updated last for visualizer sync
+
+  // ==========================================================================
+  // Helper Functions
+  // ==========================================================================
+
+  // Formats floats nicely, limits decimals to 2 places if necessary
+  function formatNumber(value) {
+    if (isNaN(value) || value === null || !isFinite(value)) return 'N/A';
+    
+    // Check if it's a whole number
+    if (value % 1 === 0) {
+      return value.toString();
+    }
+    
+    // Limit to 2 decimal places
+    const rounded = Math.round(value * 100) / 100;
+    return rounded.toString();
+  }
+
+  // Update circular and horizontal visual progress bars
+  function updateVisualizer(percent, labelX = 'Part', labelY = 'Total', valX = 0, valY = 100) {
+    // 1. Update text display
+    const formattedPercent = formatNumber(percent);
+    visualizerPercentage.textContent = `${formattedPercent}%`;
+
+    // 2. Clamp percentage for SVG circle and horizontal fills [0, 100]
+    const clampedPercent = Math.max(0, Math.min(100, isNaN(percent) ? 0 : percent));
+    
+    // 3. Update SVG ring dashoffset
+    const offset = RING_CIRCUMFERENCE - (clampedPercent / 100) * RING_CIRCUMFERENCE;
+    visualizerRing.style.strokeDashoffset = offset;
+
+    // 4. Update horizontal bar fill
+    visualizerBar.style.width = `${clampedPercent}%`;
+
+    // 5. Update captions
+    visualLabelX.textContent = `${labelX} (${formatNumber(valX)})`;
+    visualLabelY.textContent = `${labelY} (${formatNumber(valY)})`;
+  }
+
+  // Session Logging Utility
+  function appendLog(equationText) {
+    // Remove empty state message if visible
+    const emptyMsg = logsContainer.querySelector('.empty-logs-msg');
+    if (emptyMsg) {
+      emptyMsg.remove();
+    }
+
+    const logItem = document.createElement('div');
+    logItem.className = 'log-item';
+    
+    // Format timestamp
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0];
+
+    logItem.innerHTML = `
+      <span class="log-equation">[${timeStr}] ${equationText}</span>
+      <button class="icon-btn-small btn-copy-log" title="Copy calculation">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="copy-svg"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </button>
+    `;
+
+    // Clipboard copy log handler
+    logItem.querySelector('.btn-copy-log').addEventListener('click', (e) => {
+      let btn = e.currentTarget;
+      navigator.clipboard.writeText(equationText).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<span style="font-size:0.6rem; color:#10b981; font-weight:700;">Copied</span>`;
+        setTimeout(() => { btn.innerHTML = originalHtml; }, 1200);
+      });
+    });
+
+    logsContainer.insertBefore(logItem, logsContainer.firstChild);
+
+    // Keep logs size limited to 20
+    if (logsContainer.children.length > 20) {
+      logsContainer.removeChild(logsContainer.lastChild);
+    }
+  }
+
+  // ==========================================================================
+  // Calculator Implementation Logic
+  // ==========================================================================
+
+  // Calculator 1: What is X% of Y
+  function calc1() {
+    const x = parseFloat(c1X.value);
+    const y = parseFloat(c1Y.value);
+    
+    if (isNaN(x) || isNaN(y)) {
+      c1Result.textContent = 'N/A';
+      return;
+    }
+
+    const result = (x / 100) * y;
+    c1Result.textContent = formatNumber(result);
+
+    if (lastActiveCalculator === 1) {
+      updateVisualizer(x, 'Percent', 'Of Value', result, y);
+    }
+  }
+
+  // Calculator 2: X is what percent of Y
+  function calc2() {
+    const x = parseFloat(c2X.value);
+    const y = parseFloat(c2Y.value);
+
+    if (isNaN(x) || isNaN(y) || y === 0) {
+      c2Result.textContent = 'N/A';
+      return;
+    }
+
+    const percent = (x / y) * 100;
+    c2Result.textContent = `${formatNumber(percent)}%`;
+
+    if (lastActiveCalculator === 2) {
+      updateVisualizer(percent, 'Part', 'Whole', x, y);
+    }
+  }
+
+  // Calculator 3: Percentage Increase/Decrease
+  function calc3() {
+    const x = parseFloat(c3X.value);
+    const y = parseFloat(c3Y.value);
+
+    if (isNaN(x) || isNaN(y) || x === 0) {
+      c3Result.textContent = 'N/A';
+      return;
+    }
+
+    const diff = y - x;
+    const percentChange = (diff / Math.abs(x)) * 100;
+    
+    if (percentChange > 0) {
+      c3Result.textContent = `${formatNumber(percentChange)}% increase`;
+      c3Result.className = 'result-value text-green';
+    } else if (percentChange < 0) {
+      c3Result.textContent = `${formatNumber(Math.abs(percentChange))}% decrease`;
+      c3Result.className = 'result-value text-red';
+    } else {
+      c3Result.textContent = '0% change';
+      c3Result.className = 'result-value';
+    }
+
+    if (lastActiveCalculator === 3) {
+      updateVisualizer(Math.abs(percentChange), 'Change', 'Original', Math.abs(diff), x);
+    }
+  }
+
+  // Calculator 4: Value X Increased/Decreased by Y%
+  function calc4() {
+    const x = parseFloat(c4X.value);
+    const y = parseFloat(c4Y.value);
+
+    if (isNaN(x) || isNaN(y)) {
+      c4ResultInc.textContent = 'N/A';
+      c4ResultDec.textContent = 'N/A';
+      return;
+    }
+
+    const change = (y / 100) * x;
+    const incVal = x + change;
+    const decVal = x - change;
+
+    c4ResultInc.textContent = formatNumber(incVal);
+    c4ResultDec.textContent = formatNumber(decVal);
+
+    if (lastActiveCalculator === 4) {
+      updateVisualizer(y, 'Percent', 'Base Value', change, x);
+    }
+  }
+
+  // Calculator 5: X is Y% of what?
+  function calc5() {
+    const x = parseFloat(c5X.value);
+    const y = parseFloat(c5Y.value);
+
+    if (isNaN(x) || isNaN(y) || y === 0) {
+      c5Result.textContent = 'N/A';
+      return;
+    }
+
+    const whole = (x / y) * 100;
+    c5Result.textContent = formatNumber(whole);
+
+    if (lastActiveCalculator === 5) {
+      updateVisualizer(y, 'Percent', 'Whole Value', x, whole);
+    }
+  }
+
+  // Calculator 6: Fraction to percentage
+  function calc6() {
+    const num = parseFloat(c6Num.value);
+    const den = parseFloat(c6Den.value);
+
+    if (isNaN(num) || isNaN(den) || den === 0) {
+      c6Result.textContent = 'N/A';
+      return;
+    }
+
+    const percent = (num / den) * 100;
+    c6Result.textContent = `${formatNumber(percent)}%`;
+
+    if (lastActiveCalculator === 6) {
+      updateVisualizer(percent, 'Numerator', 'Denominator', num, den);
+    }
+  }
+
+  // ==========================================================================
+  // Log Action Trigger Helpers (Only on input blur or enter key)
+  // ==========================================================================
+  
+  function triggerLogC1() {
+    const x = c1X.value;
+    const y = c1Y.value;
+    const res = c1Result.textContent;
+    if (x && y && res !== 'N/A') {
+      appendLog(`${x}% of ${y} = ${res}`);
+    }
+  }
+
+  function triggerLogC2() {
+    const x = c2X.value;
+    const y = c2Y.value;
+    const res = c2Result.textContent;
+    if (x && y && res !== 'N/A') {
+      appendLog(`${x} is what % of ${y}? Result = ${res}`);
+    }
+  }
+
+  function triggerLogC3() {
+    const x = c3X.value;
+    const y = c3Y.value;
+    const res = c3Result.textContent;
+    if (x && y && res !== 'N/A') {
+      appendLog(`From ${x} to ${y} is a ${res}`);
+    }
+  }
+
+  function triggerLogC4() {
+    const x = c4X.value;
+    const y = c4Y.value;
+    const inc = c4ResultInc.textContent;
+    const dec = c4ResultDec.textContent;
+    if (x && y && inc !== 'N/A') {
+      appendLog(`${x} +/- ${y}%: Inc = ${inc}, Dec = ${dec}`);
+    }
+  }
+
+  function triggerLogC5() {
+    const x = c5X.value;
+    const y = c5Y.value;
+    const res = c5Result.textContent;
+    if (x && y && res !== 'N/A') {
+      appendLog(`${x} is ${y}% of ${res}`);
+    }
+  }
+
+  function triggerLogC6() {
+    const num = c6Num.value;
+    const den = c6Den.value;
+    const res = c6Result.textContent;
+    if (num && den && res !== 'N/A') {
+      appendLog(`${num}/${den} as percentage = ${res}`);
+    }
+  }
+
+  // ==========================================================================
+  // Register Input Event Listeners
+  // ==========================================================================
+
+  // Setup input listeners to run math calculations in real-time
+  const registerCalc = (inputs, calcFn, triggerLogFn, num) => {
+    inputs.forEach(input => {
+      // Real-time updates
+      input.addEventListener('input', () => {
+        lastActiveCalculator = num;
+        calcFn();
+      });
+
+      // Append log item on blur
+      input.addEventListener('blur', triggerLogFn);
+
+      // Append log item on enter key press
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          triggerLogFn();
+          input.blur();
+        }
+      });
+    });
+  };
+
+  registerCalc([c1X, c1Y], calc1, triggerLogC1, 1);
+  registerCalc([c2X, c2Y], calc2, triggerLogC2, 2);
+  registerCalc([c3X, c3Y], calc3, triggerLogC3, 3);
+  registerCalc([c4X, c4Y], calc4, triggerLogC4, 4);
+  registerCalc([c5X, c5Y], calc5, triggerLogC5, 5);
+  registerCalc([c6Num, c6Den], calc6, triggerLogC6, 6);
+
+  // Clear Logs Handler
+  btnClearLogs.addEventListener('click', () => {
+    logsContainer.innerHTML = '<div class="empty-logs-msg">No calculations performed yet.</div>';
+  });
+
+  // ==========================================================================
+  // Copy to Clipboard Core Util
+  // ==========================================================================
+
+  const copyButtons = document.querySelectorAll('.btn-copy');
+  copyButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const valText = document.getElementById(targetId).textContent;
+      
+      navigator.clipboard.writeText(valText).then(() => {
+        // Micro-interaction styling
+        const originalColor = btn.style.color;
+        btn.style.color = '#10b981'; // Green confirmation color
+        
+        setTimeout(() => {
+          btn.style.color = originalColor;
+        }, 1200);
+      });
+    });
+  });
+
+  // ==========================================================================
+  // Theme Switching Management
+  // ==========================================================================
+
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // ==========================================================================
+  // Initial Boot Run
+  // ==========================================================================
+  calc1();
+  calc2();
+  calc3();
+  calc4();
+  calc5();
+  calc6();
+
+});
+
+
+  </script>
+</body>
+</html>

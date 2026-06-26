@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Fraction to Decimal & Decimal to Fraction Converter | Online Tools</title>
+  <meta name="description" content="Convert fractions to decimals and decimals to fractions instantly. Includes mixed number conversions, repeating decimals, and step-by-step fraction simplification.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Fraction Converter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(165, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(165, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(52, 211, 153, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(150, 76%, 53%) 0%, hsl(172, 91%, 50%) 100%);
+  --accent-color: hsl(150, 76%, 53%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(165, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(165, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(52, 211, 153, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calculators-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 680px) {
+  .calculators-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Calc Panel Bodies */
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ==========================================================================
+   Fraction Layout Elements
+   ========================================================================== */
+
+.fraction-inputs-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.mixed-part {
+  width: 70px;
+}
+
+.fraction-divider-bracket {
+  width: 2px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+}
+
+&.light-theme .fraction-divider-bracket {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.fraction-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 90px;
+}
+
+.frac-line {
+  width: 100%;
+  height: 2px;
+  background: var(--text-muted);
+  border-radius: 1px;
+}
+
+/* Results display */
+.result-display-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  background: rgba(52, 211, 153, 0.05);
+  border: 1px solid rgba(52, 211, 153, 0.12);
+  border-radius: var(--radius-sm);
+  margin-top: 6px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.main-duration {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.result-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+  letter-spacing: -1px;
+  word-break: break-all;
+  text-align: center;
+}
+
+.divider-h {
+  height: 1px;
+  background: rgba(52, 211, 153, 0.15);
+  margin: 10px 0;
+}
+
+.sub-durations {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sub-duration-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sub-dur-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.sub-dur-val {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* Fraction Result display */
+.fraction-visual-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+
+.fraction-visual-mixed {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.fraction-visual-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.frac-num, .frac-den {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+}
+
+.frac-line-res {
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Compare Fraction Styles
+   ========================================================================== */
+
+.compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+.compact-frac {
+  width: 70px;
+}
+
+.comparison-symbol {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  font-family: var(--font-mono);
+}
+
+.comparison-text-res {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Sidebar SVG Pie Chart visualizer
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flex-center-col {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.pie-chart-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.pie-chart-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* Align start of slice at 12 o'clock */
+}
+
+/* Analyzer details */
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Bottom Status, SEO, Footer
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* SEO */
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+/* Footer */
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="6" y1="12" x2="18" y2="12"></line>
+            <line x1="12" y1="6" x2="12" y2="18"></line>
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+          <h1>Fraction & Decimal Calc</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Conversion Grid -->
+        <div class="calculators-grid">
+          
+          <!-- Module 1: Fraction to Decimal -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Fraction to Decimal</h3>
+            </div>
+            <div class="calc-body">
+              <div class="fraction-inputs-row">
+                <div class="form-group mixed-part">
+                  <label for="c1-whole" class="field-label">Whole</label>
+                  <input type="number" id="c1-whole" value="0" class="form-input text-center" placeholder="0">
+                </div>
+                <div class="fraction-divider-bracket"></div>
+                <div class="fraction-column">
+                  <input type="number" id="c1-num" value="5" class="form-input text-center" placeholder="Numerator">
+                  <div class="frac-line"></div>
+                  <input type="number" id="c1-den" value="8" class="form-input text-center" placeholder="Denominator">
+                </div>
+              </div>
+
+              <div class="result-display-panel">
+                <div class="main-duration">
+                  <span id="c1-decimal-res" class="result-number">0.625</span>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Percentage:</span>
+                    <span id="c1-percent-res" class="sub-dur-val">62.5%</span>
+                  </div>
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Type:</span>
+                    <span id="c1-type-res" class="sub-dur-val">Terminating</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 2: Decimal to Fraction -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Decimal to Fraction</h3>
+            </div>
+            <div class="calc-body">
+              <div class="form-group">
+                <label for="c2-decimal" class="field-label">Decimal Value</label>
+                <input type="number" id="c2-decimal" value="0.75" step="any" class="form-input font-mono">
+              </div>
+
+              <div class="result-display-panel">
+                <div class="fraction-visual-display">
+                  <div class="fraction-visual-mixed" id="c2-mixed-res"></div>
+                  <div class="fraction-visual-main">
+                    <span id="c2-num-res" class="frac-num">3</span>
+                    <div class="frac-line-res"></div>
+                    <span id="c2-den-res" class="frac-den">4</span>
+                  </div>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Simplified Fraction:</span>
+                    <span id="c2-simple-res" class="sub-dur-val">3/4</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 3: Fraction Simplifier -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Fraction Simplifier</h3>
+            </div>
+            <div class="calc-body">
+              <div class="fraction-inputs-row">
+                <div class="fraction-column">
+                  <input type="number" id="c3-num" value="24" class="form-input text-center" placeholder="Numerator">
+                  <div class="frac-line"></div>
+                  <input type="number" id="c3-den" value="36" class="form-input text-center" placeholder="Denominator">
+                </div>
+              </div>
+
+              <div class="result-display-panel">
+                <div class="fraction-visual-display">
+                  <div class="fraction-visual-main">
+                    <span id="c3-num-res" class="frac-num">2</span>
+                    <div class="frac-line-res"></div>
+                    <span id="c3-den-res" class="frac-den">3</span>
+                  </div>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">GCD (Greatest Divisor):</span>
+                    <span id="c3-gcd" class="sub-dur-val">12</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 4: Compare Fractions -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Compare Fractions</h3>
+            </div>
+            <div class="calc-body">
+              <div class="compare-row">
+                <!-- Fraction A -->
+                <div class="fraction-column compact-frac">
+                  <input type="number" id="c4-num-a" value="2" class="form-input text-center">
+                  <div class="frac-line"></div>
+                  <input type="number" id="c4-den-a" value="3" class="form-input text-center">
+                </div>
+                <span class="comparison-symbol" id="c4-sym">&gt;</span>
+                <!-- Fraction B -->
+                <div class="fraction-column compact-frac">
+                  <input type="number" id="c4-num-b" value="3" class="form-input text-center">
+                  <div class="frac-line"></div>
+                  <input type="number" id="c4-den-b" value="5" class="form-input text-center">
+                </div>
+              </div>
+
+              <div class="result-display-panel">
+                <div class="comparison-text-res text-center" id="c4-text-res">
+                  2/3 is greater than 3/5
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Diff (Dec):</span>
+                    <span id="c4-diff" class="sub-dur-val">0.067</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Right Side: Sidebar Info -->
+        <div class="sidebar-column">
+          <!-- Interactive Visual Chart -->
+          <section class="card chart-card">
+            <div class="card-header">
+              <h3>Fraction Visualizer</h3>
+            </div>
+            <div class="calc-body flex-center-col">
+              <div class="pie-chart-container">
+                <svg viewBox="0 0 100 100" class="pie-chart-svg">
+                  <!-- Gray background circle -->
+                  <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.03)" stroke="var(--border-color)" stroke-width="2"/>
+                  <!-- Highlighted slice -->
+                  <path id="pie-slice" d="" fill="url(#emerald-gradient)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                </svg>
+                <defs>
+                  <linearGradient id="emerald-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#34d399" />
+                    <stop offset="100%" stop-color="#059669" />
+                  </linearGradient>
+                </defs>
+              </div>
+              <div class="analyzer-details">
+                <div class="analy-row">
+                  <span>Fraction value:</span>
+                  <strong id="visual-val-text">0.625</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Pie Slice Angle:</span>
+                  <strong id="visual-angle">225°</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Decimal Precision: Auto-fit</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">Instant calculations</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Understanding Fractions & Decimals: Conversions and steps</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>A <strong>fraction</strong> represents a part of a whole, consisting of a numerator (top number) and a denominator (bottom number). A <strong>decimal</strong> is a number expressed in the scale of tens, using a decimal point.</p>
+          <h3>How to Convert Fraction to Decimal:</h3>
+          <p>To convert a fraction to a decimal, divide the numerator by the denominator. If the division ends (like 3/4 = 0.75), it is a terminating decimal. If it repeats indefinitely (like 1/3 = 0.3333...), it is a repeating decimal.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>How to Convert Decimal to Fraction:</h3>
+          <p>Write down the decimal divided by 1 (e.g. 0.75/1). Multiply both top and bottom by 10 for every number after the decimal point (e.g. 75/100). Simplify the fraction by dividing both top and bottom by their greatest common divisor (GCD).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Module 1: Fraction to Decimal
+  const c1Whole = document.getElementById('c1-whole');
+  const c1Num = document.getElementById('c1-num');
+  const c1Den = document.getElementById('c1-den');
+  const c1DecimalRes = document.getElementById('c1-decimal-res');
+  const c1PercentRes = document.getElementById('c1-percent-res');
+  const c1TypeRes = document.getElementById('c1-type-res');
+
+  // Module 2: Decimal to Fraction
+  const c2Decimal = document.getElementById('c2-decimal');
+  const c2MixedRes = document.getElementById('c2-mixed-res');
+  const c2NumRes = document.getElementById('c2-num-res');
+  const c2DenRes = document.getElementById('c2-den-res');
+  const c2SimpleRes = document.getElementById('c2-simple-res');
+
+  // Module 3: Fraction Simplifier
+  const c3Num = document.getElementById('c3-num');
+  const c3Den = document.getElementById('c3-den');
+  const c3NumRes = document.getElementById('c3-num-res');
+  const c3DenRes = document.getElementById('c3-den-res');
+  const c3Gcd = document.getElementById('c3-gcd');
+
+  // Module 4: Compare Fractions
+  const c4NumA = document.getElementById('c4-num-a');
+  const c4DenA = document.getElementById('c4-den-a');
+  const c4NumB = document.getElementById('c4-num-b');
+  const c4DenB = document.getElementById('c4-den-b');
+  const c4Sym = document.getElementById('c4-sym');
+  const c4TextRes = document.getElementById('c4-text-res');
+  const c4Diff = document.getElementById('c4-diff');
+
+  // Visualizer Elements
+  const pieSlice = document.getElementById('pie-slice');
+  const visualValText = document.getElementById('visual-val-text');
+  const visualAngle = document.getElementById('visual-angle');
+
+  // ==========================================================================
+  // Mathematics Utilities
+  // ==========================================================================
+
+  // Greatest Common Divisor (GCD)
+  function getGcd(a, b) {
+    a = Math.abs(a);
+    b = Math.abs(b);
+    while (b) {
+      const t = b;
+      b = a % b;
+      a = t;
+    }
+    return a;
+  }
+
+  // Draw Pie Chart Slice based on fraction percent [0, 100]
+  function drawPieSlice(percentage) {
+    percentage = Math.max(0, Math.min(100, isNaN(percentage) ? 0 : percentage));
+    
+    const angle = (percentage / 100) * 360;
+    visualAngle.textContent = `${Math.round(angle)}°`;
+
+    if (percentage === 0) {
+      pieSlice.setAttribute('d', '');
+      return;
+    }
+
+    if (percentage >= 100) {
+      // Draw a full circle
+      pieSlice.setAttribute('d', 'M 50 5 A 45 45 0 1 1 49.99 5 Z');
+      return;
+    }
+
+    // Convert angle to radians. Offset by -90 deg (since 0 deg in math is at 3 o'clock)
+    // to start the slice drawing from 12 o'clock.
+    const angleRad = (angle - 90) * Math.PI / 180;
+    
+    // Calculate endpoints on the 45-radius circle centered at (50, 50)
+    const endX = 50 + 45 * Math.cos(angleRad);
+    const endY = 50 + 45 * Math.sin(angleRad);
+
+    const largeArcFlag = percentage > 50 ? 1 : 0;
+
+    // SVG arc path command
+    const d = `M 50 50 L 50 5 A 45 45 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
+    pieSlice.setAttribute('d', d);
+  }
+
+  // ==========================================================================
+  // Core Calculators Implementation
+  // ==========================================================================
+
+  // Module 1: Fraction to Decimal
+  function runFracToDec() {
+    const whole = parseInt(c1Whole.value) || 0;
+    const num = parseInt(c1Num.value);
+    const den = parseInt(c1Den.value);
+
+    if (isNaN(num) || isNaN(den) || den === 0) {
+      c1DecimalRes.textContent = 'N/A';
+      c1PercentRes.textContent = 'N/A';
+      c1TypeRes.textContent = '-';
+      drawPieSlice(0);
+      visualValText.textContent = 'N/A';
+      return;
+    }
+
+    // Decimal result value
+    const decVal = whole + (num / den);
+    c1DecimalRes.textContent = Number(decVal.toFixed(8)); // limits floating precision errors
+    
+    const percentage = (num / den) * 100;
+    c1PercentRes.textContent = `${(decVal * 100).toFixed(4).replace(/\.?0+$/, '')}%`;
+
+    // Repeating vs Terminating logic check
+    const gcd = getGcd(num, den);
+    let d = Math.abs(den) / gcd;
+    
+    while (d % 2 === 0) d /= 2;
+    while (d % 5 === 0) d /= 5;
+
+    c1TypeRes.textContent = (d === 1) ? 'Terminating' : 'Repeating';
+
+    // Update Sidebar visualizer using the decimal part of the fraction
+    visualValText.textContent = Number(decVal.toFixed(4));
+    drawPieSlice(percentage);
+  }
+
+  // Module 2: Decimal to Fraction
+  function runDecToFrac() {
+    const dec = parseFloat(c2Decimal.value);
+
+    if (isNaN(dec)) {
+      c2NumRes.textContent = '-';
+      c2DenRes.textContent = '-';
+      c2MixedRes.textContent = '';
+      c2SimpleRes.textContent = 'N/A';
+      return;
+    }
+
+    // Limit decimal precision to 8 places for conversion
+    const sign = dec < 0 ? -1 : 1;
+    const absDec = Math.abs(dec);
+    
+    const decString = absDec.toString();
+    const dotIndex = decString.indexOf('.');
+    
+    let den = 1;
+    let num = absDec;
+
+    if (dotIndex !== -1) {
+      const places = decString.length - dotIndex - 1;
+      den = Math.pow(10, Math.min(places, 7)); // Cap at 7 digits
+      num = Math.round(absDec * den);
+    } else {
+      num = absDec;
+      den = 1;
+    }
+
+    const gcd = getGcd(num, den);
+    const simplifiedNum = (num / gcd) * sign;
+    const simplifiedDen = den / gcd;
+
+    // Display Numerator / Denominator
+    c2NumRes.textContent = simplifiedNum;
+    c2DenRes.textContent = simplifiedDen;
+
+    // Mixed number logic
+    const absoluteNum = Math.abs(simplifiedNum);
+    if (absoluteNum > simplifiedDen && simplifiedDen !== 1) {
+      const wholePart = Math.floor(absoluteNum / simplifiedDen) * sign;
+      const remainderNum = absoluteNum % simplifiedDen;
+      c2MixedRes.textContent = wholePart;
+      
+      // Update result numerator display for mixed format fraction
+      c2NumRes.textContent = remainderNum;
+      c2SimpleRes.textContent = `${wholePart} ${remainderNum}/${simplifiedDen}`;
+    } else {
+      c2MixedRes.textContent = '';
+      c2SimpleRes.textContent = `${simplifiedNum}/${simplifiedDen}`;
+    }
+  }
+
+  // Module 3: Fraction Simplifier
+  function runSimplifier() {
+    const num = parseInt(c3Num.value);
+    const den = parseInt(c3Den.value);
+
+    if (isNaN(num) || isNaN(den) || den === 0) {
+      c3NumRes.textContent = '-';
+      c3DenRes.textContent = '-';
+      c3Gcd.textContent = '-';
+      return;
+    }
+
+    const gcd = getGcd(num, den);
+    c3NumRes.textContent = num / gcd;
+    c3DenRes.textContent = den / gcd;
+    c3Gcd.textContent = gcd;
+  }
+
+  // Module 4: Compare Fractions
+  function runCompare() {
+    const numA = parseInt(c4NumA.value);
+    const denA = parseInt(c4DenA.value);
+    const numB = parseInt(c4NumB.value);
+    const denB = parseInt(c4DenB.value);
+
+    if (isNaN(numA) || isNaN(denA) || isNaN(numB) || isNaN(denB) || denA === 0 || denB === 0) {
+      c4Sym.textContent = '?';
+      c4TextRes.textContent = 'Please enter valid inputs';
+      c4Diff.textContent = '-';
+      return;
+    }
+
+    const decA = numA / denA;
+    const decB = numB / denB;
+    const diffVal = decA - decB;
+
+    if (decA > decB) {
+      c4Sym.textContent = '>';
+      c4TextRes.textContent = `${numA}/${denA} is greater than ${numB}/${denB}`;
+    } else if (decA < decB) {
+      c4Sym.textContent = '<';
+      c4TextRes.textContent = `${numA}/${denA} is less than ${numB}/${denB}`;
+    } else {
+      c4Sym.textContent = '=';
+      c4TextRes.textContent = `${numA}/${denA} is equal to ${numB}/${denB}`;
+    }
+
+    c4Diff.textContent = Number(diffVal.toFixed(6));
+  }
+
+  // ==========================================================================
+  // Register Event Listeners
+  // ==========================================================================
+
+  // Module 1 listeners
+  c1Whole.addEventListener('input', runFracToDec);
+  c1Num.addEventListener('input', runFracToDec);
+  c1Den.addEventListener('input', runFracToDec);
+
+  // Module 2 listeners
+  c2Decimal.addEventListener('input', runDecToFrac);
+
+  // Module 3 listeners
+  c3Num.addEventListener('input', runSimplifier);
+  c3Den.addEventListener('input', runSimplifier);
+
+  // Module 4 listeners
+  c4NumA.addEventListener('input', runCompare);
+  c4DenA.addEventListener('input', runCompare);
+  c4NumB.addEventListener('input', runCompare);
+  c4DenB.addEventListener('input', runCompare);
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore theme
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initial Boot calculations
+  runFracToDec();
+  runDecToFrac();
+  runSimplifier();
+  runCompare();
+
+});
+
+
+  </script>
+</body>
+</html>

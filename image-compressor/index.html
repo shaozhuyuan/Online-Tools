@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Smart Image Compressor & Converter | Online Tools</title>
+  <meta name="description" content="Compress and convert images (JPEG, PNG, WebP) directly in your browser. Maintain high visual quality while reducing file size up to 90%. 100% private, client-side, and no limits.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Image Compressor)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.25);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(222, 47%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(222, 47%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(0, 242, 254, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(187, 100%, 45%) 0%, hsl(217, 100%, 56%) 100%);
+  --secondary-gradient: linear-gradient(135deg, hsl(263, 70%, 50%) 0%, hsl(322, 85%, 60%) 100%);
+  
+  --ad-bg: rgba(30, 41, 59, 0.3);
+  --ad-border: rgba(255, 255, 255, 0.06);
+
+  /* Checkerboard transparency background */
+  --checker-color-1: #1e293b;
+  --checker-color-2: #0f172a;
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(210, 40%, 96%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(210, 30%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(14, 165, 233, 0.5);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+  
+  --ad-bg: rgba(15, 23, 42, 0.03);
+  --ad-border: rgba(0, 0, 0, 0.05);
+
+  --checker-color-1: #e2e8f0;
+  --checker-color-2: #f1f5f9;
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: hsl(187, 100%, 45%);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Theme Switching icon display */
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==========================================================================
+   Workspace Components
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Upload Zone Panel
+   ========================================================================== */
+
+.upload-card {
+  border: 2px dashed var(--border-color);
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: rgba(15, 23, 42, 0.35);
+}
+
+&.light-theme .upload-card {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.upload-card:hover, .upload-card.dragover {
+  border-color: hsl(187, 100%, 45%);
+  box-shadow: var(--shadow-glow);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+&.light-theme .upload-card:hover, &.light-theme .upload-card.dragover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.upload-icon-wrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow-sm);
+  color: white;
+}
+
+.upload-icon-wrapper svg {
+  width: 36px;
+  height: 36px;
+}
+
+.upload-card h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.upload-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  max-width: 450px;
+  line-height: 1.5;
+}
+
+.btn-browse {
+  background: var(--primary-gradient);
+  color: white;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  padding: 10px 24px;
+}
+
+.btn-browse:hover {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Workspace Layout (Split Panel)
+   ========================================================================== */
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 868px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-card {
+  padding: 0;
+}
+
+.settings-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  letter-spacing: 0.25px;
+}
+
+.setting-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.value-display {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: hsl(187, 100%, 45%);
+}
+
+/* Format Button Selector */
+.format-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.format-btn {
+  padding: 10px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.01);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.format-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+&.light-theme .format-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.format-btn.active {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.format-badge, .format-badge-lossless {
+  font-size: 0.55rem;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.format-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+.format-badge-lossless {
+  background: rgba(168, 85, 247, 0.25);
+  color: hsl(273, 85%, 75%);
+}
+&.light-theme .format-badge-lossless {
+  color: hsl(273, 85%, 45%);
+}
+.format-btn.active .format-badge-lossless {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Slider Controls */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background: var(--border-color);
+  outline: none;
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: hsl(187, 100%, 45%);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Dimension selection Dropdown */
+.dropdown-select {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.dropdown-select:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.dropdown-select option {
+  background: hsl(222, 47%, 8%);
+  color: #fff;
+}
+
+&.light-theme .dropdown-select option {
+  background: #fff;
+  color: #000;
+}
+
+/* Stats Board inside controls */
+.stats-card {
+  border: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 0.85rem;
+}
+
+&.light-theme .stats-card {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.text-cyan {
+  color: hsl(187, 100%, 45%) !important;
+}
+
+.savings-row {
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.savings-badge {
+  background: linear-gradient(135deg, hsl(142, 72%, 29%) 0%, hsl(150, 84%, 38%) 100%);
+  color: white;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-round);
+  font-size: 0.8rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* Action block */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-launch {
+  background: var(--primary-gradient);
+  color: white;
+  width: 100%;
+  padding: 12px;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Visual Preview Comparison Area
+   ========================================================================== */
+
+.preview-card {
+  height: 100%;
+}
+
+.preview-mode-selectors {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+&.light-theme .preview-mode-selectors {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.preview-mode-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.preview-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.preview-mode-btn.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Double column comparison grid */
+.comparison-container {
+  display: grid;
+  padding: 20px;
+  gap: 20px;
+  height: calc(100vh - 290px);
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.comparison-container.side-by-side {
+  grid-template-columns: 1fr 1fr;
+}
+
+.comparison-container.single-compressed {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 600px) {
+  .comparison-container.side-by-side {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow-y: auto;
+  }
+}
+
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  background: var(--checker-color-2);
+}
+
+.preview-box-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.preview-box-label.label-cyan {
+  border-color: rgba(0, 242, 254, 0.3);
+  color: hsl(187, 100%, 55%);
+}
+
+.preview-img-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 12px;
+  min-height: 250px;
+  background-image: 
+    linear-gradient(45deg, var(--checker-color-1) 25%, transparent 25%), 
+    linear-gradient(-45deg, var(--checker-color-1) 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, var(--checker-color-1) 75%), 
+    linear-gradient(-45deg, transparent 75%, var(--checker-color-1) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.preview-img-wrapper img {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-box-meta {
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--border-color);
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+&.light-theme .preview-box-meta {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+/* Spinner Loader */
+.compression-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top-color: hsl(187, 100%, 45%);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   SEO Grid Content
+   ========================================================================== */
+
+.seo-content-card {
+  padding: 32px;
+  line-height: 1.6;
+}
+
+.seo-content-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.seo-text-col h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.seo-text-col p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.seo-text-col ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   AdSense Mockup Styling
+   ========================================================================== */
+
+.adsense-placeholder {
+  background: var(--ad-bg);
+  border: 1px dashed var(--ad-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-label {
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+.ad-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ad-stub-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.banner-ad {
+  min-height: 90px;
+}
+
+.rect-ad {
+  min-height: 180px;
+}
+
+/* ==========================================================================
+   Footer Section
+   ========================================================================== */
+
+.app-footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 8px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.author-tag {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.hidden {
+  display: none !important;
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header Block -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <h1>Smart Image Compressor</h1>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace -->
+    <main class="app-main">
+      
+      <!-- Upload Drop Zone -->
+      <section class="card upload-card" id="drop-zone">
+        <input type="file" id="image-input" accept="image/png, image/jpeg, image/webp" class="hidden">
+        <div class="upload-content">
+          <div class="upload-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <h3>Drag & Drop Image Here</h3>
+          <p>Supports PNG, JPEG, and WebP up to 50MB. Processes entirely in your browser.</p>
+          <button class="btn btn-browse" id="btn-browse">Browse Files</button>
+        </div>
+      </section>
+
+      <!-- Compression Workspace (Hidden by default) -->
+      <div id="compression-workspace" class="workspace-layout hidden">
+        
+        <!-- Left Column: Controls & Settings -->
+        <section class="card settings-card">
+          <div class="card-header">
+            <h3>Compression Settings</h3>
+          </div>
+          
+          <div class="settings-body">
+            <!-- Format selector -->
+            <div class="setting-group">
+              <label class="setting-label">Output Format</label>
+              <div class="format-options">
+                <button class="format-btn active" data-format="image/webp">WebP <span class="format-badge">Best</span></button>
+                <button class="format-btn" data-format="image/jpeg">JPEG</button>
+                <button class="format-btn" data-format="image/png">PNG <span class="format-badge-lossless">Lossless</span></button>
+              </div>
+            </div>
+
+            <!-- Quality slider -->
+            <div class="setting-group" id="quality-control-wrapper">
+              <div class="setting-header-row">
+                <label class="setting-label" for="quality-input">Compression Quality</label>
+                <span class="value-display" id="quality-value">80%</span>
+              </div>
+              <input type="range" id="quality-input" min="10" max="100" value="80" class="slider">
+              <p class="setting-desc">Lower values reduce size but decrease image clarity.</p>
+            </div>
+
+            <!-- Resize control -->
+            <div class="setting-group">
+              <label class="setting-label" for="resize-input">Scale Dimension (Max Width)</label>
+              <select id="resize-input" class="dropdown-select">
+                <option value="original">Original Size (No Scaling)</option>
+                <option value="3840">4K Ultra HD (3840px)</option>
+                <option value="1920">Full HD (1920px)</option>
+                <option value="1280">Standard HD (1280px)</option>
+                <option value="800">Mobile Optimized (800px)</option>
+              </select>
+              <p class="setting-desc">Resizes the image if its width exceeds the threshold.</p>
+            </div>
+
+            <!-- Summary / Stats -->
+            <div class="stats-card">
+              <div class="stat-row">
+                <span>Original File Size:</span>
+                <span id="stat-orig-size" class="stat-value">0 KB</span>
+              </div>
+              <div class="stat-row">
+                <span>Compressed Size:</span>
+                <span id="stat-comp-size" class="stat-value text-cyan">0 KB</span>
+              </div>
+              <div class="stat-row savings-row">
+                <span>Total Savings:</span>
+                <span id="stat-savings-pct" class="savings-badge">0% Saved</span>
+              </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+              <button id="btn-download" class="btn btn-launch">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Compressed Image
+              </button>
+              <button id="btn-reset" class="btn btn-secondary">
+                Upload New Image
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Comparative Preview -->
+        <section class="card preview-card">
+          <div class="card-header">
+            <h3>Live Quality Comparison</h3>
+            <div class="preview-mode-selectors">
+              <button class="preview-mode-btn active" id="mode-side-by-side">Side-by-Side</button>
+              <button class="preview-mode-btn" id="mode-single-compressed">Compressed Only</button>
+            </div>
+          </div>
+          
+          <div class="comparison-container side-by-side" id="comparison-container">
+            <!-- Original Box -->
+            <div class="preview-box" id="orig-box">
+              <div class="preview-box-label">Original</div>
+              <div class="preview-img-wrapper">
+                <img id="img-original-preview" alt="Original Upload Preview">
+              </div>
+              <div class="preview-box-meta" id="orig-meta-info">1920x1080 · 2.4MB</div>
+            </div>
+
+            <!-- Compressed Box -->
+            <div class="preview-box" id="comp-box">
+              <div class="preview-box-label label-cyan">Compressed</div>
+              <div class="preview-img-wrapper">
+                <img id="img-compressed-preview" alt="Compressed Output Preview">
+                <div class="compression-loading hidden" id="compression-loader">
+                  <div class="spinner"></div>
+                </div>
+              </div>
+              <div class="preview-box-meta" id="comp-meta-info">1920x1080 · 420KB</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- SEO / Educational Content Card -->
+      <section class="card seo-content-card">
+        <h2>About EtheLab Smart Image Compressor</h2>
+        <div class="seo-grid">
+          <div class="seo-text-col">
+            <p>Our <strong>Smart Image Compressor</strong> is designed to solve one of the most critical page weight problems for developers, bloggers, and material creators: high resolution files causing slow speeds. Websites load slower and incur server bills when loading large graphics. This client-side utility compresses JPEG, PNG, and WebP assets to optimized file weights instantenously.</p>
+            <h3>Supported Formats for Web Optimization</h3>
+            <ul>
+              <li><strong>WebP Format:</strong> The modern standard recommended by Google. Offers superior lossy and lossless compression. WebP files are typically 25-30% smaller than JPEGs.</li>
+              <li><strong>JPEG Optimization:</strong> Ideal for photographic content. Our compressor controls the Quantization tables of the JPG, preserving visual metadata while stripping raw bytes.</li>
+              <li><strong>PNG Optimization:</strong> Best for graphics with transparency, logos, and simple layouts. Note that PNG is lossless, so compression is limited unless downscaled.</li>
+            </ul>
+          </div>
+          <div class="seo-text-col">
+            <h3>Why Local Client-Side Compression is Better</h3>
+            <p><strong>100% Data Confidentiality:</strong> Unlike online compress services that upload your pictures to remote storage servers, all processing here uses your local CPU and browser engine. Your files never cross the network. It's completely secure and works even offline.</p>
+            <p><strong>SEO Compliance and Page Speed:</strong> Slow images are the number one reason websites fail the Google Core Web Vitals (LCP) checks. Compressing your blog and documentation assets prior to uploading is crucial for climbing search ranks and passing mobile speed tests.</p>
+            <p><strong>Smart Resolution Scaler:</strong> Scaling down a 4K image to Full HD (1920px) before publishing yields massive reductions in bytes (often over 80%). Combine scaling with WebP conversion for maximum benefits.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </footer>
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  /**
+ * EtheLab - Smart Image Compressor Core Logic
+ * Implements client-side image compression, format conversion (WebP, JPEG, PNG),
+ * dynamic scaling, visual previews, quality settings, metrics, and theme synchronization.
+ */
+
+// --- DOM References ---
+const DOM = {
+  themeToggle: document.getElementById('theme-toggle'),
+  dropZone: document.getElementById('drop-zone'),
+  imageInput: document.getElementById('image-input'),
+  btnBrowse: document.getElementById('btn-browse'),
+  
+  compressionWorkspace: document.getElementById('compression-workspace'),
+  formatButtons: document.querySelectorAll('.format-btn'),
+  qualityControlWrapper: document.getElementById('quality-control-wrapper'),
+  qualityInput: document.getElementById('quality-input'),
+  qualityValue: document.getElementById('quality-value'),
+  resizeInput: document.getElementById('resize-input'),
+  
+  statOrigSize: document.getElementById('stat-orig-size'),
+  statCompSize: document.getElementById('stat-comp-size'),
+  statSavingsPct: document.getElementById('stat-savings-pct'),
+  
+  btnDownload: document.getElementById('btn-download'),
+  btnReset: document.getElementById('btn-reset'),
+  
+  comparisonContainer: document.getElementById('comparison-container'),
+  modeSideBySide: document.getElementById('mode-side-by-side'),
+  modeSingleCompressed: document.getElementById('mode-single-compressed'),
+  
+  imgOriginalPreview: document.getElementById('img-original-preview'),
+  imgCompressedPreview: document.getElementById('img-compressed-preview'),
+  origMetaInfo: document.getElementById('orig-meta-info'),
+  compMetaInfo: document.getElementById('comp-meta-info'),
+  
+  compressionLoader: document.getElementById('compression-loader'),
+  origBox: document.getElementById('orig-box')
+};
+
+// --- App State ---
+let originalFile = null;
+let originalImage = null;
+let compressedBlob = null;
+let outputMimeType = 'image/webp'; // Default to WebP
+let qualityValue = 0.8; // Default 80% quality
+let targetWidth = 'original'; // Default no scaling
+let compressedImageUrl = null;
+
+// --- Initialize Event Listeners ---
+function init() {
+  setupTheme();
+  setupUploadListeners();
+  setupControlListeners();
+  setupPreviewModeListeners();
+}
+
+// --- Theme Management ---
+function setupTheme() {
+  DOM.themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme
+  const globalTheme = localStorage.getItem('ethelab_portal_theme');
+  if (globalTheme === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+}
+
+// --- Upload Logic & Drag and Drop ---
+function setupUploadListeners() {
+  DOM.btnBrowse.addEventListener('click', (e) => {
+    e.stopPropagation();
+    DOM.imageInput.click();
+  });
+
+  DOM.dropZone.addEventListener('click', () => {
+    DOM.imageInput.click();
+  });
+
+  DOM.imageInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) handleFile(file);
+  });
+
+  // Drag over effects
+  DOM.dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    DOM.dropZone.classList.add('dragover');
+  });
+
+  DOM.dropZone.addEventListener('dragleave', () => {
+    DOM.dropZone.classList.remove('dragover');
+  });
+
+  DOM.dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    DOM.dropZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleFile(file);
+    } else {
+      alert('Please upload a valid image file (PNG, JPEG, WebP).');
+    }
+  });
+}
+
+// Read and load image
+function handleFile(file) {
+  originalFile = file;
+  
+  // Show loader while reading file
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    originalImage = new Image();
+    originalImage.onload = () => {
+      // Setup original metadata
+      DOM.imgOriginalPreview.src = e.target.result;
+      DOM.origMetaInfo.textContent = `${originalImage.naturalWidth}x${originalImage.naturalHeight} · ${formatBytes(originalFile.size)}`;
+      DOM.statOrigSize.textContent = formatBytes(originalFile.size);
+      
+      // Reveal Workspace
+      DOM.dropZone.classList.add('hidden');
+      DOM.compressionWorkspace.classList.remove('hidden');
+      
+      // Reset format & slider inputs to default
+      resetSettingsUI();
+      
+      // Trigger initial compression
+      compressImage();
+    };
+    originalImage.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Reset UI choices when loading a new file
+function resetSettingsUI() {
+  // Reset output format to WebP
+  outputMimeType = 'image/webp';
+  DOM.formatButtons.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-format') === 'image/webp');
+  });
+  DOM.qualityControlWrapper.classList.remove('hidden');
+  
+  // Reset quality slider to 80
+  DOM.qualityInput.value = 80;
+  qualityValue = 0.8;
+  DOM.qualityValue.textContent = '80%';
+  
+  // Reset resize dropdown
+  DOM.resizeInput.value = 'original';
+  targetWidth = 'original';
+}
+
+// --- Control Settings Listeners ---
+function setupControlListeners() {
+  // Output format toggle
+  DOM.formatButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      DOM.formatButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      outputMimeType = button.getAttribute('data-format');
+      
+      // Hide quality slider for lossless PNG since quality setting is irrelevant
+      if (outputMimeType === 'image/png') {
+        DOM.qualityControlWrapper.classList.add('hidden');
+      } else {
+        DOM.qualityControlWrapper.classList.remove('hidden');
+      }
+      
+      compressImage();
+    });
+  });
+
+  // Quality slider change
+  DOM.qualityInput.addEventListener('input', (e) => {
+    const val = e.target.value;
+    DOM.qualityValue.textContent = `${val}%`;
+    qualityValue = val / 100;
+  });
+
+  DOM.qualityInput.addEventListener('change', () => {
+    compressImage();
+  });
+
+  // Scaling size dropdown change
+  DOM.resizeInput.addEventListener('change', (e) => {
+    targetWidth = e.target.value;
+    compressImage();
+  });
+
+  // Download Action
+  DOM.btnDownload.addEventListener('click', downloadCompressed);
+
+  // Reset Action
+  DOM.btnReset.addEventListener('click', resetToUpload);
+}
+
+// --- Preview Mode Layouts ---
+function setupPreviewModeListeners() {
+  DOM.modeSideBySide.addEventListener('click', () => {
+    DOM.modeSideBySide.classList.add('active');
+    DOM.modeSingleCompressed.classList.remove('active');
+    
+    DOM.comparisonContainer.classList.add('side-by-side');
+    DOM.comparisonContainer.classList.remove('single-compressed');
+    DOM.origBox.classList.remove('hidden');
+  });
+
+  DOM.modeSingleCompressed.addEventListener('click', () => {
+    DOM.modeSingleCompressed.classList.add('active');
+    DOM.modeSideBySide.classList.remove('active');
+    
+    DOM.comparisonContainer.classList.remove('side-by-side');
+    DOM.comparisonContainer.classList.add('single-compressed');
+    DOM.origBox.classList.add('hidden');
+  });
+}
+
+// --- Compression Core Logic (Using HTML5 Canvas) ---
+function compressImage() {
+  if (!originalImage) return;
+  
+  // Display compression spinner
+  DOM.compressionLoader.classList.remove('hidden');
+  
+  // Set slight timeout to allow UI spinner thread to render
+  setTimeout(() => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Calculate final dimensions
+    let width = originalImage.naturalWidth;
+    let height = originalImage.naturalHeight;
+    
+    if (targetWidth !== 'original') {
+      const maxW = parseInt(targetWidth, 10);
+      if (width > maxW) {
+        const ratio = maxW / width;
+        width = maxW;
+        height = Math.round(height * ratio);
+      }
+    }
+    
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Draw image onto offscreen canvas
+    ctx.drawImage(originalImage, 0, 0, width, height);
+    
+    // Export Canvas to selected MIME type and Quality level
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        DOM.compressionLoader.classList.add('hidden');
+        alert('Compression failed. Please try a different image.');
+        return;
+      }
+      
+      compressedBlob = blob;
+      
+      // Cleanup previous object url to save memory
+      if (compressedImageUrl) {
+        URL.revokeObjectURL(compressedImageUrl);
+      }
+      
+      compressedImageUrl = URL.createObjectURL(blob);
+      
+      // Update Preview Image src
+      DOM.imgCompressedPreview.src = compressedImageUrl;
+      
+      // Update statistics and metadata
+      const formattedSize = formatBytes(blob.size);
+      DOM.compMetaInfo.textContent = `${width}x${height} · ${formattedSize}`;
+      DOM.statCompSize.textContent = formattedSize;
+      
+      // Calculate savings percentage
+      const origSize = originalFile.size;
+      const compSize = blob.size;
+      let savingsPct = Math.round(((origSize - compSize) / origSize) * 100);
+      
+      // If output is larger than original (can happen with lossless compression upscale)
+      if (savingsPct < 0) {
+        savingsPct = 0;
+      }
+      
+      DOM.statSavingsPct.textContent = `${savingsPct}% Saved`;
+      
+      // Hide loader
+      DOM.compressionLoader.classList.add('hidden');
+    }, outputMimeType, qualityValue);
+    
+  }, 30);
+}
+
+// --- Download Handler ---
+function downloadCompressed() {
+  if (!compressedBlob) return;
+  
+  const originalName = originalFile.name;
+  const newName = getNewFileName(originalName, outputMimeType);
+  
+  const link = document.createElement('a');
+  link.href = compressedImageUrl;
+  link.download = newName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// --- Reset State to File Drag Panel ---
+function resetToUpload() {
+  originalFile = null;
+  originalImage = null;
+  compressedBlob = null;
+  
+  if (compressedImageUrl) {
+    URL.revokeObjectURL(compressedImageUrl);
+    compressedImageUrl = null;
+  }
+  
+  DOM.imgOriginalPreview.src = '';
+  DOM.imgCompressedPreview.src = '';
+  DOM.imageInput.value = '';
+  
+  DOM.compressionWorkspace.classList.add('hidden');
+  DOM.dropZone.classList.remove('hidden');
+}
+
+// --- Helper Functions ---
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function getNewFileName(originalName, mimeType) {
+  const dotIndex = originalName.lastIndexOf('.');
+  const baseName = dotIndex !== -1 ? originalName.substring(0, dotIndex) : originalName;
+  let ext = 'webp';
+  if (mimeType === 'image/jpeg') ext = 'jpg';
+  else if (mimeType === 'image/png') ext = 'png';
+  return `${baseName}_optimized.${ext}`;
+}
+
+// Start app
+window.addEventListener('DOMContentLoaded', init);
+
+
+  </script>
+</body>
+</html>

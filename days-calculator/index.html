@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Date & Days Calculator | Instant Calendar Tools | Online Tools</title>
+  <meta name="description" content="Calculate the days between dates, add/subtract days to a date, count down to events, and compute business working days. Fully client-side and free.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Days Calculator)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(265, 40%, 6%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(265, 30%, 12%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(129, 140, 248, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(271, 91%, 65%) 100%);
+  --accent-color: hsl(239, 84%, 67%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(265, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(265, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(129, 140, 248, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calculators-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 680px) {
+  .calculators-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Calc Panel Bodies */
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
+}
+
+.form-input[type="date"], .form-input[type="datetime-local"] {
+  font-family: var(--font-mono);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+.select-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 28px;
+}
+
+&.light-theme .select-input {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(15,23,42,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+}
+
+.calc-row-flex {
+  display: flex;
+  gap: 10px;
+}
+
+.flex-2 { flex: 2; }
+.flex-3 { flex: 3; }
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.checkbox-row-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   Result Panels
+   ========================================================================== */
+
+.result-display-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  background: rgba(129, 140, 248, 0.05);
+  border: 1px solid rgba(129, 140, 248, 0.12);
+  border-radius: var(--radius-sm);
+  margin-top: 6px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.main-duration {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: center;
+}
+
+.result-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+  letter-spacing: -1px;
+}
+
+.result-unit {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.result-date-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+  text-align: center;
+}
+
+.divider-h {
+  height: 1px;
+  background: rgba(129, 140, 248, 0.15);
+  margin: 10px 0;
+}
+
+.sub-durations {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sub-duration-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sub-dur-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.sub-dur-val {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Countdown Grid Panel
+   ========================================================================== */
+
+.countdown-panel {
+  padding: 18px 10px;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.countdown-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+&.light-theme .countdown-box {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.cd-num {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+}
+
+.cd-lbl {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Sidebar: Tear-off Calendar & Details
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flex-center-col {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Physical Calendar Block */
+.calendar-display {
+  width: 140px;
+  background: var(--text-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.cal-month {
+  width: 100%;
+  padding: 6px 10px;
+  background: #ef4444; /* Traditional red tab */
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.cal-day-val {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0f172a; /* Dark text for calendar page */
+  font-family: var(--font-sans);
+  line-height: 1.1;
+  padding-top: 8px;
+}
+
+.cal-year {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #64748b;
+  padding-bottom: 8px;
+}
+
+/* Analyzer Details */
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Bottom Status Bar, SEO and Footer
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(129, 140, 248, 0.15);
+  color: #818cf8;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+/* SEO content card */
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+/* Footer */
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <h1>Date & Days Calc</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Calculation Panels -->
+        <div class="calculators-grid">
+          
+          <!-- Module 1: Days Between Dates -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Days Between Dates</h3>
+            </div>
+            <div class="calc-body">
+              <div class="form-group">
+                <label for="c1-start" class="field-label">Start Date</label>
+                <input type="date" id="c1-start" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="c1-end" class="field-label">End Date</label>
+                <input type="date" id="c1-end" class="form-input">
+              </div>
+              <div class="checkbox-row">
+                <input type="checkbox" id="c1-include-end" checked>
+                <label for="c1-include-end" class="checkbox-label">Include end date (add 1 day)</label>
+              </div>
+              
+              <div class="result-display-panel">
+                <div class="main-duration">
+                  <span id="c1-total-days" class="result-number">0</span>
+                  <span class="result-unit">Days</span>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Weeks:</span>
+                    <span id="c1-sub-weeks" class="sub-dur-val">0</span>
+                  </div>
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Months:</span>
+                    <span id="c1-sub-months" class="sub-dur-val">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 2: Add/Subtract Days -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Add / Subtract Days</h3>
+            </div>
+            <div class="calc-body">
+              <div class="form-group">
+                <label for="c2-start" class="field-label">Start Date</label>
+                <input type="date" id="c2-start" class="form-input">
+              </div>
+              <div class="calc-row-flex">
+                <div class="form-group flex-2">
+                  <label for="c2-val" class="field-label">Quantity</label>
+                  <input type="number" id="c2-val" value="30" class="form-input">
+                </div>
+                <div class="form-group flex-3">
+                  <label for="c2-unit" class="field-label">Unit</label>
+                  <select id="c2-unit" class="form-input select-input">
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                  </select>
+                </div>
+                <div class="form-group flex-3">
+                  <label for="c2-op" class="field-label">Action</label>
+                  <select id="c2-op" class="form-input select-input">
+                    <option value="add">Add (+)</option>
+                    <option value="sub">Subtract (-)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="result-display-panel">
+                <div class="main-duration">
+                  <span id="c2-target-date" class="result-date-text">Select Date</span>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Day of Week:</span>
+                    <span id="c2-day-name" class="sub-dur-val">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 3: Working Days (Business Days) -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Working (Business) Days</h3>
+            </div>
+            <div class="calc-body">
+              <div class="form-group">
+                <label for="c3-start" class="field-label">Start Date</label>
+                <input type="date" id="c3-start" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="c3-end" class="field-label">End Date</label>
+                <input type="date" id="c3-end" class="form-input">
+              </div>
+              <div class="checkbox-row-stacked">
+                <div class="checkbox-row">
+                  <input type="checkbox" id="c3-exclude-sat" checked>
+                  <label for="c3-exclude-sat" class="checkbox-label">Exclude Saturdays</label>
+                </div>
+                <div class="checkbox-row">
+                  <input type="checkbox" id="c3-exclude-sun" checked>
+                  <label for="c3-exclude-sun" class="checkbox-label">Exclude Sundays</label>
+                </div>
+              </div>
+
+              <div class="result-display-panel">
+                <div class="main-duration">
+                  <span id="c3-working-days" class="result-number">0</span>
+                  <span class="result-unit">Business Days</span>
+                </div>
+                <div class="divider-h"></div>
+                <div class="sub-durations">
+                  <div class="sub-duration-item">
+                    <span class="sub-dur-label">Weekend Days Excluded:</span>
+                    <span id="c3-weekend-days" class="sub-dur-val">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Module 4: Live Target Event Countdown -->
+          <section class="card calculator-card">
+            <div class="card-header">
+              <h3>Event Countdown</h3>
+            </div>
+            <div class="calc-body">
+              <div class="form-group">
+                <label for="c4-event-date" class="field-label">Target Date & Time</label>
+                <input type="datetime-local" id="c4-event-date" class="form-input">
+              </div>
+              
+              <div class="result-display-panel countdown-panel">
+                <div class="countdown-grid">
+                  <div class="countdown-box">
+                    <span id="cd-days" class="cd-num">00</span>
+                    <span class="cd-lbl">Days</span>
+                  </div>
+                  <div class="countdown-box">
+                    <span id="cd-hours" class="cd-num">00</span>
+                    <span class="cd-lbl">Hrs</span>
+                  </div>
+                  <div class="countdown-box">
+                    <span id="cd-mins" class="cd-num">00</span>
+                    <span class="cd-lbl">Mins</span>
+                  </div>
+                  <div class="countdown-box">
+                    <span id="cd-secs" class="cd-num">00</span>
+                    <span class="cd-lbl">Secs</span>
+                  </div>
+                </div>
+                <div class="text-center font-mono" id="cd-status" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Active Tracker</div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Right Side: Sidebar Info -->
+        <div class="sidebar-column">
+          <!-- Calendar visual status info -->
+          <section class="card info-card">
+            <div class="card-header">
+              <h3>Date Analyzer</h3>
+            </div>
+            <div class="calc-body flex-center-col">
+              <div class="calendar-display">
+                <div class="cal-month" id="cal-month-name">JUNE</div>
+                <div class="cal-day-num" id="cal-day-val">07</div>
+                <div class="cal-year" id="cal-year-val">2026</div>
+              </div>
+              <div class="analyzer-details">
+                <div class="analy-row">
+                  <span>Day of Year:</span>
+                  <strong id="analy-day-year">158</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Week of Year:</span>
+                  <strong id="analy-week-year">23</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Is Leap Year?</span>
+                  <strong id="analy-leap">No</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Standard ISO-8601 Calendar</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">Instant calculation</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Calendar Calculations: Leap Years, Epochs, and Intervals</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>Calendar computations require taking leap years, varying month lengths (28, 29, 30, or 31 days), and daylight savings changes into account. The Gregorian calendar is the standard calendar layout used across the globe.</p>
+          <h3>How Business Days are Calculated:</h3>
+          <p>A business day calculator determines working days by excluding weekends (Saturdays and Sundays). For project planning and milestones, using working business days rather than calendar days provides accurate project delivery timelines.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>Leap Year Rules:</h3>
+          <p>A leap year contains 366 days instead of 365, with an extra day added in February. A year is a leap year if it is exactly divisible by 4, except for century years (ending in 00), which must be divisible by 400.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  // Theme Toggle
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Module 1: Days Between Dates
+  const c1Start = document.getElementById('c1-start');
+  const c1End = document.getElementById('c1-end');
+  const c1IncludeEnd = document.getElementById('c1-include-end');
+  const c1TotalDays = document.getElementById('c1-total-days');
+  const c1SubWeeks = document.getElementById('c1-sub-weeks');
+  const c1SubMonths = document.getElementById('c1-sub-months');
+
+  // Module 2: Add/Subtract Days
+  const c2Start = document.getElementById('c2-start');
+  const c2Val = document.getElementById('c2-val');
+  const c2Unit = document.getElementById('c2-unit');
+  const c2Op = document.getElementById('c2-op');
+  const c2TargetDate = document.getElementById('c2-target-date');
+  const c2DayName = document.getElementById('c2-day-name');
+
+  // Module 3: Working Days
+  const c3Start = document.getElementById('c3-start');
+  const c3End = document.getElementById('c3-end');
+  const c3ExcludeSat = document.getElementById('c3-exclude-sat');
+  const c3ExcludeSun = document.getElementById('c3-exclude-sun');
+  const c3WorkingDays = document.getElementById('c3-working-days');
+  const c3WeekendDays = document.getElementById('c3-weekend-days');
+
+  // Module 4: Event Countdown
+  const c4EventDate = document.getElementById('c4-event-date');
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+  const cdStatus = document.getElementById('cd-status');
+
+  // Sidebar Date Analyzer
+  const calMonthName = document.getElementById('cal-month-name');
+  const calDayVal = document.getElementById('cal-day-val');
+  const calYearVal = document.getElementById('cal-year-val');
+  const analyDayYear = document.getElementById('analy-day-year');
+  const analyWeekYear = document.getElementById('analy-week-year');
+  const analyLeap = document.getElementById('analy-leap');
+
+  // ==========================================================================
+  // Defaults & Initializations
+  // ==========================================================================
+
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+
+  // Set default values in input fields
+  c1Start.value = todayStr;
+  c3Start.value = todayStr;
+  c2Start.value = todayStr;
+
+  // Set default end dates (exactly 1 month from now)
+  const nextMonth = new Date(today);
+  nextMonth.setMonth(today.getMonth() + 1);
+  const nextMonthStr = nextMonth.toISOString().split('T')[0];
+  c1End.value = nextMonthStr;
+  c3End.value = nextMonthStr;
+
+  // Set default countdown target (New Year's Eve)
+  const currentYear = today.getFullYear();
+  c4EventDate.value = `${currentYear}-12-31T23:59`;
+
+  // Weekday naming index
+  const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+  // ==========================================================================
+  // Core Business Math Calculations
+  // ==========================================================================
+
+  // Module 1: Calculate Days Between Dates
+  function runDaysBetween() {
+    const startVal = c1Start.value;
+    const endVal = c1End.value;
+    
+    if (!startVal || !endVal) {
+      c1TotalDays.textContent = '0';
+      c1SubWeeks.textContent = '0';
+      c1SubMonths.textContent = '0';
+      return;
+    }
+
+    const start = new Date(startVal);
+    const end = new Date(endVal);
+
+    // Get time difference in milliseconds (disregard timezones by using UTC dates)
+    const startUtc = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+    const endUtc = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+
+    const diffMs = endUtc - startUtc;
+    let days = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+    if (c1IncludeEnd.checked) {
+      if (days >= 0) {
+        days += 1;
+      } else {
+        days -= 1;
+      }
+    }
+
+    c1TotalDays.textContent = Math.abs(days);
+    
+    // Sub-durations
+    const weeks = (Math.abs(days) / 7).toFixed(1);
+    const monthsDiff = (Math.abs(days) / 30.4375).toFixed(1);
+
+    c1SubWeeks.textContent = weeks;
+    c1SubMonths.textContent = monthsDiff;
+  }
+
+  // Module 2: Add or Subtract Days
+  function runAddSub() {
+    const startVal = c2Start.value;
+    const qty = parseInt(c2Val.value);
+    const unit = c2Unit.value;
+    const op = c2Op.value;
+
+    if (!startVal || isNaN(qty)) {
+      c2TargetDate.textContent = 'Select Date';
+      c2DayName.textContent = '-';
+      return;
+    }
+
+    const date = new Date(startVal);
+    const factor = op === 'add' ? qty : -qty;
+
+    if (unit === 'days') {
+      date.setDate(date.getDate() + factor);
+    } else if (unit === 'weeks') {
+      date.setDate(date.getDate() + factor * 7);
+    } else if (unit === 'months') {
+      date.setMonth(date.getMonth() + factor);
+    } else if (unit === 'years') {
+      date.setFullYear(date.getFullYear() + factor);
+    }
+
+    // Format target date as YYYY-MM-DD
+    const targetStr = date.toISOString().split('T')[0];
+    c2TargetDate.textContent = targetStr;
+    c2DayName.textContent = weekdays[date.getDay()];
+  }
+
+  // Module 3: Calculate Working Business Days
+  function runWorkingDays() {
+    const startVal = c3Start.value;
+    const endVal = c3End.value;
+
+    if (!startVal || !endVal) {
+      c3WorkingDays.textContent = '0';
+      c3WeekendDays.textContent = '0';
+      return;
+    }
+
+    let start = new Date(startVal);
+    let end = new Date(endVal);
+    
+    let isNegative = false;
+    if (start > end) {
+      const temp = start;
+      start = end;
+      end = temp;
+      isNegative = true;
+    }
+
+    const excludeSat = c3ExcludeSat.checked;
+    const excludeSun = c3ExcludeSun.checked;
+
+    let workingDaysCount = 0;
+    let weekendDaysCount = 0;
+
+    // Iterate day-by-day
+    let current = new Date(start);
+    while (current <= end) {
+      const day = current.getDay(); // 0 is Sunday, 6 is Saturday
+      
+      const isSat = (day === 6);
+      const isSun = (day === 0);
+
+      if ((isSat && excludeSat) || (isSun && excludeSun)) {
+        weekendDaysCount++;
+      } else {
+        workingDaysCount++;
+      }
+
+      current.setDate(current.getDate() + 1);
+    }
+
+    c3WorkingDays.textContent = isNegative ? -workingDaysCount : workingDaysCount;
+    c3WeekendDays.textContent = weekendDaysCount;
+  }
+
+  // Module 4: Live Target Event Countdown Timer
+  let countdownTimerId = null;
+
+  function runCountdown() {
+    if (countdownTimerId) {
+      clearInterval(countdownTimerId);
+    }
+
+    function update() {
+      const eventVal = c4EventDate.value;
+      if (!eventVal) {
+        cdDays.textContent = '00';
+        cdHours.textContent = '00';
+        cdMins.textContent = '00';
+        cdSecs.textContent = '00';
+        cdStatus.textContent = 'Set a valid event date';
+        return;
+      }
+
+      const target = new Date(eventVal).getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        cdDays.textContent = '00';
+        cdHours.textContent = '00';
+        cdMins.textContent = '00';
+        cdSecs.textContent = '00';
+        cdStatus.textContent = 'Event Completed!';
+        clearInterval(countdownTimerId);
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      cdDays.textContent = String(d).padStart(2, '0');
+      cdHours.textContent = String(h).padStart(2, '0');
+      cdMins.textContent = String(m).padStart(2, '0');
+      cdSecs.textContent = String(s).padStart(2, '0');
+      cdStatus.textContent = 'Active Real-time Tracker';
+    }
+
+    update();
+    countdownTimerId = setInterval(update, 1000);
+  }
+
+  // ==========================================================================
+  // Sidebar Date Analyzer Details
+  // ==========================================================================
+
+  function runDateAnalyzer() {
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const day = today.getDate();
+
+    // Update physical calendar visual card
+    calMonthName.textContent = months[month];
+    calDayVal.textContent = String(day).padStart(2, '0');
+    calYearVal.textContent = year;
+
+    // Day of Year
+    const startYear = new Date(year, 0, 1);
+    const diffMs = today - startYear;
+    const dayYear = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+    analyDayYear.textContent = dayYear;
+
+    // Week of Year
+    const weekYear = Math.ceil(dayYear / 7);
+    analyWeekYear.textContent = weekYear;
+
+    // Leap Year check
+    const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    analyLeap.textContent = isLeap ? 'Yes' : 'No';
+  }
+
+  // ==========================================================================
+  // Register Event Bindings
+  // ==========================================================================
+
+  // Module 1 bindings
+  c1Start.addEventListener('change', runDaysBetween);
+  c1End.addEventListener('change', runDaysBetween);
+  c1IncludeEnd.addEventListener('change', runDaysBetween);
+
+  // Module 2 bindings
+  c2Start.addEventListener('change', runAddSub);
+  c2Val.addEventListener('input', runAddSub);
+  c2Unit.addEventListener('change', runAddSub);
+  c2Op.addEventListener('change', runAddSub);
+
+  // Module 3 bindings
+  c3Start.addEventListener('change', runWorkingDays);
+  c3End.addEventListener('change', runWorkingDays);
+  c3ExcludeSat.addEventListener('change', runWorkingDays);
+  c3ExcludeSun.addEventListener('change', runWorkingDays);
+
+  // Module 4 bindings
+  c4EventDate.addEventListener('change', runCountdown);
+
+  // Theme switch logic (adapted from portal)
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Run initial calculations
+  runDaysBetween();
+  runAddSub();
+  runWorkingDays();
+  runCountdown();
+  runDateAnalyzer();
+
+});
+
+
+  </script>
+</body>
+</html>

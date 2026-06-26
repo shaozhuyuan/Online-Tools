@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online URL Encoder/Decoder & Base64 Converter | Online Tools</title>
+  <meta name="description" content="Encode and decode URLs, query parameters, and Base64 strings instantly. Completely free, secure, and client-side web developer tool.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (URL Encoder/Decoder)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(260, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(260, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(139, 92, 246, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(260, 89%, 60%) 0%, hsl(280, 90%, 50%) 100%);
+  --accent-color: hsl(260, 89%, 60%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(260, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(260, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(139, 92, 246, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-main-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header.no-bg {
+  background: none;
+  border-bottom: none;
+  padding: 12px 16px 6px;
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   Input / Output Split Panels & Operations Bar
+   ========================================================================== */
+
+.editor-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.border-bottom {
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.editor-textarea {
+  width: 100%;
+  height: 160px;
+  padding: 12px 16px 16px;
+  background: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+/* Operations button bar */
+.operations-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+&.light-theme .operations-bar {
+  background: rgba(255,255,255,0.4);
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+/* Buttons Styling */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action {
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.15);
+  color: var(--text-secondary);
+}
+
+.btn-action:hover {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255,255,255,0.08);
+}
+
+&.light-theme .btn-secondary {
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-small {
+  padding: 4px 12px;
+  font-size: 0.76rem;
+}
+
+/* ==========================================================================
+   Sidebar: Metrics & Validation
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.text-valid {
+  color: #10b981 !important;
+}
+
+.text-error {
+  color: #ef4444 !important;
+}
+
+.tips-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tips-list li {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tips-list li code {
+  font-family: var(--font-mono);
+  background: rgba(255,255,255,0.06);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  color: var(--accent-color);
+}
+
+&.light-theme .tips-list li code {
+  background: rgba(0,0,0,0.04);
+}
+
+.tips-list li strong {
+  color: var(--text-primary);
+}
+
+/* Bottom Status, SEO, Footer */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <h1>UrlShift Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Code Editor Workspace -->
+        <div class="workspace-main-column">
+          <div class="card editor-card">
+            
+            <!-- Input Panel -->
+            <div class="panel-section border-bottom">
+              <div class="card-header no-bg">
+                <h3>Source Input</h3>
+                <div class="header-actions">
+                  <button id="btn-clear" class="btn btn-secondary btn-small">Clear Input</button>
+                </div>
+              </div>
+              <textarea id="text-input" class="editor-textarea font-mono" placeholder="Paste your query string, URL link, or Base64 data here..."></textarea>
+            </div>
+
+            <!-- Operations Bar -->
+            <div class="operations-bar">
+              <div class="btn-group">
+                <button class="btn btn-action" id="btn-encode">URL Encode</button>
+                <button class="btn btn-action" id="btn-decode">URL Decode</button>
+                <button class="btn btn-action" id="btn-encode-all">Encode All</button>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-secondary btn-action" id="btn-b64-encode">Base64 Encode</button>
+                <button class="btn btn-secondary btn-action" id="btn-b64-decode">Base64 Decode</button>
+              </div>
+              <button class="btn btn-secondary" id="btn-swap" title="Swap input and output values">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 8 16 13"></polyline><line x1="21" y1="8" x2="9" y2="8"></line><polyline points="8 21 3 16 8 11"></polyline><line x1="3" y1="16" x2="15" y2="16"></line></svg>
+                Swap
+              </button>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="panel-section">
+              <div class="card-header no-bg">
+                <h3>Converted Output</h3>
+                <div class="header-actions">
+                  <button id="btn-copy" class="btn btn-primary btn-small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy Output
+                  </button>
+                </div>
+              </div>
+              <textarea id="text-output" class="editor-textarea font-mono" placeholder="Converted result will appear here..." readonly></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Sidebar metrics/validation -->
+        <div class="sidebar-column">
+          
+          <section class="card metrics-card">
+            <div class="card-header">
+              <h3>Inspections</h3>
+            </div>
+            <div class="calc-body">
+              <div class="analyzer-details">
+                <div class="analy-row">
+                  <span>Input Characters:</span>
+                  <strong id="metric-input-len">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Output Characters:</span>
+                  <strong id="metric-output-len">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Diff Size:</span>
+                  <strong id="metric-diff-size">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Is Encoded URL:</span>
+                  <strong id="metric-is-encoded" class="text-error">No</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Tips Card -->
+          <section class="card tips-card">
+            <div class="card-header">
+              <h3>Developer Reference</h3>
+            </div>
+            <div class="calc-body">
+              <ul class="tips-list">
+                <li><strong>URL Encode:</strong> Uses standard <code>encodeURIComponent</code>, which leaves characters like <code>- _ . ! ~ * ( )</code> unencoded.</li>
+                <li><strong>Encode All:</strong> Forces encoding of every punctuation sign for strict HTTP queries.</li>
+                <li><strong>Base64:</strong> Great for encoding binary bytes or tokens into ASCII strings safely.</li>
+              </ul>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Secure Local Sandboxed URL Conversion</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">No server telemetry</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Percent Encoding and Base64 URL format guide</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>When sending data inside query parameters or URL headers, special characters (like <code>&amp;</code>, <code>=</code>, or spaces) can break request routes. An online <strong>URL encoder/decoder</strong> escapes these chars using percent-encoding representation.</p>
+          <h3>How URL Percent-Encoding works:</h3>
+          <p>Standard URL encoding converts characters into their corresponding hexadecimal byte representation preceded by a <code>%</code> symbol. For example, a space character becomes <code>%20</code>.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>Base64 encoding purpose:</h3>
+          <p>Base64 is a binary-to-text encoding scheme. It translates binary assets or string streams into a secure 64-character radix representation. This is common for inline images or authentication headers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const textInput = document.getElementById('text-input');
+  const textOutput = document.getElementById('text-output');
+
+  // Actions
+  const btnClear = document.getElementById('btn-clear');
+  const btnCopy = document.getElementById('btn-copy');
+  const btnSwap = document.getElementById('btn-swap');
+
+  const btnEncode = document.getElementById('btn-encode');
+  const btnDecode = document.getElementById('btn-decode');
+  const btnEncodeAll = document.getElementById('btn-encode-all');
+
+  const btnB64Encode = document.getElementById('btn-b64-encode');
+  const btnB64Decode = document.getElementById('btn-b64-decode');
+
+  // Sidebar metrics
+  const metricInputLen = document.getElementById('metric-input-len');
+  const metricOutputLen = document.getElementById('metric-output-len');
+  const metricDiffSize = document.getElementById('metric-diff-size');
+  const metricIsEncoded = document.getElementById('metric-is-encoded');
+
+  // ==========================================================================
+  // Logic Calculations & Validations
+  // ==========================================================================
+
+  function updateMetrics() {
+    const inputVal = textInput.value;
+    const outputVal = textOutput.value;
+
+    metricInputLen.textContent = inputVal.length;
+    metricOutputLen.textContent = outputVal.length;
+
+    // Diff size indicator
+    const diff = outputVal.length - inputVal.length;
+    if (diff > 0) {
+      metricDiffSize.textContent = `+${diff} chars`;
+      metricDiffSize.style.color = '#f43f5e'; // red
+    } else if (diff < 0) {
+      metricDiffSize.textContent = `${diff} chars`;
+      metricDiffSize.style.color = '#10b981'; // green
+    } else {
+      metricDiffSize.textContent = '0';
+      metricDiffSize.style.color = '';
+    }
+
+    // Is encoded URL verification
+    const isUrlEncoded = /%[0-9A-Fa-f]{2}/.test(inputVal);
+    if (isUrlEncoded) {
+      metricIsEncoded.textContent = 'Yes';
+      metricIsEncoded.className = 'text-valid';
+    } else {
+      metricIsEncoded.textContent = 'No';
+      metricIsEncoded.className = 'text-error';
+    }
+  }
+
+  // Strict symbol encoding
+  function encodeAllSymbols(str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+  }
+
+  // ==========================================================================
+  // Register Actions Trigger
+  // ==========================================================================
+
+  // URL Encode
+  btnEncode.addEventListener('click', () => {
+    textOutput.value = encodeURIComponent(textInput.value);
+    updateMetrics();
+  });
+
+  // URL Decode
+  btnDecode.addEventListener('click', () => {
+    try {
+      textOutput.value = decodeURIComponent(textInput.value);
+    } catch (e) {
+      textOutput.value = 'Error: Invalid percent-encoded URI format.';
+    }
+    updateMetrics();
+  });
+
+  // Encode All Symbols
+  btnEncodeAll.addEventListener('click', () => {
+    textOutput.value = encodeAllSymbols(textInput.value);
+    updateMetrics();
+  });
+
+  // Base64 Encode
+  btnB64Encode.addEventListener('click', () => {
+    try {
+      textOutput.value = btoa(unescape(encodeURIComponent(textInput.value)));
+    } catch (e) {
+      textOutput.value = 'Error: Unable to base64 encode this input.';
+    }
+    updateMetrics();
+  });
+
+  // Base64 Decode
+  btnB64Decode.addEventListener('click', () => {
+    try {
+      textOutput.value = decodeURIComponent(escape(atob(textInput.value)));
+    } catch (e) {
+      textOutput.value = 'Error: Invalid base64 sequence to decode.';
+    }
+    updateMetrics();
+  });
+
+  // Swap input and output values
+  btnSwap.addEventListener('click', () => {
+    const tempInput = textInput.value;
+    textInput.value = textOutput.value;
+    textOutput.value = tempInput;
+    updateMetrics();
+  });
+
+  // Clear inputs
+  btnClear.addEventListener('click', () => {
+    textInput.value = '';
+    textOutput.value = '';
+    updateMetrics();
+    textInput.focus();
+  });
+
+  // Copy output
+  btnCopy.addEventListener('click', () => {
+    const textToCopy = textOutput.value;
+    if (!textToCopy) return;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalText = btnCopy.innerHTML;
+      btnCopy.textContent = 'Copied!';
+      btnCopy.style.background = '#6d28d9'; // dark violet
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalText;
+        btnCopy.style.background = '';
+      }, 1200);
+    });
+  });
+
+  // Live input change updates
+  textInput.addEventListener('input', updateMetrics);
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initial trigger
+  updateMetrics();
+
+});
+
+
+  </script>
+</body>
+</html>

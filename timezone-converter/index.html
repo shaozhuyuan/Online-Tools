@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Time Zone Converter & Meeting Planner | Online Tools</title>
+  <meta name="description" content="Convert times between global time zones (EST, GMT, PST, CET, JST) instantly. Plan cross-border meetings with our interactive 24-hour overlap slider.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Timezone Converter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(200, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(200, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(56, 189, 248, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(199, 89%, 48%) 0%, hsl(217, 91%, 50%) 100%);
+  --accent-color: hsl(199, 89%, 48%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(200, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(200, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(56, 189, 248, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.converter-split-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 12px;
+}
+
+@media (max-width: 820px) {
+  .converter-split-row {
+    grid-template-columns: 1fr;
+  }
+  .swap-row-button-container {
+    transform: rotate(90deg);
+    padding: 10px 0;
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.card-header-help {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.field-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+.select-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 28px;
+}
+
+&.light-theme .select-input {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(15,23,42,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+}
+
+.select-large {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.time-picker-box, .date-picker-box {
+  width: 110px;
+}
+
+.converted-time-readonly, .converted-date-readonly {
+  display: block;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+&.light-theme .converted-time-readonly, &.light-theme .converted-date-readonly {
+  background: rgba(0,0,0,0.01);
+}
+
+/* Zone controls grid */
+.zone-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Digital clock displays */
+.zone-time-display {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.digital-time {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.text-cyan {
+  color: var(--accent-color);
+}
+
+.zone-offset-text {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Swap row buttons */
+.swap-row-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-circle-btn-v {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.swap-circle-btn-v:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+&.light-theme .swap-circle-btn-v {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Badges */
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.badge-primary {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-color);
+}
+
+/* ==========================================================================
+   24-Hour Slider and Hour Grid Blocks
+   ========================================================================== */
+
+.planner-slider-container {
+  margin: 8px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hour-range-slider {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-round);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+&.light-theme .hour-range-slider {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.hour-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  transition: transform var(--transition-fast);
+}
+
+.hour-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+/* Timelines strip structure */
+.planner-timeline-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .timeline-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.timeline-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-tz-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.timeline-time-val {
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--accent-color);
+}
+
+.timeline-hours-strip {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 2px;
+  background: rgba(0,0,0,0.1);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.hour-block {
+  height: 32px;
+  min-width: 22px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+}
+
+/* World time buddy block colors */
+.hour-block.sleep {
+  background: rgba(239, 68, 68, 0.08); /* light red */
+  color: rgba(239, 68, 68, 0.45);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.hour-block.wake {
+  background: rgba(245, 158, 11, 0.12); /* light orange */
+  color: rgba(245, 158, 11, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.hour-block.work {
+  background: rgba(16, 185, 129, 0.18); /* light green */
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.hour-block.active-hour {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--border-color-focus);
+  border: 2px solid var(--accent-color) !important;
+  z-index: 2;
+}
+
+/* Evaluation Panel */
+.planner-evaluation-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-top: 6px;
+}
+
+&.light-theme .planner-evaluation-panel {
+  background: rgba(0,0,0,0.01);
+}
+
+.overlap-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.overlap-badge.good {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.overlap-badge.fair {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.overlap-badge.poor {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.overlap-description {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Bottom stats, SEO and Footer
+   ========================================================================== */
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-color);
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <h1>ZoneSync Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout-vertical">
+        
+        <!-- Top Section: Interactive Dual converter cards -->
+        <div class="converter-split-row">
+          
+          <!-- Source Time zone card -->
+          <div class="card zone-card">
+            <div class="card-header">
+              <h3>Source Timezone</h3>
+              <span class="badge badge-primary" id="src-current-date">Today</span>
+            </div>
+            <div class="calc-body">
+              <div class="zone-controls">
+                <div class="form-group flex-1">
+                  <label for="src-tz" class="field-label">Select Zone</label>
+                  <select id="src-tz" class="form-input select-input select-large">
+                    <!-- Loaded dynamically via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="src-time" class="field-label">Time</label>
+                  <input type="time" id="src-time" value="09:00" class="form-input time-picker-box font-mono">
+                </div>
+                <div class="form-group">
+                  <label for="src-date" class="field-label">Date</label>
+                  <input type="date" id="src-date" class="form-input date-picker-box font-mono">
+                </div>
+              </div>
+              
+              <div class="zone-time-display">
+                <span class="digital-time" id="src-digi-time">09:00 AM</span>
+                <span class="zone-offset-text" id="src-offset-lbl">UTC -05:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Swap arrow button -->
+          <div class="swap-row-button-container">
+            <button id="btn-swap-tz" class="swap-circle-btn-v" title="Swap Timezones">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23 3 19l4-4"></path><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+            </button>
+          </div>
+
+          <!-- Target Time zone card -->
+          <div class="card zone-card">
+            <div class="card-header">
+              <h3>Target Timezone</h3>
+              <span class="badge badge-primary" id="tgt-current-date">Today</span>
+            </div>
+            <div class="calc-body">
+              <div class="zone-controls">
+                <div class="form-group flex-1">
+                  <label for="tgt-tz" class="field-label">Select Zone</label>
+                  <select id="tgt-tz" class="form-input select-input select-large">
+                    <!-- Loaded dynamically via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="field-label">Converted Time</label>
+                  <span class="converted-time-readonly font-mono" id="tgt-digi-time">02:00 PM</span>
+                </div>
+                <div class="form-group">
+                  <label class="field-label">Converted Date</label>
+                  <span class="converted-date-readonly font-mono" id="tgt-date-lbl">2026-06-07</span>
+                </div>
+              </div>
+              
+              <div class="zone-time-display">
+                <span class="digital-time text-cyan" id="tgt-time-display">02:00 PM</span>
+                <span class="zone-offset-text" id="tgt-offset-lbl">UTC +00:00</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Middle Section: Visual 24h Meeting Scheduler strip -->
+        <section class="card meeting-planner-card">
+          <div class="card-header">
+            <h3>Interactive Meeting Planner</h3>
+            <span class="card-header-help">Drag slider or click hours to find overlap working windows</span>
+          </div>
+          <div class="calc-body">
+            
+            <div class="planner-slider-container">
+              <input type="range" id="hour-sync-slider" min="0" max="23" value="9" class="hour-range-slider">
+              <div class="slider-marks">
+                <span>12 AM</span><span>3 AM</span><span>6 AM</span><span>9 AM</span><span>12 PM</span><span>3 PM</span><span>6 PM</span><span>9 PM</span>
+              </div>
+            </div>
+
+            <!-- Overlapping timeline blocks grid -->
+            <div class="planner-timeline-rows">
+              
+              <!-- Source timeline row -->
+              <div class="timeline-row">
+                <div class="timeline-meta">
+                  <strong class="timeline-tz-name" id="planner-src-name">EST</strong>
+                  <span class="timeline-time-val" id="planner-src-time-lbl">09:00 AM</span>
+                </div>
+                <div class="timeline-hours-strip" id="planner-src-strip">
+                  <!-- 24 blocks generated by JS -->
+                </div>
+              </div>
+
+              <!-- Target timeline row -->
+              <div class="timeline-row">
+                <div class="timeline-meta">
+                  <strong class="timeline-tz-name" id="planner-tgt-name">GMT</strong>
+                  <span class="timeline-time-val" id="planner-tgt-time-lbl">02:00 PM</span>
+                </div>
+                <div class="timeline-hours-strip" id="planner-tgt-strip">
+                  <!-- 24 blocks generated by JS -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Meeting evaluation badge indicator -->
+            <div class="planner-evaluation-panel">
+              <div class="overlap-badge" id="overlap-rating-badge">Good overlapping hours</div>
+              <p class="overlap-description" id="overlap-desc-text">Both locations are within waking or working hours.</p>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span id="system-tz-indicator">Detected: America/New_York</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">Instant synchronization</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Understanding Time Zones: GMT, Offset variations, and Meeting Planner</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>A <strong>Time Zone</strong> is a region of the globe that observes a uniform standard time for legal, commercial, and social purposes. Standard time zones are defined by offsets from Coordinated Universal Time (UTC) or Greenwich Mean Time (GMT).</p>
+          <h3>Why Do Time Zones Change?</h3>
+          <p>Time zone boundaries tend to follow country and subdivision borders rather than exact meridians. Many regions observe Daylight Saving Time (DST) during summer months, changing offsets by adding 1 hour.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>Interactive Meeting Planner:</h3>
+          <p>Planning international webinars or conference calls across boundaries (e.g. EST to GMT or PST to JST) requires finding overlapping hours. Hours between 9:00 AM and 5:00 PM local time represent typical corporate working windows.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // Timezone Database
+  // ==========================================================================
+
+  const TIMEZONES = [
+    { id: 'GMT', name: 'GMT/UTC (Greenwich Mean Time)', offset: 0 },
+    { id: 'EST', name: 'EST (Eastern Standard Time, UTC-5)', offset: -5 },
+    { id: 'EDT', name: 'EDT (Eastern Daylight Time, UTC-4)', offset: -4 },
+    { id: 'CST', name: 'CST (Central Standard Time, UTC-6)', offset: -6 },
+    { id: 'CDT', name: 'CDT (Central Daylight Time, UTC-5)', offset: -5 },
+    { id: 'MST', name: 'MST (Mountain Standard Time, UTC-7)', offset: -7 },
+    { id: 'MDT', name: 'MDT (Mountain Daylight Time, UTC-6)', offset: -6 },
+    { id: 'PST', name: 'PST (Pacific Standard Time, UTC-8)', offset: -8 },
+    { id: 'PDT', name: 'PDT (Pacific Daylight Time, UTC-7)', offset: -7 },
+    { id: 'CET', name: 'CET (Central European Time, UTC+1)', offset: 1 },
+    { id: 'CEST', name: 'CEST (Central European Summer Time, UTC+2)', offset: 2 },
+    { id: 'MSK', name: 'MSK (Moscow Standard Time, UTC+3)', offset: 3 },
+    { id: 'GST', name: 'GST (Gulf Standard Time, UTC+4)', offset: 4 },
+    { id: 'IST', name: 'IST (India Standard Time, UTC+5.5)', offset: 5.5 },
+    { id: 'CST_CN', name: 'CST (China Standard Time, UTC+8)', offset: 8 },
+    { id: 'JST', name: 'JST (Japan Standard Time, UTC+9)', offset: 9 },
+    { id: 'AEST', name: 'AEST (Australian Eastern Standard Time, UTC+10)', offset: 10 },
+    { id: 'AEDT', name: 'AEDT (Australian Eastern Daylight Time, UTC+11)', offset: 11 },
+    { id: 'NZST', name: 'NZST (New Zealand Standard Time, UTC+12)', offset: 12 }
+  ];
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Input elements
+  const srcTzSelect = document.getElementById('src-tz');
+  const srcTime = document.getElementById('src-time');
+  const srcDate = document.getElementById('src-date');
+  const tgtTzSelect = document.getElementById('tgt-tz');
+  
+  // Static labels
+  const srcDigiTime = document.getElementById('src-digi-time');
+  const srcOffsetLbl = document.getElementById('src-offset-lbl');
+  const srcCurrentDate = document.getElementById('src-current-date');
+  
+  const tgtDigiTime = document.getElementById('tgt-digi-time');
+  const tgtDateLbl = document.getElementById('tgt-date-lbl');
+  const tgtTimeDisplay = document.getElementById('tgt-time-display');
+  const tgtOffsetLbl = document.getElementById('tgt-offset-lbl');
+  const tgtCurrentDate = document.getElementById('tgt-current-date');
+
+  const btnSwapTz = document.getElementById('btn-swap-tz');
+  const systemTzIndicator = document.getElementById('system-tz-indicator');
+
+  // Meeting Planner Elements
+  const hourSyncSlider = document.getElementById('hour-sync-slider');
+  const plannerSrcName = document.getElementById('planner-src-name');
+  const plannerSrcTimeLbl = document.getElementById('planner-src-time-lbl');
+  const plannerTgtName = document.getElementById('planner-tgt-name');
+  const plannerTgtTimeLbl = document.getElementById('planner-tgt-time-lbl');
+  const plannerSrcStrip = document.getElementById('planner-src-strip');
+  const plannerTgtStrip = document.getElementById('planner-tgt-strip');
+
+  const overlapRatingBadge = document.getElementById('overlap-rating-badge');
+  const overlapDescText = document.getElementById('overlap-desc-text');
+
+  // ==========================================================================
+  // Initialization & Setup
+  // ==========================================================================
+
+  const today = new Date();
+  srcDate.value = today.toISOString().split('T')[0];
+
+  // Populate Dropdown Selection lists
+  TIMEZONES.forEach(tz => {
+    const optA = document.createElement('option');
+    optA.value = tz.id;
+    optA.textContent = tz.name;
+    srcTzSelect.appendChild(optA);
+
+    const optB = document.createElement('option');
+    optB.value = tz.id;
+    optB.textContent = tz.name;
+    tgtTzSelect.appendChild(optB);
+  });
+
+  // Detect and set System timezone defaults
+  try {
+    const sysTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const sysOffsetMin = -new Date().getTimezoneOffset();
+    const sysOffsetHrs = sysOffsetMin / 60;
+    systemTzIndicator.textContent = `Detected Local TZ: ${sysTz} (UTC${sysOffsetHrs >= 0 ? '+' : ''}${sysOffsetHrs})`;
+
+    // Try to match system offset with our closest timezone database key
+    let bestMatch = TIMEZONES.find(t => t.offset === sysOffsetHrs);
+    if (!bestMatch) {
+      bestMatch = TIMEZONES[0]; // Fallback to GMT
+    }
+    srcTzSelect.value = bestMatch.id;
+    
+    // Default target timezone selection
+    if (bestMatch.id === 'GMT') {
+      tgtTzSelect.value = 'EST';
+    } else {
+      tgtTzSelect.value = 'GMT';
+    }
+  } catch (err) {
+    srcTzSelect.value = 'EST';
+    tgtTzSelect.value = 'GMT';
+  }
+
+  // ==========================================================================
+  // Helper Formatter functions
+  // ==========================================================================
+
+  function getZone(id) {
+    return TIMEZONES.find(t => t.id === id);
+  }
+
+  function formatTime12h(h, m) {
+    const period = h >= 12 ? 'PM' : 'AM';
+    let displayHr = h % 12;
+    if (displayHr === 0) displayHr = 12;
+    return `${String(displayHr).padStart(2, '0')}:${String(m).padStart(2, '0')} ${period}`;
+  }
+
+  function formatOffset(offset) {
+    const sign = offset >= 0 ? '+' : '-';
+    const absOffset = Math.abs(offset);
+    const hrs = Math.floor(absOffset);
+    const mins = Math.round((absOffset - hrs) * 60);
+    return `UTC ${sign}${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+  }
+
+  // ==========================================================================
+  // Conversions Logic Core
+  // ==========================================================================
+
+  function runTimezoneConversion() {
+    const srcTz = getZone(srcTzSelect.value);
+    const tgtTz = getZone(tgtTzSelect.value);
+
+    plannerSrcName.textContent = srcTz.id;
+    plannerTgtName.textContent = tgtTz.id;
+
+    const [hours, minutes] = srcTime.value.split(':').map(Number);
+    const [year, month, day] = srcDate.value.split('-').map(Number);
+
+    // Get time in UTC
+    const d = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+    const utcMs = d.getTime() - (srcTz.offset * 60 * 60 * 1000);
+
+    // Apply target offset
+    const targetLocalMs = utcMs + (tgtTz.offset * 60 * 60 * 1000);
+    const targetDate = new Date(targetLocalMs);
+
+    const tYear = targetDate.getUTCFullYear();
+    const tMonth = targetDate.getUTCMonth() + 1;
+    const tDay = targetDate.getUTCDate();
+    const tHours = targetDate.getUTCHours();
+    const tMinutes = targetDate.getUTCMinutes();
+
+    // Render Source labels
+    srcDigiTime.textContent = formatTime12h(hours, minutes);
+    srcOffsetLbl.textContent = formatOffset(srcTz.offset);
+    srcCurrentDate.textContent = srcDate.value;
+
+    // Render Target labels
+    const convertedDateStr = `${tYear}-${String(tMonth).padStart(2, '0')}-${String(tDay).padStart(2, '0')}`;
+    tgtDigiTime.textContent = formatTime12h(tHours, tMinutes);
+    tgtDateLbl.textContent = convertedDateStr;
+    tgtTimeDisplay.textContent = formatTime12h(tHours, tMinutes);
+    tgtOffsetLbl.textContent = formatOffset(tgtTz.offset);
+
+    // Determine Day offsets for primary badges
+    const diffDays = Math.round((new Date(convertedDateStr).getTime() - new Date(srcDate.value).getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) {
+      tgtCurrentDate.textContent = 'Same Day';
+      tgtCurrentDate.className = 'badge badge-primary';
+    } else if (diffDays > 0) {
+      tgtCurrentDate.textContent = `+${diffDays} Day`;
+      tgtCurrentDate.className = 'badge badge-primary';
+    } else {
+      tgtCurrentDate.textContent = `${diffDays} Day`;
+      tgtCurrentDate.className = 'badge badge-primary';
+    }
+
+    // Sync Slider
+    hourSyncSlider.value = hours;
+
+    // Render Visual Meeting planner rows
+    buildMeetingPlanner(hours, srcTz, tgtTz);
+  }
+
+  // ==========================================================================
+  // Visual Meeting Planner Grid generator
+  // ==========================================================================
+
+  function getHourClass(h) {
+    if (h >= 9 && h <= 17) {
+      return 'work'; // 9am - 5pm
+    } else if (h >= 7 && h <= 22) {
+      return 'wake'; // 7am - 8am, 6pm - 10pm
+    } else {
+      return 'sleep'; // 11pm - 6am
+    }
+  }
+
+  function getHourLabel(h) {
+    if (h === 0) return '12a';
+    if (h === 12) return '12p';
+    return h > 12 ? `${h - 12}p` : `${h}a`;
+  }
+
+  function buildMeetingPlanner(activeSourceHour, srcTz, tgtTz) {
+    plannerSrcStrip.innerHTML = '';
+    plannerTgtStrip.innerHTML = '';
+
+    // Calculate corresponding active hour in target
+    const targetOffsetDiff = tgtTz.offset - srcTz.offset;
+    const activeTargetHour = Math.round(activeSourceHour + targetOffsetDiff + 24) % 24;
+
+    plannerSrcTimeLbl.textContent = formatTime12h(activeSourceHour, 0);
+    plannerTgtTimeLbl.textContent = formatTime12h(activeTargetHour, 0);
+
+    // Generate 24 hour blocks for Source row
+    for (let h = 0; h < 24; h++) {
+      const block = document.createElement('div');
+      block.className = `hour-block ${getHourClass(h)}`;
+      block.textContent = getHourLabel(h);
+      if (h === activeSourceHour) {
+        block.classList.add('active-hour');
+      }
+
+      // Clicking an hour block updates the converter state time
+      block.addEventListener('click', () => {
+        srcTime.value = `${String(h).padStart(2, '0')}:00`;
+        runTimezoneConversion();
+      });
+
+      plannerSrcStrip.appendChild(block);
+    }
+
+    // Generate 24 hour blocks for Target row
+    for (let h = 0; h < 24; h++) {
+      const correspondingSrcHour = Math.round(h - targetOffsetDiff + 24) % 24;
+      
+      const block = document.createElement('div');
+      block.className = `hour-block ${getHourClass(h)}`;
+      block.textContent = getHourLabel(h);
+      if (h === activeTargetHour) {
+        block.classList.add('active-hour');
+      }
+
+      block.addEventListener('click', () => {
+        // Find what source hour aligns with this clicked target hour
+        srcTime.value = `${String(correspondingSrcHour).padStart(2, '0')}:00`;
+        runTimezoneConversion();
+      });
+
+      plannerTgtStrip.appendChild(block);
+    }
+
+    // Evaluate Overlap overlap rating
+    const srcType = getHourClass(activeSourceHour);
+    const tgtType = getHourClass(activeTargetHour);
+
+    if (srcType === 'work' && tgtType === 'work') {
+      overlapRatingBadge.textContent = 'Excellent';
+      overlapRatingBadge.className = 'overlap-badge good';
+      overlapDescText.textContent = 'Perfect overlapping business hours for both parties.';
+    } else if (srcType !== 'sleep' && tgtType !== 'sleep') {
+      overlapRatingBadge.textContent = 'Fair';
+      overlapRatingBadge.className = 'overlap-badge fair';
+      overlapDescText.textContent = 'Waking hours overlapping. Good window for phone calls or standups.';
+    } else {
+      overlapRatingBadge.textContent = 'Poor';
+      overlapRatingBadge.className = 'overlap-badge poor';
+      overlapDescText.textContent = 'One location is in sleeping hours. Not recommended for standard meetings.';
+    }
+  }
+
+  // ==========================================================================
+  // Event Listeners Registration
+  // ==========================================================================
+
+  srcTzSelect.addEventListener('change', runTimezoneConversion);
+  srcTime.addEventListener('input', runTimezoneConversion);
+  srcDate.addEventListener('change', runTimezoneConversion);
+  
+  tgtTzSelect.addEventListener('change', runTimezoneConversion);
+
+  // Range Slider handles interactive drag
+  hourSyncSlider.addEventListener('input', () => {
+    const h = parseInt(hourSyncSlider.value);
+    srcTime.value = `${String(h).padStart(2, '0')}:00`;
+    runTimezoneConversion();
+  });
+
+  // Swap zones
+  btnSwapTz.addEventListener('click', () => {
+    const temp = srcTzSelect.value;
+    srcTzSelect.value = tgtTzSelect.value;
+    tgtTzSelect.value = temp;
+    runTimezoneConversion();
+  });
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Run initial conversion
+  runTimezoneConversion();
+
+});
+
+
+  </script>
+</body>
+</html>

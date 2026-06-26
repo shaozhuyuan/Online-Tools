@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Lorem Ipsum Generator | Dummy Text Generator | Online Tools</title>
+  <meta name="description" content="Generate dummy placeholder text (paragraphs, words, lists) instantly. Completely free, customizable, HTML-wrapped Lorem Ipsum generator.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Lorem Ipsum Generator)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(35, 47%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(35, 30%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(245, 158, 11, 0.5);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(35, 92%, 52%) 0%, hsl(20, 95%, 48%) 100%);
+  --accent-color: hsl(35, 92%, 52%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(35, 30%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(35, 20%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(245, 158, 11, 0.4);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+.calc-body.no-padding {
+  padding: 0;
+  background: none;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+&.light-theme .calc-body.no-padding {
+  background: none;
+}
+
+/* ==========================================================================
+   Parameters Controls & Selection Pills
+   ========================================================================== */
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.field-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Pills buttons selectors */
+.selector-pills {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  gap: 4px;
+}
+
+&.light-theme .selector-pills {
+  background: rgba(0,0,0,0.03);
+}
+
+.pill-btn {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.pill-btn:hover {
+  color: var(--text-primary);
+}
+
+.pill-btn.active {
+  background: var(--primary-gradient);
+  color: #ffffff;
+}
+
+/* Slider */
+.slider-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider-val-lbl {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.range-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-round);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--border-color);
+}
+
+&.light-theme .range-slider {
+  background: rgba(0,0,0,0.06);
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Checkboxes */
+.checkboxes-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+}
+
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.check-box {
+  width: 18px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+&.light-theme .check-box {
+  background-color: rgba(0,0,0,0.02);
+}
+
+.check-container:hover input ~ .check-box {
+  border-color: var(--text-muted);
+}
+
+.check-container input:checked ~ .check-box {
+  background: var(--primary-gradient);
+  border-color: transparent;
+}
+
+.check-box:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.check-container input:checked ~ .check-box:after {
+  display: block;
+}
+
+/* ==========================================================================
+   Generated output textarea
+   ========================================================================== */
+
+.editor-textarea {
+  width: 100%;
+  height: 220px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+&.light-theme .editor-textarea {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Buttons Styling */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255,255,255,0.08);
+}
+
+&.light-theme .btn-secondary {
+  background: rgba(0,0,0,0.02);
+}
+
+.btn-small {
+  padding: 4px 12px;
+  font-size: 0.76rem;
+}
+
+.btn-full-width {
+  width: 100%;
+  padding: 10px 16px;
+}
+
+/* ==========================================================================
+   Sidebar: Metrics & History
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analyzer-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analy-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.analy-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.history-text {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.history-text em {
+  color: var(--text-primary);
+}
+
+/* Bottom Status, SEO, Footer */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <h1>DummyText Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Interactive controls & triggers -->
+        <div class="workspace-main-column">
+          
+          <div class="card controls-card">
+            <div class="card-header">
+              <h3>Generator Parameters</h3>
+            </div>
+            <div class="calc-body">
+              
+              <!-- Mode Selection -->
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label class="field-label">Generate Type</label>
+                  <div class="selector-pills">
+                    <button class="pill-btn active" data-type="paragraphs">Paragraphs</button>
+                    <button class="pill-btn" data-type="words">Words</button>
+                    <button class="pill-btn" data-type="lists">List Items</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quantity input & slider -->
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <div class="slider-info">
+                    <label class="field-label">Quantity</label>
+                    <span class="slider-val-lbl font-mono" id="qty-lbl">5</span>
+                  </div>
+                  <input type="range" id="qty-slider" min="1" max="40" value="5" class="range-slider">
+                </div>
+              </div>
+
+              <!-- Extra formatting checkboxes -->
+              <div class="checkboxes-row">
+                <label class="check-container">
+                  <input type="checkbox" id="check-start-lorem" checked>
+                  <span class="check-box"></span>
+                  Start with "Lorem ipsum dolor sit amet"
+                </label>
+
+                <label class="check-container">
+                  <input type="checkbox" id="check-wrap-html">
+                  <span class="check-box"></span>
+                  Wrap paragraphs in HTML tags (&lt;p&gt; or &lt;li&gt;)
+                </label>
+              </div>
+
+              <!-- Action button row -->
+              <div class="actions-row">
+                <button id="btn-generate" class="btn btn-primary btn-full-width">Generate Placeholder Text</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Preview & copy Card -->
+          <div class="card preview-card">
+            <div class="card-header">
+              <h3>Generated Results</h3>
+              <div class="header-actions">
+                <button id="btn-copy" class="btn btn-secondary btn-small">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy Text
+                </button>
+              </div>
+            </div>
+            <div class="calc-body no-padding">
+              <textarea id="text-output" class="editor-textarea" readonly></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Sidebar statistics -->
+        <div class="sidebar-column">
+          
+          <section class="card metrics-card">
+            <div class="card-header">
+              <h3>Output Stats</h3>
+            </div>
+            <div class="calc-body">
+              <div class="analyzer-details">
+                <div class="analy-row">
+                  <span>Words Generated:</span>
+                  <strong id="metric-words">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Characters:</span>
+                  <strong id="metric-chars">0</strong>
+                </div>
+                <div class="analy-row">
+                  <span>Paragraphs/Lines:</span>
+                  <strong id="metric-lines">0</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Explanation Card -->
+          <section class="card explain-card">
+            <div class="card-header">
+              <h3>History of Lorem Ipsum</h3>
+            </div>
+            <div class="calc-body">
+              <p class="history-text">Lorem Ipsum is a pseudo-Latin standard placeholder text used in typography, layout design and typesetting since the 16th century. It originated from Cicero's book <em>"de Finibus Bonorum et Malorum"</em>.</p>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>Secure Local Sandboxed Generation</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">No server logs</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Lorem Ipsum generator: Customized dummy texts for design mockups</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>For graphic designers and website developers, filling layouts with readable dummy sentences is standard practice. A customizable <strong>lorem ipsum generator</strong> lets you tailor paragraph counts without using real copy.</p>
+          <h3>Why use standard placeholder text?</h3>
+          <p>Using real content during website layout creation can distract testers from focusing on the structural design. Dummy Latin text has a natural-looking distribution of letter weights, preventing design distortion.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>HTML Wrap Tags features:</h3>
+          <p>Mocking up HTML layouts usually requires wrapping paragraphs in block tags like <code>&lt;p&gt;</code> or list elements in <code>&lt;li&gt;</code>. Enabling this option places tags around generated lines for direct copy-paste.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // Latin Vocabulary Database
+  // ==========================================================================
+
+  const wordsDb = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", 
+    "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore", 
+    "magna", "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis", "nostrud", 
+    "exercitation", "ullamco", "laboris", "nisi", "ut", "aliquip", "ex", "ea", 
+    "commodo", "consequat", "duis", "aute", "irure", "dolor", "in", "reprehenderit", 
+    "in", "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla", 
+    "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non", "proident", 
+    "sunt", "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", 
+    "est", "laborum", "at", "vero", "eos", "et", "accusamus", "et", "iusto", "odio", 
+    "dignissimos", "ducimus", "qui", "blanditiis", "praesentium", "voluptatum", 
+    "deleniti", "atque", "corrupti", "quos", "dolores", "et", "quas", "molestias", 
+    "excepturi", "sint", "obcaecati", "cupiditate", "non", "provident", "similique", 
+    "sunt", "in", "culpa", "qui", "officia", "deserunt", "mollitia", "animi", "id", 
+    "est", "laborum", "et", "dolorum", "fuga", "harum", "quidem", "rerum", "facilis", 
+    "est", "et", "expedita", "distinctio", "nam", "libero", "tempore", "cum", "soluta", 
+    "nobis", "est", "eligendi", "optio", "cumque", "nihil", "impedit", "quo", "minus", 
+    "id", "quod", "maxime", "placeat", "facere", "possimus", "omnis", "voluptas", 
+    "assumenda", "est", "omnis", "dolor", "repellendus", "temporibus", "autem", 
+    "quibusdam", "et", "aut", "consequatur", "vel", "illum", "qui", "dolorem", 
+    "eum", "fugiat", "quo", "voluptas", "nulla", "pariatur"
+  ];
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Parameters
+  const modePills = document.querySelectorAll('.pill-btn');
+  const qtySlider = document.getElementById('qty-slider');
+  const qtyLbl = document.getElementById('qty-lbl');
+
+  const checkStartLorem = document.getElementById('check-start-lorem');
+  const checkWrapHtml = document.getElementById('check-wrap-html');
+
+  // Trigger
+  const btnGenerate = document.getElementById('btn-generate');
+  const textOutput = document.getElementById('text-output');
+  const btnCopy = document.getElementById('btn-copy');
+
+  // Stats display
+  const metricWords = document.getElementById('metric-words');
+  const metricChars = document.getElementById('metric-chars');
+  const metricLines = document.getElementById('metric-lines');
+
+  // State
+  let currentMode = 'paragraphs'; // 'paragraphs', 'words', 'lists'
+
+  // ==========================================================================
+  // Text Generator Methods
+  // ==========================================================================
+
+  function getRandomWord() {
+    const idx = Math.floor(Math.random() * wordsDb.length);
+    return wordsDb[idx];
+  }
+
+  function makeSentence(wordCount = null) {
+    const count = wordCount || (Math.floor(Math.random() * 8) + 6); // 6 to 13 words
+    const words = [];
+    for (let i = 0; i < count; i++) {
+      words.push(getRandomWord());
+    }
+    // Capitalize first letter
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+    return words.join(' ') + '.';
+  }
+
+  function makeParagraph(sentenceCount = null) {
+    const count = sentenceCount || (Math.floor(Math.random() * 4) + 4); // 4 to 7 sentences
+    const sentences = [];
+    for (let i = 0; i < count; i++) {
+      sentences.push(makeSentence());
+    }
+    return sentences.join(' ');
+  }
+
+  function generateText() {
+    const qty = parseInt(qtySlider.value);
+    const startWithLorem = checkStartLorem.checked;
+    const wrapInHtml = checkWrapHtml.checked;
+
+    let result = '';
+    
+    if (currentMode === 'paragraphs') {
+      const paragraphs = [];
+      for (let i = 0; i < qty; i++) {
+        let pText = makeParagraph();
+        
+        // Handle start lorem option
+        if (i === 0 && startWithLorem) {
+          const defaultStart = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+          pText = defaultStart + ' ' + pText;
+        }
+
+        if (wrapInHtml) {
+          pText = `<p>${pText}</p>`;
+        }
+        paragraphs.push(pText);
+      }
+      result = paragraphs.join(wrapInHtml ? '\n\n' : '\n\n');
+
+    } else if (currentMode === 'words') {
+      const words = [];
+      if (startWithLorem && qty >= 5) {
+        words.push("Lorem", "ipsum", "dolor", "sit", "amet");
+      }
+      const remainingQty = qty - words.length;
+      for (let i = 0; i < remainingQty; i++) {
+        words.push(getRandomWord());
+      }
+      
+      let wordsJoined = words.join(' ');
+      if (wrapInHtml) {
+        wordsJoined = `<p>${wordsJoined}</p>`;
+      }
+      result = wordsJoined;
+
+    } else if (currentMode === 'lists') {
+      const items = [];
+      for (let i = 0; i < qty; i++) {
+        let itemText = makeSentence(Math.floor(Math.random() * 4) + 5); // shorter sentence
+        
+        if (i === 0 && startWithLorem) {
+          itemText = 'Lorem ipsum dolor sit amet.';
+        }
+
+        if (wrapInHtml) {
+          itemText = `<li>${itemText}</li>`;
+        } else {
+          itemText = `• ${itemText}`;
+        }
+        items.push(itemText);
+      }
+      result = items.join('\n');
+    }
+
+    textOutput.value = result;
+
+    // Calculate metrics
+    calculateMetrics(result);
+  }
+
+  function calculateMetrics(text) {
+    const cleanText = text.replace(/<[^>]*>/g, ''); // strip HTML tags for realistic stats
+    const words = cleanText.trim() ? cleanText.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+    
+    metricWords.textContent = words;
+    metricChars.textContent = cleanText.length;
+    metricLines.textContent = text ? text.split('\n').filter(l => l.trim().length > 0).length : 0;
+  }
+
+  // ==========================================================================
+  // Register Event Listeners
+  // ==========================================================================
+
+  // Mode Selection Pills
+  modePills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      modePills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentMode = pill.getAttribute('data-type');
+
+      // Adjust slider limit dynamically based on type
+      if (currentMode === 'words') {
+        qtySlider.min = 5;
+        qtySlider.max = 500;
+        qtySlider.value = 100;
+      } else if (currentMode === 'lists') {
+        qtySlider.min = 1;
+        qtySlider.max = 30;
+        qtySlider.value = 8;
+      } else {
+        qtySlider.min = 1;
+        qtySlider.max = 20;
+        qtySlider.value = 5;
+      }
+      qtyLbl.textContent = qtySlider.value;
+      generateText();
+    });
+  });
+
+  // Slider change updates values label
+  qtySlider.addEventListener('input', () => {
+    qtyLbl.textContent = qtySlider.value;
+  });
+
+  qtySlider.addEventListener('change', generateText);
+
+  // Checkbox changes triggers auto regen
+  checkStartLorem.addEventListener('change', generateText);
+  checkWrapHtml.addEventListener('change', generateText);
+
+  // Generate Button Click
+  btnGenerate.addEventListener('click', generateText);
+
+  // Copy text to clipboard
+  btnCopy.addEventListener('click', () => {
+    const textToCopy = textOutput.value;
+    if (!textToCopy) return;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalText = btnCopy.innerHTML;
+      btnCopy.textContent = 'Copied!';
+      btnCopy.style.borderColor = '#f59e0b'; // amber color flash
+      
+      setTimeout(() => {
+        btnCopy.innerHTML = originalText;
+        btnCopy.style.borderColor = '';
+      }, 1200);
+    });
+  });
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initial Boot Generation
+  generateText();
+
+});
+
+
+  </script>
+</body>
+</html>

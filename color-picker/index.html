@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Color Picker & Converter | HEX, RGB, HSL, CMYK | Online Tools</title>
+  <meta name="description" content="Choose colors, adjust RGB & HSL sliders, convert between HEX, RGB, HSL, CMYK, and generate complementary, monochromatic, and analogous palettes.">
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- External Libraries -->
+  
+  
+  <script>
+    // 配置 Tailwind CSS
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            border: 'rgba(255,255,255,0.1)',
+            input: 'rgba(255,255,255,0.1)',
+            ring: '#f97316',
+            background: '#09090b',
+            foreground: '#fafafa',
+            primary: {
+              DEFAULT: '#f97316',
+              foreground: '#fafafa',
+            },
+            secondary: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            destructive: {
+              DEFAULT: '#ef4444',
+              foreground: '#fafafa',
+            },
+            muted: {
+              DEFAULT: '#27272a',
+              foreground: '#a1a1aa',
+            },
+            accent: {
+              DEFAULT: '#27272a',
+              foreground: '#fafafa',
+            },
+            popover: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+            card: {
+              DEFAULT: '#09090b',
+              foreground: '#fafafa',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 全局样式重置与覆盖 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+    }
+    
+    /* 工具自定义样式 */
+    
+  .tool-wrapper {
+  /* ==========================================================================
+   Design Tokens & Colors (Color Picker & Converter)
+   ========================================================================== */
+
+& {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', "Courier New", monospace;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.1), 0 1px 3px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 32px -4px rgba(0, 0, 0, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-round: 9999px;
+
+  /* Theme: Dark (Default) */
+  --bg-app: hsl(220, 20%, 4%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(220, 15%, 8%) 1px, transparent 1px);
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(255, 255, 255, 0.2);
+  
+  --text-primary: hsl(210, 40%, 98%);
+  --text-secondary: hsl(215, 25%, 72%);
+  --text-muted: hsl(215, 16%, 47%);
+
+  --primary-gradient: linear-gradient(135deg, hsl(260, 80%, 55%) 0%, hsl(310, 80%, 55%) 100%);
+  --accent-color: hsl(260, 80%, 55%);
+}
+
+/* Light Theme Overrides */
+&.light-theme {
+  --bg-app: hsl(220, 15%, 95%);
+  --bg-grid-lines: radial-gradient(circle at 50% 50%, hsl(220, 10%, 88%) 1px, transparent 1px);
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --border-color-focus: rgba(0, 0, 0, 0.15);
+  
+  --text-primary: hsl(222, 47%, 12%);
+  --text-secondary: hsl(215, 25%, 35%);
+  --text-muted: hsl(215, 16%, 55%);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+& {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-grid-lines);
+  background-size: 24px 24px;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+button, input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-round);
+}
+
+/* ==========================================================================
+   Layout Structure
+   ========================================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+&.light-theme .back-link:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+&.light-theme .icon-btn:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+&.light-theme .sun-icon { display: block; }
+&.light-theme .moon-icon { display: none; }
+
+/* ==========================================================================
+   Workspace Layout
+   ========================================================================== */
+
+.app-main {
+  flex-grow: 1;
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+&.light-theme .card-header {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.card-header h3 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.card-header-help {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.calc-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+}
+
+&.light-theme .calc-body {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   Color Preview Panel & Inspector Grid
+   ========================================================================== */
+
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 650px) {
+  .color-picker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Large color output screen */
+.preview-card {
+  height: 240px;
+  position: relative;
+  transition: background 0.1s ease;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.4));
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.preview-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.7);
+}
+
+.preview-hex-display {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.contrast-check-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contrast-val {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.contrast-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Inspector card input round circle */
+.picker-input-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-sm);
+  padding: 0;
+  overflow: hidden;
+}
+
+.picker-input-circle::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+.picker-input-circle::-webkit-color-swatch {
+  border: none;
+}
+
+/* Custom Color Sliders */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slider-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.slider-val-lbl {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.color-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-round);
+  outline: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--border-color);
+}
+
+.color-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--text-muted);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.color-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+/* Slider Track Gradients */
+.slider-red {
+  background: linear-gradient(to right, #000, #ff0000);
+}
+.slider-green {
+  background: linear-gradient(to right, #000, #00ff00);
+}
+.slider-blue {
+  background: linear-gradient(to right, #000, #0000ff);
+}
+.slider-alpha {
+  /* checkered bg representing transparent checkerboard pattern */
+  background: linear-gradient(45deg, #ccc 25%, transparent 25%), 
+              linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+              linear-gradient(45deg, transparent 75%, #ccc 75%), 
+              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+/* ==========================================================================
+   Color Harmonies Lists
+   ========================================================================== */
+
+.harmonies-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.harmony-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 580px) {
+  .harmony-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.harmony-lbl {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.harmony-blocks {
+  display: flex;
+  gap: 6px;
+}
+
+.harmony-block {
+  flex: 1;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  position: relative;
+  border: 1px solid var(--border-color);
+  transition: transform var(--transition-fast);
+}
+
+.harmony-block:hover {
+  transform: scale(1.1);
+  z-index: 2;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   Sidebar: Formats Converter inputs
+   ========================================================================== */
+
+.sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-with-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-copy-format {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.btn-copy-format:hover {
+  color: var(--text-primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: border-color var(--transition-fast);
+}
+
+&.light-theme .form-input {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  border-color: var(--border-color-focus);
+}
+
+/* Bottom status, SEO and Footer */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+.status-valid {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dot {
+  color: var(--text-muted);
+}
+
+.savings-highlight {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.seo-content-card {
+  padding: 24px;
+  margin-top: 10px;
+}
+
+.seo-content-card h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .seo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.seo-text-col p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.seo-text-col h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.author-tag {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+}
+
+  </style>
+</head>
+<body class="bg-zinc-950 text-foreground min-h-screen">
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.gstatic.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <div class="tool-wrapper dark-theme">
+    <div class="app-container">
+
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <a href="https://ethelab.com/tools" class="back-link" title="Return to Portal Homepage">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path>
+            <path d="M12 6V12L16 14"></path>
+          </svg>
+          <h1>HueShift Pro</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <div class="workspace-layout">
+        
+        <!-- Left Column: Color Preview & Pickers -->
+        <div class="workspace-main-column">
+          
+          <div class="color-picker-grid">
+            
+            <!-- Large interactive color preview screen -->
+            <div class="card preview-card" id="color-preview-panel">
+              <div class="preview-overlay">
+                <span class="preview-title">Active Shade</span>
+                <span class="preview-hex-display font-mono" id="preview-hex">#10b981</span>
+                
+                <!-- WCAG contrast evaluation badge -->
+                <div class="contrast-check-box">
+                  <span class="contrast-val" id="wcag-val">Contrast Ratio: 4.5:1</span>
+                  <span class="contrast-badge" id="wcag-badge">AAA PASS</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pickers and sliders controls card -->
+            <div class="card controls-card">
+              <div class="card-header">
+                <h3>Inspector Sliders</h3>
+                <div class="header-actions">
+                  <input type="color" id="native-picker" value="#10b981" class="picker-input-circle">
+                </div>
+              </div>
+              <div class="calc-body">
+                
+                <!-- RGB Sliders -->
+                <div class="slider-group">
+                  <div class="slider-info">
+                    <label class="field-label">Red (R)</label>
+                    <span class="slider-val-lbl font-mono" id="val-r-lbl">16</span>
+                  </div>
+                  <input type="range" id="slide-r" min="0" max="255" value="16" class="color-slider slider-red">
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-info">
+                    <label class="field-label">Green (G)</label>
+                    <span class="slider-val-lbl font-mono" id="val-g-lbl">185</span>
+                  </div>
+                  <input type="range" id="slide-g" min="0" max="255" value="185" class="color-slider slider-green">
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-info">
+                    <label class="field-label">Blue (B)</label>
+                    <span class="slider-val-lbl font-mono" id="val-b-lbl">129</span>
+                  </div>
+                  <input type="range" id="slide-b" min="0" max="255" value="129" class="color-slider slider-blue">
+                </div>
+
+                <!-- Alpha (Transparency) -->
+                <div class="slider-group">
+                  <div class="slider-info">
+                    <label class="field-label">Alpha (Opacity)</label>
+                    <span class="slider-val-lbl font-mono" id="val-a-lbl">1.00</span>
+                  </div>
+                  <input type="range" id="slide-a" min="0" max="1" value="1" step="0.01" class="color-slider slider-alpha">
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Color harmonies generator row -->
+          <section class="card harmonies-card">
+            <div class="card-header">
+              <h3>Color Harmonies</h3>
+              <span class="card-header-help">Click any color block to copy its HEX value</span>
+            </div>
+            <div class="calc-body">
+              <div class="harmonies-container">
+                
+                <div class="harmony-row">
+                  <span class="harmony-lbl">Complementary</span>
+                  <div class="harmony-blocks" id="harmony-complementary">
+                    <!-- Loaded dynamically -->
+                  </div>
+                </div>
+
+                <div class="harmony-row">
+                  <span class="harmony-lbl">Monochromatic</span>
+                  <div class="harmony-blocks" id="harmony-monochromatic">
+                    <!-- Loaded dynamically -->
+                  </div>
+                </div>
+
+                <div class="harmony-row">
+                  <span class="harmony-lbl">Analogous</span>
+                  <div class="harmony-blocks" id="harmony-analogous">
+                    <!-- Loaded dynamically -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Right Column: Formats converter inputs -->
+        <div class="sidebar-column">
+          <section class="card formats-card">
+            <div class="card-header">
+              <h3>Converted Formats</h3>
+            </div>
+            <div class="calc-body">
+              
+              <!-- HEX Input -->
+              <div class="form-group">
+                <div class="label-with-btn">
+                  <label for="out-hex" class="field-label">HEX</label>
+                  <button class="btn-copy-format" data-target="out-hex">Copy</button>
+                </div>
+                <input type="text" id="out-hex" value="#10B981" class="form-input font-mono">
+              </div>
+
+              <!-- RGB Input -->
+              <div class="form-group">
+                <div class="label-with-btn">
+                  <label for="out-rgb" class="field-label">RGB</label>
+                  <button class="btn-copy-format" data-target="out-rgb">Copy</button>
+                </div>
+                <input type="text" id="out-rgb" value="rgb(16, 185, 129)" class="form-input font-mono">
+              </div>
+
+              <!-- RGBA Input -->
+              <div class="form-group">
+                <div class="label-with-btn">
+                  <label for="out-rgba" class="field-label">RGBA</label>
+                  <button class="btn-copy-format" data-target="out-rgba">Copy</button>
+                </div>
+                <input type="text" id="out-rgba" value="rgba(16, 185, 129, 1)" class="form-input font-mono">
+              </div>
+
+              <!-- HSL Input -->
+              <div class="form-group">
+                <div class="label-with-btn">
+                  <label for="out-hsl" class="field-label">HSL</label>
+                  <button class="btn-copy-format" data-target="out-hsl">Copy</button>
+                </div>
+                <input type="text" id="out-hsl" value="hsl(162, 84%, 39%)" class="form-input font-mono">
+              </div>
+
+              <!-- CMYK Input -->
+              <div class="form-group">
+                <div class="label-with-btn">
+                  <label for="out-cmyk" class="field-label">CMYK</label>
+                  <button class="btn-copy-format" data-target="out-cmyk">Copy</button>
+                </div>
+                <input type="text" id="out-cmyk" value="cmyk(91%, 0%, 30%, 27%)" class="form-input font-mono">
+              </div>
+
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Status -->
+    <div class="status-bar">
+      <div class="stats">
+        <span class="status-badge status-valid">Online</span>
+        <span class="dot">·</span>
+        <span>CMYK / RGB / HSL Conversions</span>
+        <span class="dot">·</span>
+        <span class="savings-highlight">Instant calculations</span>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <section class="card seo-content-card">
+      <h2>Color formats explained: HEX, RGB, HSL, and CMYK</h2>
+      <div class="seo-grid">
+        <div class="seo-text-col">
+          <p>Understanding color spaces is essential for digital designers and developers. An online <strong>color picker & converter</strong> provides cross-format translation between display and print standards.</p>
+          <h3>RGB vs. HSL:</h3>
+          <p><strong>RGB</strong> (Red, Green, Blue) represents color as it is emitted by electronic displays. <strong>HSL</strong> (Hue, Saturation, Lightness) describes colors in a way that matches human perception, making it easier to adjust shading.</p>
+        </div>
+        <div class="seo-text-col">
+          <h3>What is WCAG Contrast?</h3>
+          <p>The Web Content Accessibility Guidelines (WCAG) specify that text on a background must maintain a contrast ratio of at least 4.5:1 (for normal text) to ensure readability for visually impaired users.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    
+  </div>
+  </div>
+
+  
+  <script>
+    // 注入内置逻辑
+    
+  // @ts-nocheck
+  
+  // Redirect body class modifications to local tool wrapper container
+  const toolWrapper = document.querySelector('.tool-wrapper');
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+  // ==========================================================================
+  // DOM Elements
+  // ==========================================================================
+
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // Preview elements
+  const colorPreviewPanel = document.getElementById('color-preview-panel');
+  const previewHex = document.getElementById('preview-hex');
+  const wcagVal = document.getElementById('wcag-val');
+  const wcagBadge = document.getElementById('wcag-badge');
+
+  // Pickers and sliders
+  const nativePicker = document.getElementById('native-picker');
+  const slideR = document.getElementById('slide-r');
+  const slideG = document.getElementById('slide-g');
+  const slideB = document.getElementById('slide-b');
+  const slideA = document.getElementById('slide-a');
+
+  // Sliders display values labels
+  const valRLbl = document.getElementById('val-r-lbl');
+  const valGLbl = document.getElementById('val-g-lbl');
+  const valBLbl = document.getElementById('val-b-lbl');
+  const valALbl = document.getElementById('val-a-lbl');
+
+  // Converted output format textboxes
+  const outHex = document.getElementById('out-hex');
+  const outRgb = document.getElementById('out-rgb');
+  const outRgba = document.getElementById('out-rgba');
+  const outHsl = document.getElementById('out-hsl');
+  const outCmyk = document.getElementById('out-cmyk');
+
+  // Copy formats buttons
+  const btnCopyFormats = document.querySelectorAll('.btn-copy-format');
+
+  // Harmony containers
+  const harmonyComplementary = document.getElementById('harmony-complementary');
+  const harmonyMonochromatic = document.getElementById('harmony-monochromatic');
+  const harmonyAnalogous = document.getElementById('harmony-analogous');
+
+  // ==========================================================================
+  // Mathematical Helper Functions
+  // ==========================================================================
+
+  function rgbToHex(r, g, b) {
+    const toHex = x => {
+      const h = Math.round(x).toString(16);
+      return h.length === 1 ? '0' + h : h;
+    };
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  }
+
+  function hexToRgb(hex) {
+    let c = hex.trim().replace(/^#/, '');
+    if (c.length === 3) {
+      c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+    }
+    if (c.length !== 6) return null;
+    const num = parseInt(c, 16);
+    return {
+      r: (num >> 16) & 255,
+      g: (num >> 8) & 255,
+      b: num & 255
+    };
+  }
+
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0; // achromatic
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return {
+      h: Math.round(h * 360),
+      s: Math.round(s * 100),
+      l: Math.round(l * 100)
+    };
+  }
+
+  function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s === 0) {
+      r = g = b = l; // achromatic
+    } else {
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      };
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return {
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
+
+  function rgbToCmyk(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const k = 1 - Math.max(r, g, b);
+    if (k === 1) return { c: 0, m: 0, y: 0, k: 100 };
+    const c = Math.round((1 - r - k) / (1 - k) * 100);
+    const m = Math.round((1 - g - k) / (1 - k) * 100);
+    const y = Math.round((1 - b - k) / (1 - k) * 100);
+    return { c, m, y, k: Math.round(k * 100) };
+  }
+
+  // Relative Luminance formula for WCAG contrast checker
+  function getLuminance(r, g, b) {
+    const a = [r, g, b].map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+  }
+
+  // ==========================================================================
+  // Primary State Updates
+  // ==========================================================================
+
+  function updateAppWithColor(r, g, b, alpha = 1) {
+    // Sync slider values
+    slideR.value = r;
+    slideG.value = g;
+    slideB.value = b;
+    slideA.value = alpha;
+
+    valRLbl.textContent = r;
+    valGLbl.textContent = g;
+    valBLbl.textContent = b;
+    valALbl.textContent = parseFloat(alpha).toFixed(2);
+
+    const hex = rgbToHex(r, g, b);
+    nativePicker.value = hex;
+
+    // Set background preview and titles
+    colorPreviewPanel.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    previewHex.textContent = hex;
+
+    // Alpha slider checkered overlay color
+    slideA.style.backgroundImage = `linear-gradient(to right, rgba(${r}, ${g}, ${b}, 0), rgba(${r}, ${g}, ${b}, 1))`;
+
+    // Converted Formats Text fields
+    outHex.value = hex;
+    outRgb.value = `rgb(${r}, ${g}, ${b})`;
+    outRgba.value = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    
+    const hsl = rgbToHsl(r, g, b);
+    outHsl.value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+
+    const cmyk = rgbToCmyk(r, g, b);
+    outCmyk.value = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+
+    // Accessibility Contrast Evaluation
+    checkWcagContrast(r, g, b);
+
+    // Build palettes
+    generateHarmonies(hsl);
+  }
+
+  // Evaluates WCAG contrast ratio for white vs active background
+  function checkWcagContrast(r, g, b) {
+    const bgLum = getLuminance(r, g, b);
+    
+    // Test against White text (luminance 1.0) and Black text (luminance 0)
+    const whiteRatio = (1.0 + 0.05) / (bgLum + 0.05);
+    const blackRatio = (bgLum + 0.05) / (0 + 0.05);
+
+    // Pick whichever has better contrast
+    const bestRatio = Math.max(whiteRatio, blackRatio);
+    const textStyle = whiteRatio > blackRatio ? '#ffffff' : '#0f172a';
+
+    // Apply color to texts on screen preview
+    previewHex.style.color = textStyle;
+    document.querySelector('.preview-title').style.color = textStyle;
+    wcagVal.style.color = textStyle;
+    wcagBadge.style.color = textStyle;
+
+    wcagVal.textContent = `Contrast Ratio: ${bestRatio.toFixed(1)}:1`;
+
+    if (bestRatio >= 7.0) {
+      wcagBadge.textContent = 'AAA PASS';
+      wcagBadge.style.background = 'rgba(16, 185, 129, 0.25)'; // green accent
+      wcagBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    } else if (bestRatio >= 4.5) {
+      wcagBadge.textContent = 'AA PASS';
+      wcagBadge.style.background = 'rgba(245, 158, 11, 0.25)'; // orange accent
+      wcagBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+    } else {
+      wcagBadge.textContent = 'POOR CONTRAST';
+      wcagBadge.style.background = 'rgba(239, 68, 68, 0.25)'; // red accent
+      wcagBadge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+    }
+  }
+
+  // Renders clickable color swatch elements
+  function makeSwatchBlock(hexVal) {
+    const block = document.createElement('div');
+    block.className = 'harmony-block';
+    block.style.backgroundColor = hexVal;
+    block.title = `Click to copy: ${hexVal}`;
+
+    block.addEventListener('click', () => {
+      navigator.clipboard.writeText(hexVal).then(() => {
+        // Flash tooltip
+        block.title = 'Copied!';
+        setTimeout(() => block.title = `Click to copy: ${hexVal}`, 1200);
+      });
+    });
+
+    return block;
+  }
+
+  // Harmonies Generators
+  function generateHarmonies(hsl) {
+    harmonyComplementary.innerHTML = '';
+    harmonyMonochromatic.innerHTML = '';
+    harmonyAnalogous.innerHTML = '';
+
+    // Complementary (opposite hue 180 degrees)
+    const compHue = (hsl.h + 180) % 360;
+    const compHex = rgbToHex(...Object.values(hslToRgb(compHue, hsl.s, hsl.l)));
+    
+    harmonyComplementary.appendChild(makeSwatchBlock(rgbToHex(...Object.values(hslToRgb(hsl.h, hsl.s, hsl.l)))));
+    harmonyComplementary.appendChild(makeSwatchBlock(compHex));
+
+    // Monochromatic (alter lightness values)
+    const monoLightnessValues = [
+      Math.max(hsl.l - 30, 10),
+      Math.max(hsl.l - 15, 20),
+      hsl.l,
+      Math.min(hsl.l + 15, 85),
+      Math.min(hsl.l + 30, 95)
+    ];
+    monoLightnessValues.forEach(light => {
+      const hex = rgbToHex(...Object.values(hslToRgb(hsl.h, hsl.s, light)));
+      harmonyMonochromatic.appendChild(makeSwatchBlock(hex));
+    });
+
+    // Analogous (hues -30, base, +30)
+    const analHues = [
+      (hsl.h - 30 + 360) % 360,
+      hsl.h,
+      (hsl.h + 30) % 360
+    ];
+    analHues.forEach(hue => {
+      const hex = rgbToHex(...Object.values(hslToRgb(hue, hsl.s, hsl.l)));
+      harmonyAnalogous.appendChild(makeSwatchBlock(hex));
+    });
+  }
+
+  // ==========================================================================
+  // Register Event Listeners
+  // ==========================================================================
+
+  // Inspector sliders changes trigger calculations
+  const triggerSliderChange = () => {
+    const r = parseInt(slideR.value);
+    const g = parseInt(slideG.value);
+    const b = parseInt(slideB.value);
+    const a = parseFloat(slideA.value);
+    updateAppWithColor(r, g, b, a);
+  };
+
+  slideR.addEventListener('input', triggerSliderChange);
+  slideG.addEventListener('input', triggerSliderChange);
+  slideB.addEventListener('input', triggerSliderChange);
+  slideA.addEventListener('input', triggerSliderChange);
+
+  // Native HTML5 color wheel picker
+  nativePicker.addEventListener('input', () => {
+    const rgb = hexToRgb(nativePicker.value);
+    if (rgb) {
+      updateAppWithColor(rgb.r, rgb.g, rgb.b, parseFloat(slideA.value));
+    }
+  });
+
+  // Manual Input fields bindings
+  outHex.addEventListener('input', () => {
+    const rgb = hexToRgb(outHex.value);
+    if (rgb) {
+      updateAppWithColor(rgb.r, rgb.g, rgb.b, parseFloat(slideA.value));
+    }
+  });
+
+  // Copy formats text fields on click
+  btnCopyFormats.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const inputEl = document.getElementById(targetId);
+      
+      navigator.clipboard.writeText(inputEl.value).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.color = '#a78bfa'; // light purple
+        
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.color = '';
+        }, 1200);
+      });
+    });
+  });
+
+  // Theme Toggler
+  themeToggle.addEventListener('click', () => {
+    if (toolWrapper.classList.contains('dark-theme')) {
+      toolWrapper.classList.remove('dark-theme');
+      toolWrapper.classList.add('light-theme');
+      localStorage.setItem('ethelab_portal_theme', 'light');
+    } else {
+      toolWrapper.classList.remove('light-theme');
+      toolWrapper.classList.add('dark-theme');
+      localStorage.setItem('ethelab_portal_theme', 'dark');
+    }
+  });
+
+  // Restore Theme state
+  if (localStorage.getItem('ethelab_portal_theme') === 'light') {
+    toolWrapper.classList.remove('dark-theme');
+    toolWrapper.classList.add('light-theme');
+  }
+
+  // Initial trigger boot color (Emerald default)
+  updateAppWithColor(16, 185, 129, 1.0);
+
+});
+
+
+  </script>
+</body>
+</html>
