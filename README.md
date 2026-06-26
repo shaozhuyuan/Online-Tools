@@ -2,6 +2,8 @@
 
 Translations: [简体中文](README_zh.md)
 
+⭐ **If you like this project, please give it a star! It really helps support the repository!**
+
 Welcome to the **Online Tools** repository! This is a comprehensive, client-side suite of 100% private, free, and ad-free web developer utilities. 
 
 Each utility is fully responsive, works completely offline (all calculations and formatting are done purely in your browser), and is styled with Tailwind CSS.
